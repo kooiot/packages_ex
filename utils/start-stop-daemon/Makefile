@@ -12,6 +12,9 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=start-stop-daemon
 PKG_VERSION:=1.17.9
 PKG_RELEASE:=1
+PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
+PKG_LICENSE:=GPL-2.0
+PKG_LICENSE_FILES:=COPYING
 
 PKG_SOURCE:=dpkg_$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://mirrors.aliyun.com/debian/pool/main/d/dpkg/
