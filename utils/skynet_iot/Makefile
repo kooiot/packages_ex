@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet_iot
-PKG_VERSION:=583
+PKG_VERSION:=586
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://localhost/download/skynet_iot
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=d891336b7697c35e5e3c76eb9faa3626
+PKG_MD5SUM:=093d85b38426532d71cf7939c500dfa4
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,6 +34,7 @@ endef
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)/src
 	tar -C $(PKG_BUILD_DIR)/src -xzvf "$(DL_DIR)/$(PKG_SOURCE)"
+	rm -rf $(PKG_BUILD_DIR)/src/linux
 endef
 
 define Build/Configure
@@ -43,10 +44,10 @@ define Build/Compile
 endef
 
 define Package/skynet_iot/install
-	$(INSTALL_DIR) $(1)/skynet_iot
-	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/skynet_iot/
+	$(INSTALL_DIR) $(1)/usr/iot/skynet_iot
+	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/usr/iot/skynet_iot/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(LN) lede/init.d/skynet $(1)/etc/init.d/skynet
+	$(LN) /usr/iot/skynet_iot/openwrt/init.d/skynet $(1)/etc/init.d/skynet
 endef
 
 $(eval $(call BuildPackage,skynet_iot))
