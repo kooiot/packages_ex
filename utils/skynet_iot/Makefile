@@ -48,6 +48,9 @@ define Package/skynet_iot/install
 	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/usr/iot/skynet_iot/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(LN) /usr/iot/skynet_iot/openwrt/init.d/skynet $(1)/etc/init.d/skynet
+
+	$(INSTALL_DIR) $(1)/etc/profile.d
+	$(INSTALL_BIN) ./files/echo_sn.sh $(1)/etc/profile.d/echo_sn.sh
 endef
 
 $(eval $(call BuildPackage,skynet_iot))
