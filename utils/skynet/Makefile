@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet
-PKG_VERSION:=1666
+PKG_VERSION:=1683
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://localhost/download/lede/$(PKG_ARCH)_$(PKG_NAME)
+PKG_SOURCE_URL:=http://localhost/download/openwrt/$(PKG_ARCH)_$(PKG_NAME)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=0575439e6e098c66d068317e576768a3
+PKG_MD5SUM:=0d2d4c3b9a2cf08f5bd51b5d12b6851b
 
 include $(INCLUDE_DIR)/package.mk
 
