@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet_iot
-PKG_VERSION:=586
+PKG_VERSION:=636
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://localhost/download/skynet_iot
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=093d85b38426532d71cf7939c500dfa4
+PKG_MD5SUM:=92b3f77145dd40df5a625de477a2c9c7
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -49,8 +49,10 @@ define Package/skynet_iot/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(LN) /usr/iot/skynet_iot/openwrt/init.d/skynet $(1)/etc/init.d/skynet
 
+ifeq ($(ARCH),x86_64)
 	$(INSTALL_DIR) $(1)/etc/profile.d
 	$(INSTALL_BIN) ./files/echo_sn.sh $(1)/etc/profile.d/echo_sn.sh
+endif
 endef
 
 $(eval $(call BuildPackage,skynet_iot))
