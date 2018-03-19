@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet_iot
-PKG_VERSION:=636
+PKG_VERSION:=658
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://localhost/download/skynet_iot
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=92b3f77145dd40df5a625de477a2c9c7
+PKG_MD5SUM:=8c9e9a4b4b4d64bd8914c126bebd8300
 
 include $(INCLUDE_DIR)/package.mk
 
