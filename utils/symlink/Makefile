@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=symlink
 PKG_VERSION:=20180322
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://localhost/download/$(PKG_NAME)
@@ -17,6 +17,9 @@ PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 PKG_MD5SUM:=c0cbc1334f238432e958ea1d00b2d47d
 
 include $(INCLUDE_DIR)/package.mk
+
+RSTRIP:=:
+STRIP:=:
 
 define Package/symlink
   SUBMENU:=SymLink
