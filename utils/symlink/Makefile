@@ -20,7 +20,7 @@ PKG_MD5SUM:=c0cbc1334f238432e958ea1d00b2d47d
 include $(INCLUDE_DIR)/package.mk
 
 define Package/symlink
-  SUBMENU:=SymLink
+  SUBMENU:=Symid
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=SymLink
