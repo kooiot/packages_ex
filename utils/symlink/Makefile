@@ -12,20 +12,19 @@ PKG_VERSION:=20180322
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://localhost/download/symlink
+PKG_SOURCE_URL:=http://localhost/download/$(PKG_NAME)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 PKG_MD5SUM:=c0cbc1334f238432e958ea1d00b2d47d
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/symlink
-  SUBMENU:=Symid
+  SUBMENU:=SymLink
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=SymLink
   URL:=http://www.symid.com
-  DEPENDS:=+liblua +libjson-c +libnl-tiny +libstdcpp +luci
+  DEPENDS:=+libstdcpp +luci +libopenssl +libcurl
 endef
 
 define Package/symlink/description
