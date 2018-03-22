@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=symlink
-PKG_VERSION:=103
+PKG_VERSION:=20180322
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
@@ -24,6 +24,7 @@ define Package/symlink
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=SymLink
+  URL:=http://www.symid.com
   DEPENDS:=+liblua +libjson-c +libnl-tiny +libstdcpp +luci
 endef
 
