@@ -47,9 +47,7 @@ define Package/skynet_iot/install
 	$(INSTALL_DIR) $(1)/usr/iot/skynet_iot
 	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/usr/iot/skynet_iot/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) $(1)/usr/iot/skynet_iot/openwrt/init.d/skynet $(1)/etc/init.d/skynet
-	rm -f $(1)/etc/init.d/skynet
-	$(LN) /usr/iot/skynet_iot/openwrt/init.d/skynet $(1)/etc/init.d/skynet
+	$(LN) ../../usr/iot/skynet_iot/openwrt/init.d/skynet $(1)/etc/init.d/skynet
 
 ifeq ($(ARCH),x86_64)
 	$(INSTALL_DIR) $(1)/etc/profile.d
