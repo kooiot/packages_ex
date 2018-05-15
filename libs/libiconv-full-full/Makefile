@@ -36,16 +36,16 @@ define Package/libiconv-full-full
   TITLE+= library
 endef
 
-define Package/libcharset
+define Package/libcharset-full
   $(call Package/libiconv-full-full/Default)
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= library
 endef
 
-define Package/iconv
+define Package/iconv-full
   $(call Package/libiconv-full-full/Default)
-  DEPENDS:=+libiconv-full-full +libcharset
+  DEPENDS:=+libiconv-full-full +libcharset-full
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE+= utility
@@ -75,7 +75,7 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.{a,so*} $(1)/usr/lib/libiconv-full-full/lib/
 endef
 
-define Package/libcharset/install
+define Package/libcharset-full/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharset.so* $(1)/usr/lib/
 endef
@@ -85,11 +85,11 @@ define Package/libiconv-full-full/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.so* $(1)/usr/lib/
 endef
 
-define Package/iconv/install
+define Package/iconv-full/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/iconv $(1)/usr/bin/
 endef
 
-$(eval $(call BuildPackage,libcharset))
+$(eval $(call BuildPackage,libcharset-full))
 $(eval $(call BuildPackage,libiconv-full-full))
-$(eval $(call BuildPackage,iconv))
+$(eval $(call BuildPackage,iconv-full))
