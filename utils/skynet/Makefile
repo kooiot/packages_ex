@@ -48,8 +48,8 @@ define Build/Compile
 endef
 
 define Package/skynet/install
-	$(INSTALL_DIR) $(1)/usr/iot/skynet
-	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/usr/iot/skynet/
+	$(INSTALL_DIR) $(1)/usr/ioe/skynet
+	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/usr/ioe/skynet/
 endef
 
 $(eval $(call BuildPackage,skynet))
