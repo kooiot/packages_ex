@@ -7,28 +7,28 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=skynet_iot
-PKG_VERSION:=697
+PKG_NAME:=freeioe
+PKG_VERSION:=742
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://localhost/download/skynet_iot
+PKG_SOURCE_URL:=http://localhost/download/freeioe
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=44afb04bfdb1ea232070a6f8b2415047
+PKG_MD5SUM:=2c6a9a6aaf0405dd63bfa23aa89fe073
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/skynet_iot
+define Package/freeioe
   SUBMENU:=KooIoT
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=Skynet IOT
-  URL:=https://github.com/srdgame/skynet_iot
+  TITLE:=FreeIOE
+  URL:=https://github.com/freeioe/freeioe
   DEPENDS:=+skynet
 endef
 
-define Package/skynet_iot/description
-	Skynet IOT is open souce platform for internet of things running on embedded machine
+define Package/freeioe/description
+	FreeIOE is open souce platform for internet of everythings running on embedded machine
 endef
 
 define Build/Prepare
@@ -43,11 +43,11 @@ endef
 define Build/Compile
 endef
 
-define Package/skynet_iot/install
-	$(INSTALL_DIR) $(1)/usr/iot/skynet_iot
-	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/usr/iot/skynet_iot/
+define Package/freeioe/install
+	$(INSTALL_DIR) $(1)/usr/ioe/freeioe
+	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/usr/ioe/freeioe/
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(LN) ../../usr/iot/skynet_iot/openwrt/init.d/skynet $(1)/etc/init.d/skynet
+	$(LN) ../../usr/ioe/freeioe/openwrt/init.d/skynet $(1)/etc/init.d/skynet
 
 ifeq ($(ARCH),x86_64)
 	$(INSTALL_DIR) $(1)/etc/profile.d
@@ -55,4 +55,4 @@ ifeq ($(ARCH),x86_64)
 endif
 endef
 
-$(eval $(call BuildPackage,skynet_iot))
+$(eval $(call BuildPackage,freeioe))
