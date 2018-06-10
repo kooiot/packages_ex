@@ -29,7 +29,7 @@ define Package/skynet
   CATEGORY:=Utilities
   TITLE:=Skynet
   URL:=https://github.com/srdgame/skynet
-  DEPENDS:=+lua +zip +unzip +luci +libopenssl +libcurl
+  DEPENDS:=+lua +zip +unzip +luci +libopenssl +libcurl +zlib
 endef
 
 define Package/skynet/description
