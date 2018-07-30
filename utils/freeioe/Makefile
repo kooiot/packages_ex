@@ -29,7 +29,7 @@ define Package/freeioe
 endef
 
 define Package/freeioe/description
-	FreeIOE is open souce platform for internet of everythings running on embedded machine
+	FreeIOE is platform for internet of everythings running on embedded machine, built on top of Skynet.
 endef
 
 define Build/Prepare

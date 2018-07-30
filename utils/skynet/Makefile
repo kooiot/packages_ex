@@ -33,7 +33,7 @@ define Package/skynet
 endef
 
 define Package/skynet/description
-	Skynet IOT is open souce platform for internet of things running on embedded machine
+	Skynet is light online game server platform. This is adjusted for FreeIOE Platform.
 endef
 
 define Build/Prepare
