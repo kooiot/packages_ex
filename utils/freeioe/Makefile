@@ -8,13 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe
-PKG_VERSION:=864
+PKG_VERSION:=879
 PKG_RELEASE:=1
 
+PKG_ARCH=$(ARCH_PACKAGES)
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://localhost/download/freeioe
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=2bd2c3c3abac907cee27170609a21743
+PKG_MD5SUM:=783e782152f119343aa9753b857ba59c
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,6 +36,12 @@ define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)/src
 	tar -C $(PKG_BUILD_DIR)/src -xzvf "$(DL_DIR)/$(PKG_SOURCE)"
 	rm -rf $(PKG_BUILD_DIR)/src/linux
+
+	mkdir -p $(PKG_BUILD_DIR)/src/__plat_files/$(PKG_ARCH)
+	cp -R $(PKG_BUILD_DIR)/src/openwrt/$(PKG_ARCH)/* $(PKG_BUILD_DIR)/src/__plat_files/$(PKG_ARCH)/
+	cp -R $(PKG_BUILD_DIR)/src/openwrt/init.d $(PKG_BUILD_DIR)/src/__plat_files/init.d
+	rm -rf $(PKG_BUILD_DIR)/src/openwrt
+	mv $(PKG_BUILD_DIR)/src/__plat_files $(PKG_BUILD_DIR)/src/openwrt
 endef
 
 define Build/Configure
@@ -51,7 +58,7 @@ define Package/freeioe/install
 
 ifeq ($(ARCH),x86_64)
 	$(INSTALL_DIR) $(1)/etc/profile.d
-	$(INSTALL_BIN) ./files/echo_sn.sh $(1)/etc/profile.d/echo_sn.sh
+	$(CP) ./files/echo_sn.sh $(1)/etc/profile.d/echo_sn.sh
 endif
 endef
 
