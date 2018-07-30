@@ -15,7 +15,7 @@ PKG_ARCH=$(ARCH_PACKAGES)
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://localhost/download/freeioe
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=783e782152f119343aa9753b857ba59c
+PKG_MD5SUM:=0d02c678a94356885178ba68eb71abdc
 
 include $(INCLUDE_DIR)/package.mk
 
