@@ -56,6 +56,9 @@ define Package/freeioe/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(LN) ../../usr/ioe/freeioe/openwrt/init.d/skynet $(1)/etc/init.d/skynet
 
+	$(INSTALL_DIR) $(1)/usr/ioe/ipt
+	$(CP) $(DL_DIR)/$(PKG_SOURCE) $(1)/usr/ioe/ipt/freeioe.tar.gz
+
 ifeq ($(ARCH),x86_64)
 	$(INSTALL_DIR) $(1)/etc/profile.d
 	$(CP) ./files/echo_sn.sh $(1)/etc/profile.d/echo_sn.sh

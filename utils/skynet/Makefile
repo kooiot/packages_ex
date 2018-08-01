@@ -50,6 +50,9 @@ endef
 define Package/skynet/install
 	$(INSTALL_DIR) $(1)/usr/ioe/skynet
 	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/usr/ioe/skynet/
+
+	$(INSTALL_DIR) $(1)/usr/ioe/ipt
+	$(CP) $(DL_DIR)/$(PKG_SOURCE) $(1)/usr/ioe/ipt/skynet.tar.gz
 endef
 
 $(eval $(call BuildPackage,skynet))
