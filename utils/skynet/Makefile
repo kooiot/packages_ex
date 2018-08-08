@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet
 PKG_VERSION:=1754
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
@@ -18,7 +18,7 @@ PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 PKG_MD5SUM:=ebc22bf4e3d3c1a725202033caf52ce2
 
 ifeq ($(ARCH),x86_64)
-PKG_MD5SUM=755ef0c2523386084a81ba461a71cc1b
+PKG_MD5SUM=ea5ba626b010c6f6f63eece89407d937
 endif
 
 include $(INCLUDE_DIR)/package.mk
