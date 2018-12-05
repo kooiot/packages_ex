@@ -25,7 +25,7 @@ define Package/libfwlib32
   CATEGORY:=Libraries
   TITLE:=Funac focas library in armhf rootfs
   URL:=https://github.com/srdgame
-  DEPENDS:=+chroot
+  DEPENDS:=+coreutils-chroot
 endef
 
 define Package/libfwlib32/description
