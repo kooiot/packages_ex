@@ -37,7 +37,7 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)/src
-	$(CP) $(DL_DIR)/$(PKG_SOURCE) $(PKG_BUILD_DIR)/src/rootfs
+	$(CP) $(DL_DIR)/$(PKG_SOURCE) $(PKG_BUILD_DIR)/src/rootfs.tar.gz
 endef
 
 define Build/Configure
