@@ -16,7 +16,10 @@ PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://localhost/download/focas_armhf_rootfs/
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
-PKG_MD5SUM:=34777c4ef5b558576eedd43c6fa3d7cb
+PKG_MD5SUM:=3e1c3173dc0fdc824eb643f2c6b572d0
+
+RSTRIP:=:
+STRIP:=:
 
 include $(INCLUDE_DIR)/package.mk
 
