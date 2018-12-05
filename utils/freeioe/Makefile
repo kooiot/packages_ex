@@ -65,17 +65,33 @@ ifeq ($(ARCH),x86_64)
 endif
 endef
 
+define Package/freeioe/preinst
+	#!/bin/sh
+	[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
+
+	# stop service if PKG_UPGRADE
+	[ "$${PKG_UPGRADE}" = "1" ] && /etc/init.d/skynet stop >/dev/null 2>&1
+		
+	exit 0	# suppress errors from stop command
+endef
+
 define Package/freeioe/postinst
 	#!/bin/sh
-	/etc/init.d/skynet enable && \
-	/etc/init.d/skynet start >/dev/null 2>&1
-	exit 0
+	[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
+
+	# Start service 
+	/etc/init.d/skynet enable && /etc/init.d/skynet start >/dev/null 2>&1
+
+	exit 0 
 endef
 
 define Package/freeioe/prerm
 	#!/bin/sh
+	[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
+
 	/etc/init.d/skynet stop
 	/etc/init.d/skynet disable
+
 	exit 0
 endef
 
