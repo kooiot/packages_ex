@@ -56,4 +56,8 @@ define Package/libfwlib32/postinst
 	tar -C /usr/focas_armhf_rootfs/sysroot -xzvf /usr/focas_armhf_rootfs/rootfs.tar.gz
 endef
 
+define Package/libfwlib32/prerm
+	rm -rf /usr/focas_armhf_rootfs/sysroot
+endef
+
 $(eval $(call BuildPackage,libfwlib32))

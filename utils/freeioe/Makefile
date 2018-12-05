@@ -65,4 +65,18 @@ ifeq ($(ARCH),x86_64)
 endif
 endef
 
+define Package/freeioe/postinst
+	#!/bin/sh
+	/etc/init.d/skynet enable && \
+	/etc/init.d/skynet start >/dev/null 2>&1
+	exit 0
+endef
+
+define Package/freeioe/prerm
+	#!/bin/sh
+	/etc/init.d/skynet stop
+	/etc/init.d/skynet disable
+	exit 0
+endef
+
 $(eval $(call BuildPackage,freeioe))
