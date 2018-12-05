@@ -37,7 +37,7 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)/src
-	tar -C $(PKG_BUILD_DIR)/src -xzvf "$(DL_DIR)/$(PKG_SOURCE)"
+	$(CP) $(DL_DIR)/$(PKG_SOURCE) $(PKG_BUILD_DIR)/src/rootfs
 endef
 
 define Build/Configure
@@ -49,6 +49,11 @@ endef
 define Package/libfwlib32/install
 	$(INSTALL_DIR) $(1)/usr/focas_armhf_rootfs
 	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/usr/focas_armhf_rootfs
+endef
+
+define Package/libfwlib32/postinst
+	mkdir -p /usr/focas_armhf_rootfs/sysroot
+	tar -C /usr/focas_armhf_rootfs/sysroot -xzvf /usr/focas_armhf_rootfs/rootfs.tar.gz
 endef
 
 $(eval $(call BuildPackage,libfwlib32))
