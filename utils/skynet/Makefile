@@ -8,28 +8,35 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet
-PKG_VERSION:=1813
+PKG_VERSION:=1827
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
-PKG_SOURCE:=$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://localhost/download/openwrt/$(PKG_ARCH)_$(PKG_NAME)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
+include $(INCLUDE_DIR)/package.mk
+
+SKYNET_URL:=http://localhost/download/openwrt/
+
 ifeq ($(PKG_ARCH),arm_cortex-a9_neon)
-PKG_MD5SUM:=34777c4ef5b558576eedd43c6fa3d7cb
+SKYNET_MD5SUM:=1f67d61f290deb53cb977ae2c251254d
 endif
 ifeq ($(PKG_ARCH),x86_64)
-PKG_MD5SUM=52905ca4b38a002d07f78b27baff6869
+SKYNET_MD5SUM=1a80516d5b002e2eaf819d363950b3ee
 endif
 ifeq ($(PKG_ARCH),aarch64_cortex-a53)
-PKG_MD5SUM=b691588a2ad5edc974710f8948e32dba
+SKYNET_MD5SUM=54f34f24ced7fdcd493f548a40a2a6e0
 endif
 ifeq ($(PKG_ARCH),mips_24kc)
-PKG_MD5SUM=19016ce3fed7452113324ba270774de2
+SKYNET_MD5SUM=1dcd5e3a1626202e75a0ac90633d1e31
 endif
 
-include $(INCLUDE_DIR)/package.mk
+define Download/skynet
+	FILE:=$(PKG_VERSION)-$(PKG_ARCH).tar.gz
+	URL:=$(SKYNET_URL)
+	URL_FILE:=$(PKG_ARCH)_$(PKG_NAME).tar.gz
+	HASH:=$(SKYNET_MD5SUM)
+endef
 
 define Package/skynet
   SUBMENU:=KooIoT
