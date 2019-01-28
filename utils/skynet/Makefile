@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet
 PKG_VERSION:=1827
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -32,7 +32,7 @@ ifeq ($(PKG_ARCH),mips_24kc)
 SKYNET_MD5SUM=1dcd5e3a1626202e75a0ac90633d1e31
 endif
 ifeq ($(PKG_ARCH),arm_cortex-a7_neon-vfpv4)
-SKYNET_MD5SUM=f01eeb7b6b6994834335ac2b7c6b3302
+SKYNET_MD5SUM=f5f5f2d2053ce353ccf1cebb20061bcf
 endif
 
 define Download/skynet
