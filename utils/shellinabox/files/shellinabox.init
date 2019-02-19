@@ -1,0 +1,21 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2017 Symid.COM
+
+START=90
+STOP=90
+
+USE_PROCD=1
+
+SHELLINABOX_DATADIR=/var/lib/shellinabox
+SHELLINABOX_PORT=4200
+SHELLINABOX_USER=root
+SHELLINABOX_GROUP=root
+SHELLINABOX_STYLE=white-on-black.css
+
+start_service () {
+	procd_open_instance
+	procd_set_param command shellinaboxd -p $SHELLINABOX_PORT -u "$SHELLINABOX_USER" -g "$SHELLINABOX_GROUP" --css=$SHELLINABOX_STYLE
+	procd_set_param respawn
+	procd_close_instance
+}
+
