@@ -10,7 +10,7 @@ SHELLINABOX_DATADIR=/var/lib/shellinabox
 SHELLINABOX_PORT=4200
 SHELLINABOX_USER=root
 SHELLINABOX_GROUP=root
-SHELLINABOX_STYLE=white-on-black.css
+SHELLINABOX_STYLE=/etc/shellinabox/white-on-black.css
 
 start_service () {
 	procd_open_instance
