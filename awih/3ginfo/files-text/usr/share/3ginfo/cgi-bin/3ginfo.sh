@@ -162,6 +162,12 @@ else
 	CSQ_RSSI="-"
 fi
 
+# CCID
+CCID=$(echo "$O" | awk -F[,\ ] '/^\+CCID/ {print $2}')
+
+# CPSI
+CPSI=$(echo "$O" | awk -F[,\ ] '/^\+CPSI/ {print $2}')
+
 # COPS
 COPS_NUM=$(echo "$O" | awk -F[\"] '/^\+COPS: .,2/ {print $2}')
 if [ "x$COPS_NUM" = "x" ]; then
