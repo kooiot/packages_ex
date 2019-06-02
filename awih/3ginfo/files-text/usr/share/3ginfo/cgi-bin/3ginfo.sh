@@ -562,6 +562,8 @@ if [ -e $TEMPLATE ]; then
 	s!{CSQ_PER}!$CSQ_PER!g; \
 	s!{CSQ_RSSI}!$CSQ_RSSI!g; \
 	s!{CSQ_COL}!$CSQ_COL!g; \
+	s!{CPSI}!$CPSI!g; \
+	s!{CCID}!$CCID!g; \
 	s!{COPS}!$COPS!g; \
 	s!{COPS_NUM}!$COPS_NUM!g; \
 	s!{COPS_MCC}!$COPS_MCC!g; \

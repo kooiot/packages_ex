@@ -24,7 +24,7 @@ function class:level()
 	end
 	]]--
 
-	local ss_type = self._data['type']
+	local ss_type = string.lower(self._data['type'] or self._data['mode'])
 
 	if ss_type == 'gsm' then
 		return self:getGsmLevel()
