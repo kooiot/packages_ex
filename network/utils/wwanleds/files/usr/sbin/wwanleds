@@ -29,17 +29,18 @@ local function exec_json(cmd)
 	return parser:get(), result
 end
 
-local function info_export(3ginfo)
+local function info_export(info)
 	local f, err = io.open('/tmp/sysinfo/3ginfo')
 	if not f then
 		return nil, err
 	end
-	f:write(3ginfo)
+	f:write(info)
 	f:close()
 end
 
-local function led_control(3ginfo)
-	local sso = ss.new(3ginfo)
+local function led_control(info)
+	--[[
+	local sso = ss.new(info)
 	local level = sso:level()
 
 	if level >= 3 then
@@ -53,11 +54,26 @@ local function led_control(3ginfo)
 			os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
 		end
 	end
+	]]--
+
+	local csq = info.csq or 0
+	if csq >= 17 then
+		os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness")
+		os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+	else
+		os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness")
+		if csq >= 10  then
+			os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+		else
+			os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+		end
+	end
+
 end
 
 while true do
-	local 3ginfo, 3ginfo_str = exec_json('3ginfo json')
-	info_export(3ginfo_str)
-	led_control(3ginfo)	
+	local info, info_str = exec_json('3ginfo json')
+	info_export(info_str)
+	led_control(info)	
 	nixio.nanosleep(15)
 end

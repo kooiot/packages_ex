@@ -400,6 +400,8 @@ if [ -n "$SEC" ]; then
 		if [ "x$T" = "xlte" ]; then
 			json_get_var RSRP rsrp
 			json_get_var RSRQ rsrq
+			json_get_var RSSI rssi
+			json_get_var SNR snr
 		fi
 		if [ "x$T" = "xwcdma" ]; then
 			json_get_var ECIO ecio

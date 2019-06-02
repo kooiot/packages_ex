@@ -31,7 +31,7 @@ define Build/Compile
 endef
 
 define Package/wwanleds/install
-	$(CP) $(PKG_BUILD_DIR)/wwanleds/files/* $(1)
+	$(CP) ./files/* $(1)
 endef
 
 $(eval $(call BuildPackage,wwanleds))
