@@ -1,0 +1,119 @@
+#!/usr/bin/lua
+
+local nixio = require 'nixio'
+local fs = require 'nixio.fs'
+local json = require 'luci.jsonc'
+local ss = require 'signalstrength'
+
+local function exec(cmd)
+	local f, err = io.popen(cmd)
+	if not f then
+		return nil, err
+	end
+	local s = f:read('*a')
+	f:close()
+	return s
+end
+
+local function uqmi_exec(param)
+	local cmd = "uqmi -s -d /dev/cdc-wdm0 "..param
+	local result = exec(cmd)
+	if not result then
+		return nil
+	end
+	return result
+end
+
+local function uqmi_wait(param, wait_key)
+	local cmd = "uqmi -s -d /dev/cdc-wdm0 "..param
+	local result, err = exec(cmd)
+	if not result then
+		return nil, err
+	end
+	return string.find(result, wait_key)
+end
+
+local function uqmi_exec_json(param)
+	local cmd = "uqmi -s -d /dev/cdc-wdm0 "..param
+	local result = exec(cmd)
+	if not result then
+		return nil
+	end
+	local parser = json.new()
+	local r, err = parser:parse(result)
+	if not r then
+		return nil, err
+	end
+
+	return parser:get()
+end
+
+local function qmi_export()
+	if fs.stat('/dev/cdc-wdm0') then
+		local model = exec("lsusb | sed -e 's/.*ID [a-f0-9]\+:[a-f0-9]\+ \(.*\)/\1/g' | grep modem")
+		if model then
+			if string.sub(model, -1) == '\n' then
+				model = string.sub(model, 1, -2)
+			end
+			print('model:', model)
+			os.execute("echo \""..model.."\" > /tmp/sysinfo/qmi_model")	
+		else
+			os.execute("echo UNKNOWN > /tmp/sysinfo/qmi_model")
+		end
+
+		while true do
+			local r = uqmi_wait("--get-pin-status", 'UIM uninitialized')
+			if not r then
+				break
+			end
+			nixio.nanosleep(15)
+		end
+
+		local imei = uqmi_exec_json('--get-imei')
+		if string.find(imei, 'Not supported') then
+			return
+		end
+		print('imei:', imei)
+		if imei then
+			os.execute("echo \""..imei.."\" > /tmp/sysinfo/qmi_imei")	
+		else
+			os.execute("echo UNKNOWN > /tmp/sysinfo/qmi_imei")	
+		end
+
+		if model and imei then
+			os.execute("touch /tmp/sysinfo/qmi_info")	
+		end
+	end
+end
+
+local function led_control()
+	local serving_system = uqmi_exec('--get-serving-system')
+	if not string.find(serving_system, "registered") then
+		return
+	end
+
+	local data = uqmi_exec_json("--get-signal-info")
+	if data then
+		local sso = ss.new(data)
+		local level = sso:level()
+		--print(level)
+
+		if level >= 3 then
+			os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness")
+			os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+		else
+			os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness")
+			if level >= 1  then
+				os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+			else
+				os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+			end
+		end
+	end
+end
+
+while true do
+	qmi_export()
+	led_control()
+	nixio.nanosleep(15)
+end
