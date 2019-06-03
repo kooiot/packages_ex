@@ -12,6 +12,7 @@ local function exec(cmd)
 	end
 	local s = f:read('*a')
 	f:close()
+	return s
 end
 
 local function exec_json(cmd)
@@ -55,7 +56,7 @@ local function led_control(info)
 	end
 	]]--
 
-	local csq = info.csq or 0
+	local csq = tonumber(info.csq) or 0
 	if csq >= 17 then
 		os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness")
 		os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")

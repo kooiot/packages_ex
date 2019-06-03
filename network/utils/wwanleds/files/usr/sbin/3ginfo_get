@@ -25,7 +25,7 @@ end
 local args = {...}
 
 for _, v in ipairs(args) do
-	local data = info_get()
+	local data = assert(info_get())
 	print(data[v])
 end
 
