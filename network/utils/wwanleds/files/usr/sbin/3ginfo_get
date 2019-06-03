@@ -26,6 +26,6 @@ local args = {...}
 
 for _, v in ipairs(args) do
 	local data = assert(info_get())
-	print(data[v])
+	print(data[v] ~= nil and data[v] or '')
 end
 
