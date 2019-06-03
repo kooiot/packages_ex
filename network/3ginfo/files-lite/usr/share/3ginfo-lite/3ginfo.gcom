@@ -1,8 +1,8 @@
 opengt
  set com 115200n81
  set comecho off
- set senddelay 0.02
- waitquiet 0.2 0.2
+ set senddelay 0.01
+ waitquiet 0.01 0.01
 
  let $c="AT+CSQ^m"
  let $r="+CSQ"
@@ -18,10 +18,6 @@ opengt
 
  let $c="AT+CREG=2;+CREG?^m"
  let $r="+CREG"
- gosub readatcmd
-
- let $c="AT+CGREG=2;+CGREG?^m"
- let $r="+CGREG"
  gosub readatcmd
 
  exit 0
@@ -41,7 +37,11 @@ opengt
  if len($s) < 2 goto loop2
  if $mid($s,1,2) = "ER" return
  if $mid($s,1,2) = "CO" return
+ if len($s) < 10 goto loop2
+ if $mid($s,1,10) != "+CME ERROR" goto loop2
+ print $s
+ return
 :loop2
- if i = 0 return
+ if i = 0 exit 0
  let i=i-1
  goto loop

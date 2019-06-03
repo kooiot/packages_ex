@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-# (c) 2010-2017 Cezary Jackiewicz <cezary@eko.one.pl>
+# (c) 2010-2019 Cezary Jackiewicz <cezary@eko.one.pl>
 #
 
 RES="/usr/share/3ginfo-lite"
@@ -10,6 +10,8 @@ DEVICE=$(uci -q get 3ginfo.@3ginfo[0].device)
 if [ "x$DEVICE" = "x" ]; then
 	touch /tmp/modem
 	DEVICE=$(cat /tmp/modem)
+else
+	echo "$DEVICE" > /tmp/modem
 fi
 
 if [ "x$DEVICE" = "x" ]; then
@@ -25,7 +27,7 @@ if [ "x$DEVICE" = "x" ]; then
 fi
 
 if [ "x$DEVICE" = "x" ]; then
-	echo "{}"
+	echo '{"error":"Device not found"}'
 	exit 0
 fi
 
@@ -43,7 +45,7 @@ else
 fi
 
 # COPS numeric
-COPS_NUM=$(echo "$O" | awk -F[\"] '/^\+COPS: .,2/ {print $2}')
+COPS_NUM=$(echo "$O" | awk -F[\"] '/^\+COPS: .,2/ {print $2}' | head -1)
 if [ "x$COPS_NUM" = "x" ]; then
 	COPS_NUM="-"
 	COPS_MCC="-"
@@ -55,25 +57,14 @@ else
 fi
 [ "x$COPS" = "x" ] && COPS=$COPS_NUM
 
-# COPS alphanumeric
-T=$(echo "$O" | awk -F[\"] '/^\+COPS: .,0/ {print $2}')
-if [ "x$T" != "x" ]; then
-	if [ "x$T" != "x$COPS" ]; then
-		COPS="$T"
-	fi
+if [ -z "$FORCE_PLMN" ]; then
+	# COPS alphanumeric
+	T=$(echo "$O" | awk -F[\"] '/^\+COPS: .,0/ {print $2}')
+	[ "x$T" != "x" ] && COPS="$T"
 fi
 
 # CREG
-T=99
-CNT=$(echo "$O" | grep "+CREG:" | sed 's/[^:,]//g')
-if [ "x$CNT" = "x:,,," -o "x$CNT" = "x:,,,," ]; then
-	T=$(echo "$O" | awk -F[,] '/^\+CREG/ {print $2}')
-else
-	CNT=$(echo "$O" | grep "+CGREG:" | sed 's/[^:,]//g')
-	if [ "x$CNT" = "x:,,," -o "x$CNT" = "x:,,,," ]; then
-		T=$(echo "$O" | awk -F[,] '/^\+CGREG/ {print $2}')
-	fi
-fi
+eval $(echo "$O" | awk -F[,] '/^\+CREG/ {gsub(/[[:space:]"]+/,"");printf "T=\"%d\";LAC_HEX=\"%X\";CID_HEX=\"%X\";LAC_DEC=\"%d\";CID_DEC=\"%d\";MODE1=\"%d\"", $2, "0x"$3, "0x"$4, "0x"$3, "0x"$4, $5}')
 case "$T" in
 	0*) REG="0";;
 	1*) REG="1";;
@@ -84,9 +75,8 @@ case "$T" in
 esac
 
 # MODE
-T=$(echo "$O" | awk -F[,] '/^\+COPS/ {print $4}' | head -1)
-[ -z "$T" ] && T=$(echo "$O" | awk -F[,] '/^\+CREG/ {print $5}')
-case "$T" in
+[ -z "$MODE1" -o "x$MODE1" = "x0" ] && MODE1=$(echo "$O" | awk -F[,] '/^\+COPS/ {print $4;exit}')
+case "$MODE1" in
 	2*) MODE="UMTS";;
 	3*) MODE="EDGE";;
 	4*) MODE="HSDPA";;
@@ -96,6 +86,33 @@ case "$T" in
 	 *) MODE="-";;
 esac
 
-echo "{\"csq\":\"$CSQ\",\"signal\":\"$CSQ_PER\",\"operator_name\":\"$COPS\",\"operator_mcc\":\"$COPS_MCC\",\"operator_mnc\":\"$COPS_MNC\",\"mode\":\"$MODE\",\"registration\":\"$REG\"}"
-
+T=$(echo "$O" | awk -F[,\ ] '/^\+CME ERROR:/ {print $0;exit}')
+if [ -n "$T" ]; then
+	case "$T" in
+	"+CME ERROR: 10"*) REG="SIM not inserted";;
+	"+CME ERROR: 11"*) REG="SIM PIN required";;
+	"+CME ERROR: 12"*) REG="SIM PUK required";;
+	"+CME ERROR: 13"*) REG="SIM failure";;
+	"+CME ERROR: 14"*) REG="SIM busy";;
+	"+CME ERROR: 15"*) REG="SIM wrong";;
+	"+CME ERROR: 17"*) REG="SIM PIN2 required";;
+	"+CME ERROR: 18"*) REG="SIM PUK2 required";;
+			*) REG=$(echo "$T" | cut -f2 -d: | xargs);;
+	esac
+fi
+cat <<EOF
+{
+"csq":"$CSQ",
+"signal":"$CSQ_PER",
+"operator_name":"$COPS",
+"operator_mcc":"$COPS_MCC",
+"operator_mnc":"$COPS_MNC",
+"mode":"$MODE",
+"registration":"$REG",
+"lac_dec":"$LAC_DEC",
+"lac_hex":"$LAC_HEX",
+"cid_dec":"$CID_DEC",
+"cid_hex":"$CID_HEX"
+}
+EOF
 exit 0

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-# (c) 2010-2016 Cezary Jackiewicz <cezary@eko.one.pl>
+# (c) 2010-2019 Cezary Jackiewicz <cezary@eko.one.pl>
 #
 
 # Output format
@@ -59,6 +59,9 @@ if echo "x$DEVICE" | grep -q "192.168."; then
 	fi
 	if grep -q "Vendor=12d1" /sys/kernel/debug/usb/devices; then
 		O=$($RES/scripts/huawei_hilink.sh $DEVICE)
+	fi
+	if grep -q "Vendor=19d2" /sys/kernel/debug/usb/devices; then
+		O=$($RES/scripts/zte.sh $DEVICE)
 	fi
 	SEC=$(uci -q get 3ginfo.@3ginfo[0].network)
 	SEC=${SEC:-wan}
