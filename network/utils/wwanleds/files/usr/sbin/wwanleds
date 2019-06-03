@@ -12,7 +12,6 @@ local function exec(cmd)
 	end
 	local s = f:read('*a')
 	f:close()
-	return s
 end
 
 local function exec_json(cmd)
@@ -30,7 +29,7 @@ local function exec_json(cmd)
 end
 
 local function info_export(info)
-	local f, err = io.open('/tmp/sysinfo/3ginfo')
+	local f, err = io.open('/tmp/sysinfo/3ginfo', "w+")
 	if not f then
 		return nil, err
 	end

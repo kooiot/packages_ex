@@ -1,0 +1,31 @@
+#!/usr/bin/lua
+
+local nixio = require 'nixio'
+local fs = require 'nixio.fs'
+local json = require 'luci.jsonc'
+
+local function info_get()
+	local f, err = io.open('/tmp/sysinfo/3ginfo')
+	if not f then
+		return nil, err
+	end
+
+	local s = f:read('*a')
+	f:close()
+
+	local parser = json.new()
+	local r, err = parser:parse(s)
+	if not r then
+		return nil, err
+	end
+
+	return parser:get()
+end
+
+local args = {...}
+
+for _, v in ipairs(args) do
+	local data = info_get()
+	print(data[v])
+end
+
