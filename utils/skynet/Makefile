@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet
-PKG_VERSION:=1892
+PKG_VERSION:=1934
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
@@ -20,19 +20,19 @@ SKYNET_URL:=http://localhost/download/openwrt/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_ARCH)-$(PKG_VERSION).tar.gz
 
 ifeq ($(PKG_ARCH),arm_cortex-a9_neon)
-SKYNET_MD5SUM:=d79316346b2483add52652f2330c82da
+SKYNET_MD5SUM:=b330c5188f324f8b0042de5da7d9e866
 endif
 ifeq ($(PKG_ARCH),x86_64)
-SKYNET_MD5SUM=0c74c402a8de91f832e942cffa8ed825
+SKYNET_MD5SUM=9a87f775e77ba946c2eb93d0cc7f3eba
 endif
 ifeq ($(PKG_ARCH),aarch64_cortex-a53)
 SKYNET_MD5SUM=
 endif
 ifeq ($(PKG_ARCH),mips_24kc)
-SKYNET_MD5SUM=d85ccd98891a068be6110b326fb9b7d2
+SKYNET_MD5SUM=6f8b9380e8beded43a659380ccd8a1bf
 endif
 ifeq ($(PKG_ARCH),arm_cortex-a7_neon-vfpv4)
-SKYNET_MD5SUM=d145545ab44972b9599a7f236612cb53
+SKYNET_MD5SUM=4c8335debf8fdee57e3c1bcff56541b3
 endif
 
 define Download/skynet
