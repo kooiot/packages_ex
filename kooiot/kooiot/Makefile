@@ -18,9 +18,8 @@ PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 include $(INCLUDE_DIR)/package.mk
 
 define Package/kooiot
-  SUBMENU:=KooIoT
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
   TITLE:=KooIoT
   URL:=https://github.com/srdgame/kooiot
   DEPENDS:=+lua +luac +liblua +luasocket \

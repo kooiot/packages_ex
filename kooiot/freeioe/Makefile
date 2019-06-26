@@ -20,9 +20,8 @@ PKG_MD5SUM:=13817851b4e16940a57f722d45c0bb2f
 include $(INCLUDE_DIR)/package.mk
 
 define Package/freeioe
-  SUBMENU:=KooIoT
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
   TITLE:=FreeIOE
   URL:=https://github.com/freeioe/freeioe
   DEPENDS:=+skynet +process-monitor

@@ -22,9 +22,8 @@ RSTRIP:=:
 STRIP:=:
 
 define Package/symlink
-  SUBMENU:=SymLink
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
   TITLE:=SymLink
   URL:=http://www.symid.com
   DEPENDS:=+libstdcpp +luci +libopenssl +libcurl

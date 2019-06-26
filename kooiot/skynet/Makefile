@@ -44,9 +44,8 @@ endef
 $(eval $(call Download,skynet))
 
 define Package/skynet
-  SUBMENU:=KooIoT
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
   TITLE:=Skynet
   URL:=https://github.com/srdgame/skynet
   DEPENDS:=+lua +zip +unzip +luci +libopenssl +libcurl +zlib
