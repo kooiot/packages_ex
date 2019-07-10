@@ -1,0 +1,11 @@
+--- a/libhttp/ssl.h
++++ b/libhttp/ssl.h
+@@ -49,6 +49,7 @@
+ #include "config.h"
+ 
+ #include "libhttp/trie.h"
++#include <openssl/opensslv.h>
+ 
+ #if defined(HAVE_OPENSSL_BIO_H) && \
+     defined(HAVE_OPENSSL_ERR_H) && \
+
