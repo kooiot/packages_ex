@@ -10,16 +10,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=shellinabox
-PKG_VERSION:=2.20
-PKG_RELEASE:=2
+PKG_RELEASE:=1
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=COPYING
 
-PKG_SOURCE:=shellinabox-$(PKG_VERSION).tar.gz
-
-SIB_SOURCE_URL:=https://github.com/shellinabox/shellinabox/archive/
-SIB_MD5SUM:=5abe705d4e3092b667a187e10eb01ce7
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL=https://github.com/freeioe/shellinabox
+PKG_SOURCE_DATE:=2019-07-07
+PKG_SOURCE_VERSION:=7ea72226de399ac7f11cb6cb5670ace59b5ed491
 
 PKG_FIXUP:=autoreconf
 
@@ -29,21 +28,13 @@ define Package/shellinabox
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Shell In A Box
-  URL:=https://github.com/shellinabox/shellinabox/
+  URL:=https://github.com/freeioe/shellinabox/
   DEPENDS:=+zlib
 endef
 
 define Package/shellinabox/description
 	Shell in A Box
 endef
-
-define Download/shellinabox
-	FILE:=$(PKG_SOURCE)
-	URL:=$(SIB_SOURCE_URL)
-	URL_FILE:=v$(PKG_VERSION).tar.gz
-	HASH:=$(SIB_MD5SUM)
-endef
-$(eval $(call Download,shellinabox))
 
 #define Package/shellinabox/config
 #  source "$(SOURCE)/Config.in"
