@@ -76,6 +76,7 @@ local function reset_4g_wan()
 
 	os.execute('echo "4G wan reseting...." >> /dev/console')
 	os.execute('echo "'..os.date()..' 4G Wan reset module" >> /mnt/data/wwanleds.log')
+	os.execute("sync")
 
 	os.execute("ifdown 4g_wan")
 	os.execute("echo 1 > /sys/device/gpio/pcie_reset/value")
@@ -88,6 +89,7 @@ end
 local function repower_4g_module()
 	os.execute('echo "4G wan re-powering...." >> /dev/console')
 	os.execute('echo "'..os.date()..' 4G Wan re-power module" >> /mnt/data/wwanleds.log')
+	os.execute("sync")
 
 	os.execute("ifdown 4g_wan")
 	os.execute("echo 0 > /sys/device/gpio/pcie_power/value")
