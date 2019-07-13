@@ -79,9 +79,9 @@ local function reset_4g_wan()
 	os.execute("sync")
 
 	os.execute("ifdown 4g_wan")
-	os.execute("echo 1 > /sys/device/gpio/pcie_reset/value")
+	os.execute("echo 1 > /sys/class/gpio/pcie_reset/value")
 	nixio.nanosleep(1)
-	os.execute("echo 0 > /sys/device/gpio/pcie_reset/value")
+	os.execute("echo 0 > /sys/class/gpio/pcie_reset/value")
 	nixio.nanosleep(10)
 	os.execute("ifup 4g_wan")
 end
@@ -92,9 +92,9 @@ local function repower_4g_module()
 	os.execute("sync")
 
 	os.execute("ifdown 4g_wan")
-	os.execute("echo 0 > /sys/device/gpio/pcie_power/value")
+	os.execute("echo 0 > /sys/class/gpio/pcie_power/value")
 	nixio.nanosleep(1)
-	os.execute("echo 1 > /sys/device/gpio/pcie_power/value")
+	os.execute("echo 1 > /sys/class/gpio/pcie_power/value")
 	nixio.nanosleep(10)
 	os.execute("ifup 4g_wan")
 end
