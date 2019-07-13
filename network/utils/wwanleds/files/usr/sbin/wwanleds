@@ -72,7 +72,7 @@ local function led_control(info)
 end
 
 local function reset_4g_module()
-	os.execute('echo "4G wan reseting...." >> /dev/console')
+	--os.execute('echo "4G wan reseting...." >> /dev/console')
 	os.execute('echo "'..os.date()..' 4G Wan reset module" >> /mnt/data/wwanleds.log')
 	os.execute("sync")
 
@@ -85,7 +85,7 @@ local function reset_4g_module()
 end
 
 local function repower_4g_module()
-	os.execute('echo "4G wan re-powering...." >> /dev/console')
+	--os.execute('echo "4G wan re-powering...." >> /dev/console')
 	os.execute('echo "'..os.date()..' 4G Wan re-power module" >> /mnt/data/wwanleds.log')
 	os.execute("sync")
 
@@ -108,7 +108,7 @@ local function watch_4g_wan()
 	local wan_4g = util.usub('network.interface', 'status', {interface='4g_wan'})
 	if not wan_4g or not wan_4g.autostart then
 		wwan0_not_exits = true
-		os.execute('echo "4G wan is disabled or not exists !!!!" >> /dev/console')
+		--os.execute('echo "4G wan is disabled or not exists !!!!" >> /dev/console')
 		return
 	end
 
@@ -138,13 +138,13 @@ local function watch_4g_wan()
 	
 	--- If 4G got ip connected, then return
 	if wwan0_has_ip then
-		os.execute('echo "4G wan IP is ok!!!!" >> /dev/console')
+		--os.execute('echo "4G wan IP is ok!!!!" >> /dev/console')
 		wwan0_ip_last_got = os.time()
 		wwan0_reset_times = 0
 		return
 	end
 
-	os.execute('echo "4G wan IP missing" >> /dev/console')
+	--os.execute('echo "4G wan IP missing" >> /dev/console')
 
 	--- Three minutes ip lost
 	if (os.time() - wwan0_ip_last_got) >  (wwan0_reset_times * 120 + 300) then
