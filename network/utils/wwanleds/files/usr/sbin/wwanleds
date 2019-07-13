@@ -71,9 +71,7 @@ local function led_control(info)
 	end
 end
 
-local function reset_4g_wan()
-	--- extend the reset time
-
+local function reset_4g_module()
 	os.execute('echo "4G wan reseting...." >> /dev/console')
 	os.execute('echo "'..os.date()..' 4G Wan reset module" >> /mnt/data/wwanleds.log')
 	os.execute("sync")
@@ -99,9 +97,9 @@ local function repower_4g_module()
 	os.execute("ifup 4g_wan")
 end
 
-local wwan0_reset_last = 0
-local wwan0_ip_last_got = os.time()
 local wwan0_not_exits = true
+local wwan0_ip_last_got = os.time()
+local wwan0_reset_times = 0
 
 local function watch_4g_wan()
 	local wwan0_has_ip = false
@@ -114,6 +112,7 @@ local function watch_4g_wan()
 		return
 	end
 
+	--- Get the 4g_wan_4 interface and check whether has got IP or not
 	local iface = util.ubus('network.interface', 'status', {interface='4g_wan_4'})
 	if iface and iface.l3_device == 'wwan0' then
 		local ipv4_addr = iface['ipv4-address']
@@ -122,6 +121,7 @@ local function watch_4g_wan()
 		end
 	end
 
+	--- Get the 4g_wan_6 interface and check whether has got IP or not
 	local iface6 = util.ubus('network.interface', 'status', {interface='4g_wan_6'})
 	if iface6 and iface.l3_device == 'wwan0' then
 		local ipv6_addr = iface['ipv6-address']
@@ -136,31 +136,38 @@ local function watch_4g_wan()
 		wwan0_ip_last_got = os.time()
 	end
 	
+	--- If 4G got ip connected, then return
 	if wwan0_has_ip then
 		os.execute('echo "4G wan IP is ok!!!!" >> /dev/console')
 		wwan0_ip_last_got = os.time()
-		wwan0_reset_last = 0
-	else
-		os.execute('echo "4G wan IP missing" >> /dev/console')
+		wwan0_reset_times = 0
+		return
 	end
 
-	--- ten minutes ip lost
-	if (os.time() - wwan0_ip_last_got) >  (wwan0_reset_last + 600) then
-		wwan0_reset_last = wwan0_reset_last + 300
-		reset_4g_wan()
+	os.execute('echo "4G wan IP missing" >> /dev/console')
+
+	--- Three minutes ip lost
+	if (os.time() - wwan0_ip_last_got) >  (wwan0_reset_times * 120 + 300) then
+		if wwan0_reset_times < 3 then
+			--- Next check will be two minutes later
+			wwan0_reset_times = wwan0_reset_times + 1
+			--- Reset 4G module
+			reset_4g_module()
+		else
+			--- already reset 4g module for three times and network still missing
+			wwan0_ip_last_got = os.time()
+			wwan0_reset_times = 0
+			repower_4g_module()
+		end
 	end
 
-	--- already reset 4g module for three times and network still missing
-	if wwan0_reset_last > 900 then
-		wwan0_ip_last_got = os.time()
-		wwan0_reset_last = 0
-		repower_4g_module()
-		--[[
+	--[[
+	if false then
 		os.execute('echo "'..os.date()..' 4G Wan reset reboot" >> /mnt/data/wwanleds.log')
 		os.execute("sync")
 		os.execute("reboot")
-		]]--
 	end
+	]]--
 end
 
 while true do
