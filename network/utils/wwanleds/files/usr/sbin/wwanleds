@@ -101,38 +101,38 @@ end
 
 local wwan0_reset_last = 0
 local wwan0_ip_last_got = os.time()
-local there_is_no_wwan0 = true
+local wwan0_not_exits = true
 
 local function watch_4g_wan()
-	local no_wwan0 = true
 	local wwan0_has_ip = false
+
+	--- If there is not 4g_wan or 4g_wan is disabled
+	local wan_4g = util.usub('network.interface', 'status', {interface='4g_wan'})
+	if not wan_4g or not wan_4g.autostart then
+		wwan0_not_exits = true
+		os.execute('echo "4G wan is disabled or not exists !!!!" >> /dev/console')
+		return
+	end
+
 	local iface = util.ubus('network.interface', 'status', {interface='4g_wan_4'})
 	if iface and iface.l3_device == 'wwan0' then
-		no_wwan0 = false
 		local ipv4_addr = iface['ipv4-address']
-		if #ipv4_addr > 0 then
+		if ipv4_addr and #ipv4_addr > 0 then
 			wwan0_has_ip = true
 		end
 	end
 
 	local iface6 = util.ubus('network.interface', 'status', {interface='4g_wan_6'})
 	if iface6 and iface.l3_device == 'wwan0' then
-		no_wwan0 = false
 		local ipv6_addr = iface['ipv6-address']
-		if #ipv6_addr > 0 then
+		if ipv6_addr and #ipv6_addr > 0 then
 			wwan0_has_ip = true
 		end
 	end
 
-	--- If there is not wwan0 then do nothing
-	if no_wwan0 then
-		there_is_no_wwan0 = true
-		return
-	end
-
 	--- If previously there is no wwan0 then just update the last ip got
-	if there_is_no_wwan0 then
-		there_is_no_wwan0 = false
+	if wwan0_not_exits then
+		wwan0_not_exits = false
 		wwan0_ip_last_got = os.time()
 	end
 	
