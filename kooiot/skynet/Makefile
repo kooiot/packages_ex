@@ -16,7 +16,7 @@ PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
 include $(INCLUDE_DIR)/package.mk
 
-SKYNET_URL:=http://localhost/download/openwrt/
+SKYNET_URL:=http://localhost/download/bin/openwrt/$(VERSION_NUMBER)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_ARCH)-$(PKG_VERSION).tar.gz
 
 ifeq ($(PKG_ARCH),arm_cortex-a9_neon)
@@ -37,7 +37,7 @@ endif
 
 define Download/skynet
 	FILE:=$(PKG_SOURCE)
-	URL:=$(SKYNET_URL)/$(PKG_ARCH)_$(PKG_NAME)/
+	URL:=$(SKYNET_URL)/$(PKG_ARCH)/$(PKG_NAME)/
 	URL_FILE:=$(PKG_VERSION).tar.gz
 	HASH:=$(SKYNET_MD5SUM)
 endef
