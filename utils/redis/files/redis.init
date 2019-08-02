@@ -1,0 +1,29 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2010-2011 OpenWrt.org
+
+START=95
+STOP=10
+
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+SERVICE_STOP_TIME=9
+
+
+REDIS_BIN="/usr/bin/redis-server "
+REDIS_CLI="/usr/bin/redis-cli"
+REDIS_CONFIG="/etc/redis.conf"
+REDIS_PID="/var/run/redis.pid"
+REDIS_DATA="/opt/var/lib/redis"
+
+PROG="/usr/bin/redis-server --dir $REDIS_DATA"
+
+start() {
+    [ -d "$REDIS_DATA" ] || mkdir -p $REDIS_DATA
+    rm -rf /var/lib/redis || true
+    ln -s $REDIS_DATA /var/lib/redis || true
+	service_start $PROG
+}
+
+stop() {
+	service_stop $PROG
+}

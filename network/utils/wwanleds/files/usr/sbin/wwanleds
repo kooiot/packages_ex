@@ -78,6 +78,7 @@ local function reset_4g_module()
 
 	os.execute("ifdown 4g_wan")
 	os.execute("echo 1 > /sys/class/gpio/pcie_reset/value")
+	os.execute("killall -9 uqmi")
 	nixio.nanosleep(1)
 	os.execute("echo 0 > /sys/class/gpio/pcie_reset/value")
 	nixio.nanosleep(10)
