@@ -1,0 +1,43 @@
+#! /bin/sh
+
+
+. /lib/functions.sh
+
+failure_show() {
+	for file in `ls /sys/class/leds/`; do
+		if [ -d /sys/class/leds/$file ]; then
+			if [ -f /sys/class/leds/$file/brightness ]; then
+				echo "heartbeat" > /sys/class/leds/$file/trigger
+			fi
+		fi
+	done
+	while [ "1" = "1" ]; do
+		sleep 1
+	done
+}
+
+tlink_make() {
+	echo "Starting to doing factory make for board: $1"
+
+	install_to_mmc -f
+
+	if [ $? -ne 0 ]; then
+		failure_show
+	fi
+
+	echo "Start FreeIOE for hwtest"
+
+	cd /usr/ioe/skynet
+	./skynet ioe/hwtest_config
+}
+
+case "$(board_name)" in
+"kooiot,tlink-x1" | \
+"kooiot,tlink-r1")
+	tlink_make ${board_name}
+	;;
+*)
+	echo "UNKNOWN Board to do factory make!!!!"
+	failure_show
+	;;
+esac

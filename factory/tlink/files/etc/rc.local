@@ -1,0 +1,14 @@
+
+# Timeout time ( seconds )
+TIMEOUT=3
+
+echo "Flashing eMMC will be started after ${TIMEOUT}!"
+echo "Enter any character to stop flashing"
+read -t ${TIMEOUT} stop
+
+if [ -z "${stop} ];
+then
+	/sbin/factory_make &
+fi
+
+exit 0
