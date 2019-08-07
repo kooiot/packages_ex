@@ -23,9 +23,9 @@ tlink_make_pre() {
 	export_tlink_efuse MACADDR 2 || {
 		return
 	}
-	uci set network.wan.macaddr=${MACADDR}
-	uci set network.wan6.macaddr=${MACADDR}
-	uci commit network
+	ifconfig eth1 down
+	ifconfig eth1 hw ether ${MACADDR}
+	ifconfig eth1 up
 }
 
 tlink_make() {
