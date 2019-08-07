@@ -19,7 +19,7 @@ failure_show() {
 tlink_make() {
 	echo "Starting to doing factory make for board: $1"
 
-	install_to_mmc -f
+	/sbin/install_to_emmc -f
 
 	if [ $? -ne 0 ]; then
 		failure_show
@@ -29,6 +29,10 @@ tlink_make() {
 
 	cd /usr/ioe/skynet
 	./skynet ioe/hwtest_config
+
+	if [ $? -ne 0 ]; then
+		failure_show
+	fi
 }
 
 case "$(board_name)" in
