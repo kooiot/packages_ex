@@ -2,6 +2,7 @@
 
 
 . /lib/functions.sh
+. /lib/functions/tlink.sh
 
 failure_show() {
 	for file in `ls /sys/class/leds/`; do
@@ -15,6 +16,16 @@ failure_show() {
 		echo "ERROR" > /dev/console
 		sleep 1
 	done
+}
+
+tlink_make_pre() {
+	local MACADDR
+	export_tlink_efuse MACADDR 2 || {
+		return
+	}
+	uci set network.wan.macaddr=${MACADDR}
+	uci set network.wan6.macaddr=${MACADDR}
+	uci commit network
 }
 
 tlink_make() {
@@ -51,6 +62,7 @@ tlink_make() {
 case "$(board_name)" in
 "kooiot,tlink-x1" | \
 "kooiot,tlink-r1")
+	tlink_make_pre ${board_name}
 	tlink_make ${board_name}
 	;;
 *)
