@@ -1,6 +1,9 @@
 root = "./"
 thread = 4
-logger = nil
+logger = "vlogger"
+logservice = "snlua"
+--logger = nil
+logpath = "."
 harbor = 0
 start = "hwtest_main"	-- main script
 bootstrap = "snlua bootstrap"	-- The service for bootstrap
