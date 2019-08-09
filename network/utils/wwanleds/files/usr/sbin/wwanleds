@@ -171,6 +171,8 @@ local function watch_4g_wan()
 	]]--
 end
 
+info_export({})
+
 while true do
 	local info, info_str = exec_json('3ginfo json')
 	info_export(info_str)
