@@ -1,0 +1,13 @@
+Address = 0.0.0.0
+Port = 666
+Compression = 9
+subnet = 10.222.0.1/32
+
+-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEArLLK64uyYNYQchYTVZpwdOLkTFr9P+6Bmr84k2eL1/t1Q8oOdzBa
+oLYiD4rui/z0o/gnw/ChS/xenDVACSc/lrarBL5IsS7c4g+t9pni03zH+RxKOLWY
+fzrMNml7doZHoBSFotl4m7LdFP3skv/SrKy5q26gTHd7NoOEZt1MBR8IzrpCnqgf
+AnG5iJyqfPh5LdvE5oPowlvEyZoNKf0zd2mSE8WdaxrvKst+mFnWxws7sPhQZd70
+C9Ky7D3fDk7nfKahrvdMJ/0c0Vp9deB7vRbZzsoRAxBcoA23zVWd9EX/oVWSZv14
+8+UTO7SDFqkB4wfpV1ULYm5Tr4omYcBkuwIDAQAB
+-----END RSA PUBLIC KEY-----

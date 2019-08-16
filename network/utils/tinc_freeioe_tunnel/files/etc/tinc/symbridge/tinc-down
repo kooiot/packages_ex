@@ -1,0 +1,3 @@
+#!/bin/sh
+ip link set $INTERFACE down
+#iptables -D POSTROUTING -t nat -s 10.8.0.0/24 -j MASQUERADE -o eth0

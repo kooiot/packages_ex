@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2017 symid.com
+
+START=99
+
+
+start () {
+	tincd -n symrouter
+}
+
+stop () {
+	tincd -n symrouter -k
+}
+
+restart () {
+	tincd -n symrouter -k
+	sleep 1
+	tincd -n symrouter
+}
