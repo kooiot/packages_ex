@@ -2,6 +2,7 @@
 
 uci -q show network.symrouter || {
 	uci add_list network.lan.ifname='symbridge'
+	uci set network.symrouter='interface'
 	uci set network.symrouter.prop='static'
 	uci set network.symrouter.ifname='symrouter'
 	uci set network.symrouter.ipaddr='10.222.0.1'
