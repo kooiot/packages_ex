@@ -42,6 +42,8 @@ endef
 
 define Package/freeioe/postinst
 	#!/bin/sh
+	[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
+
 	if [ -f /etc/uci-defaults/tinc_freeioe_tunnel ]; then
 		sh /etc/uci-defaults/tinc_freeioe_tunnel
 		rm -f /etc/uci-defaults/tinc_freeioe_tunnel
@@ -50,6 +52,7 @@ endef
 
 define Package/freeioe/prerm
 	#!/bin/sh
+	[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
 
 	/etc/init.d/symbridge stop
 	/etc/init.d/symbridge disable
