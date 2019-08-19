@@ -1,0 +1,35 @@
+#!/bin/sh
+
+uci -q show network.symrouter || {
+	uci add_list network.lan.ifname='symbridge'
+	uci set network.symrouter.prop='static'
+	uci set network.symrouter.ifname='symrouter'
+	uci set network.symrouter.ipaddr='10.222.0.1'
+	uci set network.symrouter.netmask='255.255.255.0'
+
+	uci commit network
+
+	uci add firewall zone
+	uci set firewall.@zone[-1].name='tosymrouter'
+	uci set firewall.@zone[-1].network='symrouter'
+	uci set firewall.@zone[-1].input='ACCEPT'
+	uci set firewall.@zone[-1].output='ACCEPT'
+	uci set firewall.@zone[-1].forward='ACCEPT'
+
+	uci add firewall rule
+	uci set firewall.@rule[-1].name='tosymrouter'
+	uci set firewall.@rule[-1].src='lan'
+	uci set firewall.@rule[-1].proto='all'
+	uci set firewall.@rule[-1].dest='tosymrouter'
+	uci set firewall.@rule[-1].target='ACCEPT'
+
+	uci add firewall forwarding
+	uci set firewall.@forwarding[-1].src='tosymrouter'
+	uci set firewall.@forwarding[-1].dest='lan'
+
+	uci add firewall forwarding
+	uci set firewall.@forwarding[-1].src='lan'
+	uci set firewall.@forwarding[-1].dest='tosymrouter'
+
+	uci commit firewall
+}
