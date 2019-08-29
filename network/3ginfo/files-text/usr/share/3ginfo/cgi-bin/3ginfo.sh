@@ -171,7 +171,7 @@ CCID=$(echo "$O" | awk -F[,\ ] '/^\+CCID/ {print $2}')
 # CPSI
 CPSI=$(echo "$O" | awk -F[,\ ] '/^\+CPSI/ {print $2}')
 
-# CPSI
+# CGSN
 CGSN=$(echo "$O" | awk -F[,\ ] '/^\+CGSN/ {print $2}')
 
 # COPS
@@ -572,6 +572,7 @@ if [ -e $TEMPLATE ]; then
 	s!{CSQ_COL}!$CSQ_COL!g; \
 	s!{CPSI}!$CPSI!g; \
 	s!{CCID}!$CCID!g; \
+	s!{CGSN}!$CGSN!g; \
 	s!{COPS}!$COPS!g; \
 	s!{COPS_NUM}!$COPS_NUM!g; \
 	s!{COPS_MCC}!$COPS_MCC!g; \
