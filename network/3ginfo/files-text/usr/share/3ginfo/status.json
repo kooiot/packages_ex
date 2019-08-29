@@ -3,6 +3,7 @@
 "csq": "{CSQ}",
 "ccid": "{CCID}",
 "cpsi": "{CPSI}",
+"cgsn": "{CGSN}",
 "signal": "{CSQ_PER}",
 "rssi": "{CSQ_RSSI}",
 "mode": "{MODE}",

@@ -23,6 +23,10 @@ opengt
  let $r="+CCID"
  gosub readatcmd
 
+ let $c="AT+CGSN"
+ let $r="+CGSN"
+ gosub readatcmd
+
  if $toupper($mid($v,0,3)) = "HUA" goto huawei
  if $toupper($mid($v,0,3)) = "NOK" goto vodafone
  if $toupper($mid($v,0,3)) = "NOV" goto novatel
