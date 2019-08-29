@@ -114,7 +114,10 @@ local function watch_cloud_status()
 			if tonumber(status) == 1 then
 				cloud_last = now
 			else
-				cloud_last = tonumber(last) or cloud_last
+				local last_num = tonumber(last)
+				if last_num and last_num > cloud_last then
+					cloud_last = last_num
+				end
 			end
 		end
 	else
@@ -122,9 +125,10 @@ local function watch_cloud_status()
 		cloud_last = now
 	end
 
-	if now - cloud_last > 600 then
+	--- If 20 minutes that gateway not connected
+	if now - cloud_last > 1200 then
 		cloud_last = now
-		echo_log('Cloud status out of date (10m)')
+		echo_log('Cloud status out of date (20 min)')
 		repower_4g_module()
 	end
 end
@@ -187,12 +191,14 @@ local function watch_4g_wan()
 		if wwan0_reset_times < 3 then
 			--- Next check will be two minutes later
 			wwan0_reset_times = wwan0_reset_times + 1
+			cloud_last = os.time()
 			--- Reset 4G module
 			reset_4g_module()
 		else
 			--- already reset 4g module for three times and network still missing
 			wwan0_ip_last_got = os.time()
 			wwan0_reset_times = 0
+			cloud_last = os.time()
 			repower_4g_module()
 		end
 	end
