@@ -19,12 +19,13 @@ opengt
  let $r="+CPSI"
  gosub readatcmd
 
+ let $c="AT+CGSN^m"
+ gosub readatcmdnr
+ print "\n+CGSN: ",$s
+
+
  let $c="AT+CCID^m"
  let $r="+CCID"
- gosub readatcmd
-
- let $c="AT+CGSN"
- let $r="+CGSN"
  gosub readatcmd
 
  if $toupper($mid($v,0,3)) = "HUA" goto huawei

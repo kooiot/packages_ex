@@ -75,7 +75,7 @@ local function echo_log(log)
 	os.execute('echo "'..log..'" >> /dev/console')
 	os.execute('echo "'..os.date()..': '..log..'" >> /mnt/data/wwanleds.log')
 	os.execute('tail -n 500 /mnt/data/wwanleds.log > /mnt/data/wwanleds.log.new')
-	os.execute('mv /mnt/data/wwanleds.log.new > /mnt/data/wwanleds.log')
+	os.execute('mv -f /mnt/data/wwanleds.log.new /mnt/data/wwanleds.log')
 	os.execute("sync")
 end
 
