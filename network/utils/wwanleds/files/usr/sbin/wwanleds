@@ -57,6 +57,12 @@ local function led_control(info)
 	end
 	]]--
 
+	if not info.ccid or string.len(info.ccid) == 0 then
+		os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness")
+		os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+		return
+	end
+
 	local csq = tonumber(info.csq) or 0
 	if csq >= 17 then
 		os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness")
