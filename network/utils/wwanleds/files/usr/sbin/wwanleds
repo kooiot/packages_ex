@@ -71,10 +71,16 @@ local function led_control(info)
 	end
 end
 
-local function reset_4g_module()
-	--os.execute('echo "4G wan reseting...." >> /dev/console')
-	os.execute('echo "'..os.date()..' 4G Wan reset module" >> /mnt/data/wwanleds.log')
+local function echo_log(log)
+	os.execute('echo "'..log..'" >> /dev/console')
+	os.execute('echo "'..os.date()..': '..log..'" >> /mnt/data/wwanleds.log')
+	os.execute('tail -n 500 /mnt/data/wwanleds.log > /mnt/data/wwanleds.log.new')
+	os.execute('mv /mnt/data/wwanleds.log.new > /mnt/data/wwanleds.log')
 	os.execute("sync")
+end
+
+local function reset_4g_module()
+	echo_log('4G Wan reset module')
 
 	os.execute("ifdown 4g_wan")
 	os.execute("echo 1 > /sys/class/gpio/pcie_reset/value")
@@ -86,9 +92,7 @@ local function reset_4g_module()
 end
 
 local function repower_4g_module()
-	--os.execute('echo "4G wan re-powering...." >> /dev/console')
-	os.execute('echo "'..os.date()..' 4G Wan re-power module" >> /mnt/data/wwanleds.log')
-	os.execute("sync")
+	echo_log('4G Wan re-power module')
 
 	os.execute("ifdown 4g_wan")
 	os.execute("echo 0 > /sys/class/gpio/pcie_power/value")
@@ -96,6 +100,33 @@ local function repower_4g_module()
 	os.execute("echo 1 > /sys/class/gpio/pcie_power/value")
 	nixio.nanosleep(10)
 	os.execute("ifup 4g_wan")
+end
+
+local cloud_last = os.time()
+
+local function watch_cloud_status()
+	local now = os.time()
+
+	local str, err = exec('cat /tmp/sysinfo/cloud_status')
+	if str and string.len(str) > 0 then
+		local status, last = string.match(str, '(%d+)%c+(%d+)')
+		if status and last then
+			if tonumber(status) == 1 then
+				cloud_last = now
+			else
+				cloud_last = tonumber(last) or cloud_last
+			end
+		end
+	else
+		-- if file is empty, the programe is not running, skip checking
+		cloud_last = now
+	end
+
+	if now - cloud_last > 600 then
+		cloud_last = now
+		echo_log('Cloud status out of date (10m)')
+		repower_4g_module()
+	end
 end
 
 local wwan0_not_exits = true
@@ -142,6 +173,10 @@ local function watch_4g_wan()
 		--os.execute('echo "4G wan IP is ok!!!!" >> /dev/console')
 		wwan0_ip_last_got = os.time()
 		wwan0_reset_times = 0
+
+		-- Only watch cloud status if the wwan0 has ip
+		watch_cloud_status()
+
 		return
 	end
 
@@ -172,6 +207,8 @@ local function watch_4g_wan()
 end
 
 info_export('{}')
+os.execute('touch /tmp/sysinfo/cloud_status') --- make sure the file is there
+echo_log('Start wwanleds services...')
 
 while true do
 	local info, info_str = exec_json('3ginfo json')
