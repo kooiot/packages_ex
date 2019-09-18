@@ -47,7 +47,7 @@ define Package/focas_ubus
   CATEGORY:=KooIoT
   TITLE:=Fanuc Focas
   URL:=http://www.kooiot.com
-  DEPENDS:=+freeioe
+  DEPENDS:=+freeioe +@KERNEL_DEVTMPFS
 endef
 
 define Package/focas_ubus/description
