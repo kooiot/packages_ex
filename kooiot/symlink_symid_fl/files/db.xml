@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="GBK"?> 
+<root binver="22" appver="260000" ver="6" GapUpdateOff="0" stn="C系列默认工程" dbimgflg="0" runmode="0" etagsct="1000" maxvpign="0" iows="0" ioidle="10" tmot="60" qsw_flg="0" qsw_chkp="60" qsw_nidx="0" qsw_ping="114.114.114.114" ysl_sln="0" ysl_tcpaddr="symid-fl.top" ysl_tcpport="5190" ysl_dsch="" ysl_torst="30" els_flg="0" yemb_valid="1" yemb_ipaddr="symid-fl.top" yemb_ipport="5191" yemb_bind="" gbrgto_vd="0" gbrgto_nmid="" gbrgto_log="0" gbrgto_lnktype="0" gbrgto_ipaddr="" gbrgto_ipport="9000" gbrgto_flg="62963712" gbrgto_dbfmt="1" gbrgto_maxasdu="1024" gbrgto_rtspan="0" ctx_valid="0" ctx_addr="" ctx_hours="168" ctx_filecount="256" ctx_filesz="1024" perf1="0" evtfmt="0">
+<etag_lst>
+<tag tid="10" name="AlertL0" desc="0级告警输入数量" vvt="1" isemb="1"/>
+<tag tid="10" name="AlertL1" desc="1级告警输入数量" vvt="1" isemb="1"/>
+<tag tid="10" name="AlertL2" desc="2级告警输入数量" vvt="1" isemb="1"/>
+<tag tid="10" name="AlertL3x" desc="3级以上告警输入数量" vvt="1" isemb="1"/>
+<tag tid="10" name="AlmAIL1CTR" desc="模拟量一级报警计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="AlmAIL2CTR" desc="模拟量二级报警计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="AlmDICTR" desc="数字量报警计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="AlmXHCTR" desc="信号量报警计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="CpuScanCnt" desc="内核计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="CalRPFIDCnt" desc="RapidFID计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="CalFSDCnt" desc="FSD计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="CalFSBCnt" desc="FSB计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="CalSOECnt" desc="SOE计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="RMClientCnt" desc="在线客户端数量" vvt="1" isemb="1"/>
+<tag tid="10" name="DeviceSN" desc="设备序列号" vvt="3" isemb="1"/>
+<tag tid="10" name="CpuLoad" desc="CPU使用率" vvt="2" isemb="1"/>
+<tag tid="10" name="CpuTemp" desc="CPU温度" vvt="2" isemb="1"/>
+<tag tid="10" name="DbImageSaveTrig" desc="镜像保存数据" vvt="1" isemb="1"/>
+<tag tid="10" name="SysUptime" desc="设备开机时间" vvt="1" isemb="1"/>
+<tag tid="10" name="KnUptime" desc="内核运行时间" vvt="1" isemb="1"/>
+<tag tid="10" name="BoxTimer" desc="时钟(Unix秒数)" vvt="1" isemb="1"/>
+<tag tid="10" name="Year" desc="年" vvt="1" isemb="1"/>
+<tag tid="10" name="Month" desc="月" vvt="1" isemb="1"/>
+<tag tid="10" name="Day" desc="日" vvt="1" isemb="1"/>
+<tag tid="10" name="Hour" desc="时" vvt="1" isemb="1"/>
+<tag tid="10" name="Minute" desc="分" vvt="1" isemb="1"/>
+<tag tid="10" name="Second" desc="秒" vvt="1" isemb="1"/>
+<tag tid="10" name="SysTotalRam" desc="系统内存总量" vvt="1" isemb="1"/>
+<tag tid="10" name="SysFreeRam" desc="系统剩余内存" vvt="1" isemb="1"/>
+<tag tid="10" name="SDCardFree" desc="SD卡剩余容量KB" vvt="1" isemb="1"/>
+<tag tid="10" name="CacheFree" desc="断缓剩余容量MB" vvt="2" isemb="1"/>
+<tag tid="10" name="SWRModule" desc="SWR状态通道" vvt="1" isemb="1"/>
+<tag tid="10" name="Config" desc="远程配置接口" vvt="4" isemb="1"/>
+<tag tid="10" name="LicInfo" desc="设备授权信息" vvt="3" isemb="1"/>
+<tag tid="10" name="LisDecode" desc="授权解码通道" vvt="3" isemb="1"/>
+<tag tid="10" name="pcid" desc="设备标识" vvt="3" isemb="1"/>
+<tag tid="10" name="RDDForbid" desc="热备冗余停运" vvt="1" isemb="1"/>
+<tag tid="10" name="RDDMode" desc="运行模式" vvt="1" isemb="1"/>
+<tag tid="10" name="BSPos" desc="基站定位" vvt="3" isemb="1"/>
+<tag tid="10" name="CSQ" desc="无线信号强度" vvt="2" isemb="1"/>
+<tag tid="10" name="IMEI" desc="无线串号" vvt="3" isemb="1"/>
+<tag tid="10" name="CCID" desc="SIM卡串号" vvt="3" isemb="1"/>
+<tag tid="10" name="WiFlowUp" desc="月无线流量上行" vvt="2" isemb="1"/>
+<tag tid="10" name="WiFlowDown" desc="月无线流量下行" vvt="2" isemb="1"/>
+<tag tid="10" name="WiFlowTotal" desc="月无线流量总" vvt="2" isemb="1"/>
+</etag_lst>
+<gapcfg mode="0" protfilter="0"/>
+<tspch_lst/>
+<db/>
+<dstask name="ds" desc="转发服务" vd="1"/>
+<ytask name="y" desc="数据中心" vd="1">
+<channel name="SymLink" desc="C系列（出厂设置）" vd="1" snrep="" xturl="" prefix="" bcode="" pos="" coor="" commtype="0" ipaddr="symid-fl.top" ipport="5191" bndlocalip="" ipportpnp="5192" swrnumb="0" mportcheckcyc="3" rdd_flag="0" rdd_commtype="0" rdd_ipaddr="" rdd_ipport="4300" rdd_bndlocalip="" rdd_swrnumb="0" deconn_to="0" commtestf="1" commtestp="5190" sndmode="0" szwpool="1048576" packsz="8192" sndcyc="5" heartcyc="120" rtcall="900" sndto="30" lgspan="60" dbxsprt="0" txcache="1" txfilect="64" txvdhours="240" txidlepush="0" txidlepushspan="60" ytimeadj="0" autocompr="1" exflg="0" aesflg="0" aeskey="">
+<objs>
+<tags/>
+</objs>
+</channel>
+</ytask>
+<deuser/>
+<aldb hsaveflg="0" libsz_delay="128" libsz_snd="256" libsz_his="512">
+<atag_mgr/>
+</aldb>
+<trigger>
+<altrig_mgr/>
+</trigger>
+<estlib>
+<elst/>
+</estlib>
+<stlib>
+<ilst/>
+</stlib>
+<eas_mgr/>
+<freeioe enable="1"/>
+<filecheck>
+<project simpleflag="1"/>
+</filecheck>
+</root>
