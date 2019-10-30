@@ -53,6 +53,19 @@ define Package/symlink/description
 	SymLink application is an IOT gateway solution
 endef
 
+define Package/symlink/config
+choice
+	prompt "Default project server domain"
+	default SYMLINK_PROJECT_NONE
+	config SYMLINK_PROJECT_NONE
+		bool "None"
+	config SYMLINK_PROJECT_SYMGRID
+		bool "symgrid.com"
+	config SYMLINK_PROJECT_SYMID_FL
+		bool "symid-fl.top"
+endchoice
+endef
+
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)/src
 	unzip -d $(PKG_BUILD_DIR)/src $(DL_DIR)/$(PKG_SOURCE)
@@ -64,6 +77,16 @@ endef
 define Build/Compile
 endef
 
+
+SYMLINK_RPOJECT_DIR:=none
+ifeq ($(CONFIG_SYMLINK_PROJECT_SYMGRID), y)
+	SYMLINK_PROJECT_DIR:=symgrid.com
+else ifeq ($(CONFIG_SYMLINK_PROJECT_SYMID_FL), y)
+	SYMLINK_PROJECT_DIR:=symid-fl.top
+else
+	SYMLINK_PROJECT_DIR:=none
+endif
+
 define Package/symlink/install
 	$(INSTALL_DIR) $(1)/mnt/sympad
 	$(CP) -rf $(PKG_BUILD_DIR)/src/sympad/* $(1)/mnt/sympad
@@ -73,6 +96,11 @@ define Package/symlink/install
 
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/symlink.init $(1)/etc/init.d/symlink
+
+	if [ -f ./files/$(SYMLINK_PROJECT_DIR)/db.xml ]; then \
+		$(INSTALL_DIR) $(1)/mnt/sympad/project; \
+		$(CP) ./files/$(SYMLINK_PROJECT_DIR)/* $(1)/mnt/sympad/project; \
+	fi
 endef
 
 define Package/symlink/postinst
