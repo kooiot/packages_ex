@@ -58,7 +58,7 @@ choice
 	prompt "Default project server domain"
 	default SYMLINK_PROJECT_NONE
 	config SYMLINK_PROJECT_NONE
-		bool "None"
+		bool "none"
 	config SYMLINK_PROJECT_SYMGRID
 		bool "symgrid.com"
 	config SYMLINK_PROJECT_SYMID_FL
@@ -80,11 +80,14 @@ endef
 
 SYMLINK_RPOJECT_DIR:=none
 ifeq ($(CONFIG_SYMLINK_PROJECT_SYMGRID), y)
-	SYMLINK_PROJECT_DIR:=symgrid.com
+SYMLINK_PROJECT_DIR:=symgrid.com
+CONFIGURE_ARGS += --symgrid_com
 else ifeq ($(CONFIG_SYMLINK_PROJECT_SYMID_FL), y)
-	SYMLINK_PROJECT_DIR:=symid-fl.top
+SYMLINK_PROJECT_DIR:=symid-fl.top
+CONFIGURE_ARGS += --symid_fl_top
 else
-	SYMLINK_PROJECT_DIR:=none
+SYMLINK_PROJECT_DIR:=none
+CONFIGURE_ARGS += --symgrid_none
 endif
 
 define Package/symlink/install
