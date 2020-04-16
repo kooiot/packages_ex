@@ -172,6 +172,19 @@ local function watch_4g_wan()
 		end
 	end
 
+	-- Get the 3g-4g_wan inteface and check whether has got IP or not
+	local iface = util.ubus('network.interface', 'status', {interface='4g_wan'})
+	if iface and iface.l3_device == '3g-4g_wan' then
+		local ipv4_addr = iface['ipv4-address']
+		if ipv4_addr then #ipv4_addr > 0 then
+			wwan0_has_ip = true
+		end
+		local ipv6_addr = iface['ipv6-address']
+		if ipv6_addr and #ipv6_addr > 0 then
+			wwan0_has_ip = true
+		end
+	end
+
 	--- If previously there is no wwan0 then just update the last ip got
 	if wwan0_not_exits then
 		wwan0_not_exits = false
