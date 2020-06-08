@@ -1,0 +1,37 @@
+#
+# Copyright (C) 2020 Dirk Chang
+#
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=cloud_watch
+PKG_VERSION:=0.3
+PKG_RELEASE:=1
+PKG_LICNESE:=MIT
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/cloud_watch
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=WWAN restart by watching cloud connnection status
+  DEPENDS:=+freeioe
+  MAINTAINER:=Dirk Chang <dirk@kooiot.com>
+endef
+
+define Package/cloud_watch/description
+  Utils to restart wwan module by watch the cloud connection status exported by FreeIOE
+endef
+
+define Build/Configure
+endef
+
+define Build/Compile
+endef
+
+define Package/cloud_watch/install
+	$(CP) ./files/* $(1)
+endef
+
+$(eval $(call BuildPackage,cloud_watch))

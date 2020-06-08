@@ -117,13 +117,13 @@ local function watch_cloud_status()
 	if str and string.len(str) > 0 then
 		local status, last = string.match(str, '(%d+)%c+(%d+)')
 		if status and last then
+			local last_num = tonumber(last)
 			if tonumber(status) == 1 then
-				cloud_last = now
-			else
-				local last_num = tonumber(last)
-				if last_num and last_num > cloud_last then
-					cloud_last = last_num
-				end
+				--- if it is online using now if last is not present
+				last_num = last_num or now
+			end
+			if last_num and last_num > cloud_last then
+				cloud_last = last_num
 			end
 		end
 	else
