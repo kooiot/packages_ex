@@ -148,7 +148,7 @@ local function watch_4g_wan()
 
 	--- If there is not 4g_wan or 4g_wan is disabled
 	local wan_4g = util.ubus('network.interface', 'status', {interface='4g_wan'})
-	if not wan_4g or not wan_4g.autostart then
+	if not wan_4g or (not wan_4g.autostart and not wan_4g.errors) then
 		wwan0_not_exits = true
 		--os.execute('echo "4G wan is disabled or not exists !!!!" >> /dev/console')
 		return
