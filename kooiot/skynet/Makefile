@@ -28,8 +28,8 @@ SKYNET_MD5SUM=583cccac7112c91e8cee06de1fa323a1
 VERSION_NUMBER=19.07
 endif
 ifeq ($(PKG_ARCH),aarch64_cortex-a53)
-SKYNET_MD5SUM=
-VERSION_NUMBER:=
+SKYNET_MD5SUM=522ed15665e545a613d9aad7362f80e6
+VERSION_NUMBER:=snapshot
 endif
 ifeq ($(PKG_ARCH),mips_24kc)
 SKYNET_MD5SUM=058d531d612625159f9aad8a7ec0e611
@@ -55,7 +55,7 @@ define Package/skynet
   CATEGORY:=KooIoT
   TITLE:=Skynet
   URL:=https://github.com/srdgame/skynet
-  DEPENDS:=+lua +zip +unzip +luci +libopenssl +libcurl +zlib
+  DEPENDS:=+lua +zip +unzip +luci +libopenssl +libcurl +zlib +libstdcpp
 endef
 
 define Package/skynet/description
