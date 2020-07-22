@@ -119,8 +119,8 @@ local function watch_cloud_status()
 		if status and last then
 			local last_num = tonumber(last)
 			if tonumber(status) == 1 then
-				--- if it is online using now if last is not present
-				last_num = last_num or now
+				--- Use now when status is online (as the timestamp will be updated untill offline)
+				last_num = now
 			end
 			if last_num and last_num > cloud_last then
 				cloud_last = last_num
