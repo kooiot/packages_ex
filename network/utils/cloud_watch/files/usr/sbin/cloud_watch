@@ -13,7 +13,7 @@ local function exec(cmd)
 end
 
 local function sysinfo_module()
-	print('sysinfo_module')
+	--print('sysinfo_module')
 
 	local cmd = 'sysinfo module'
 	local result = exec(cmd)
@@ -26,8 +26,8 @@ local function sysinfo_module()
 	if ccid == 'UNKNOWN ERROR' then
 		ccid = nil
 	end
-	print('MODULE', module)
-	print('CCID', ccid)
+	--print('MODULE', module)
+	--print('CCID', ccid)
 
 	return {
 		module = module,
@@ -59,8 +59,8 @@ local function watch_cloud_status()
 		if status and last then
 			local last_num = tonumber(last)
 			if tonumber(status) == 1 then
-				--- if it is online using now if last is not present
-				last_num = last_num or now
+				--- Use now when status is online (as the timestamp will be updated untill offline)
+				last_num = now
 			end
 
 			if last_num and last_num > cloud_last then
@@ -71,7 +71,7 @@ local function watch_cloud_status()
 		-- if file is empty, the programe is not running, skip checking
 		cloud_last = now
 	end
-	print(now, cloud_last)
+	--print(now, cloud_last)
 
 	--- If 20 minutes that gateway not connected
 	if now - cloud_last > 1200 then
