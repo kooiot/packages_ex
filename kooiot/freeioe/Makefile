@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe
-PKG_VERSION:=1322
+PKG_VERSION:=1326
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://localhost/download/freeioe
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=5188047fd766cebd6ec1501bea73f7e0
+PKG_MD5SUM:=2c4eb0d689c2ab5ffd119766c1217145
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -57,7 +57,7 @@ define Package/freeioe/install
 	$(INSTALL_DIR) $(1)/usr/ioe/ipt
 	$(CP) $(DL_DIR)/$(PKG_SOURCE) $(1)/usr/ioe/ipt/freeioe.tar.gz
 
-ifeq ($(ARCH),x86_64)
+ifeq ($(PKG_ARCH),x86_64)
 	$(INSTALL_DIR) $(1)/etc/profile.d
 	$(CP) ./files/echo_sn.sh $(1)/etc/profile.d/echo_sn.sh
 endif
