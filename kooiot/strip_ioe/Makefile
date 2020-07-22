@@ -36,9 +36,15 @@ endef
 
 define Package/strip_ioe/install
 	$(CP) ./files/* $(1)
+endef
 
-	$(RM) -rf $(1)/usr/ioe/freeioe/*
-	$(RM) -rf $(1)/usr/ioe/skynet/*
+define Package/strip_ioe/preinst
+	#!/bin/sh
+	if [ -n "$${IPKG_INSTROOT}" ] # if run within buildroot exit
+	then
+	$(RM) -rf $(IPKG_INSTROOT)/usr/ioe/freeioe/*
+	$(RM) -rf $(IPKG_INSTROOT)/usr/ioe/skynet/*
+	fi
 endef
 
 $(eval $(call BuildPackage,strip_ioe))
