@@ -1,0 +1,21 @@
+--- a/Makefile	2020-07-21 11:42:38.277872138 +0800
++++ b/Makefile	2020-07-21 11:41:15.738509033 +0800
+@@ -47,7 +47,7 @@
+ ifeq ($(MT7621_MP), y)
+ CONFIG_CROSS_COMPILER_PATH ?= /opt/mips-2012.03/bin/
+ else
+-CONFIG_CROSS_COMPILER_PATH ?= /opt/buildroot-gcc342/bin
++CONFIG_CROSS_COMPILER_PATH ?= $(TOPDIR)/toolchain_opt/buildroot-gcc342/bin
+ endif
+ 
+ ifeq (include/config.mk,$(wildcard include/config.mk))
+@@ -1663,6 +1663,9 @@
+ 
+ rt2880_config: unconfig
+ 	@./mkconfig $(@:_config=) mips ralink_soc rt2880
++
++widora_neo_32m_config:
++	echo "AAAAA"
+ #########################################################################
+ ## MIPS32 AU1X00
+ #########################################################################
