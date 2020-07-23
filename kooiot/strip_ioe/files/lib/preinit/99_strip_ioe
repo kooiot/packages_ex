@@ -1,10 +1,11 @@
 do_uncompress_ioe() {
 	if [ -f /usr/ioe/ipt/freeioe.tar.gz ]; then
+		mkdir -p /usr/ioe/freeioe
 		tar -C /usr/ioe/freeioe -xzf /usr/ioe/ipt/freeioe.tar.gz
-		ln -s /usr/ioe/freeioe/openwrt/init.d/skynet /etc/init.d/skynet
 	fi
 	if [ -f /usr/ioe/ipt/skynet.tar.gz ]; then
-		tar -C /usr/ioe/skynet -xzf /usr/ioe/ipt/freeioe.tar.gz
+		mkdir -p /usr/ioe/skynet
+		tar -C /usr/ioe/skynet -xzf /usr/ioe/ipt/skynet.tar.gz
 	fi
 }
 

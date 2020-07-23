@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strip_ioe
 PKG_VERSION:=20200722
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICENSE:=MIT
 
 PKG_ARCH=$(ARCH_PACKAGES)
@@ -38,13 +38,13 @@ define Package/strip_ioe/install
 	$(CP) ./files/* $(1)
 endef
 
-define Package/strip_ioe/preinst
-	#!/bin/sh
-	if [ -n "$${IPKG_INSTROOT}" ] # if run within buildroot exit
-	then
-	$(RM) -rf $(IPKG_INSTROOT)/usr/ioe/freeioe/*
-	$(RM) -rf $(IPKG_INSTROOT)/usr/ioe/skynet/*
-	fi
+define Package/strip_ioe/postinst
+#!/bin/sh
+if [ -n "$${IPKG_INSTROOT}" ] # if run within buildroot
+then
+	rm -rf "$${IPKG_INSTROOT}/usr/ioe/freeioe"
+	rm -rf "$${IPKG_INSTROOT}/usr/ioe/skynet"
+fi
 endef
 
 $(eval $(call BuildPackage,strip_ioe))

@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe
-PKG_VERSION:=1326
+PKG_VERSION:=1328
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://localhost/download/freeioe
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=2c4eb0d689c2ab5ffd119766c1217145
+PKG_MD5SUM:=7ea33234edec89d953a3be01121f3fe7
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -64,33 +64,33 @@ endif
 endef
 
 define Package/freeioe/preinst
-	#!/bin/sh
-	[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
 
-	# stop service if PKG_UPGRADE
-	[ "$${PKG_UPGRADE}" = "1" ] && /etc/init.d/skynet stop >/dev/null 2>&1
-		
-	exit 0	# suppress errors from stop command
+# stop service if PKG_UPGRADE
+[ "$${PKG_UPGRADE}" = "1" ] && /etc/init.d/skynet stop >/dev/null 2>&1
+
+exit 0	# suppress errors from stop command
 endef
 
 define Package/freeioe/postinst
-	#!/bin/sh
-	[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
 
-	# Start service 
-	/etc/init.d/skynet enable && /etc/init.d/skynet start >/dev/null 2>&1
+# Start service
+/etc/init.d/skynet enable && /etc/init.d/skynet start >/dev/null 2>&1
 
-	exit 0 
+exit 0
 endef
 
 define Package/freeioe/prerm
-	#!/bin/sh
-	[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
 
-	/etc/init.d/skynet stop
-	/etc/init.d/skynet disable
+/etc/init.d/skynet stop
+/etc/init.d/skynet disable
 
-	exit 0
+exit 0
 endef
 
 $(eval $(call BuildPackage,freeioe))
