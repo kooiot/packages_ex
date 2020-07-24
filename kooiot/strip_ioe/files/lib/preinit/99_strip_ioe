@@ -1,4 +1,6 @@
 do_uncompress_ioe() {
+	[ -f /usr/ioe/ipt/strip_done ] && return 0
+
 	if [ -f /usr/ioe/ipt/freeioe.tar.gz ]; then
 		mkdir -p /usr/ioe/freeioe
 		tar -C /usr/ioe/freeioe -xzf /usr/ioe/ipt/freeioe.tar.gz
@@ -7,6 +9,8 @@ do_uncompress_ioe() {
 		mkdir -p /usr/ioe/skynet
 		tar -C /usr/ioe/skynet -xzf /usr/ioe/ipt/skynet.tar.gz
 	fi
+
+	date > /usr/ioe/ipt/strip_done
 }
 
 boot_hook_add preinit_main do_uncompress_ioe

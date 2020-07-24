@@ -26,9 +26,19 @@ define U-Boot/Default
   UBOOT_IMAGE:=uboot-$(1).bin
 endef
 
-define U-Boot/tlink_c1
+define U-Boot/kooiot_tlink_c1
   NAME:=ThingsLink C1
   BUILD_DEVICES:=kooiot_tlink-c1
+endef
+
+define U-Boot/kooiot_tlink_c1_16m
+  NAME:=ThingsLink C1 (16M)
+  BUILD_DEVICES:=kooiot_tlink-c1-16m
+endef
+
+define U-Boot/kooiot_tlink_c1_32m
+  NAME:=ThingsLink C1 (32M)
+  BUILD_DEVICES:=kooiot_tlink-c1-32m
 endef
 
 define U-Boot/widora_neo_32m
@@ -60,7 +70,9 @@ define Package/u-boot/install
 endef
 
 UBOOT_TARGETS := \
-	tlink_c1 \
+	kooiot_tlink_c1 \
+	kooiot_tlink_c1_16m \
+	kooiot_tlink_c1_32m \
 	widora_neo_32m
 
 $(eval $(call BuildPackage/U-Boot))
