@@ -9,13 +9,19 @@
  endif
  
  ifeq (include/config.mk,$(wildcard include/config.mk))
-@@ -1663,6 +1663,9 @@
+@@ -1663,6 +1663,15 @@
  
  rt2880_config: unconfig
  	@./mkconfig $(@:_config=) mips ralink_soc rt2880
 +
 +widora_neo_32m_config:
-+	echo "AAAAA"
++	echo "Fake config for Widora Neo 32M"
++kooiot_tlink_c1_config:
++	echo "Fake config for TLink C1"
++kooiot_tlink_c1_16m_config:
++	echo "Fake config for TLink C1 (16M)"
++kooiot_tlink_c1_32m_config:
++	echo "Fake config for TLink C1 (32M)"
  #########################################################################
  ## MIPS32 AU1X00
  #########################################################################
