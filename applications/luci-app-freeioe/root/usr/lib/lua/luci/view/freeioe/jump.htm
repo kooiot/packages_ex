@@ -1,0 +1,27 @@
+
+<%+header%>
+
+<div class="cbi-map">
+	<h2 name="content"><%:FreeIOE%></h2>
+	<h3 id="countdown">2</h3>
+</div>
+
+<script type="text/javascript">  
+	var time = 1;
+	var contain = document.getElementById("countdown")
+	function Redirect() {  
+		window.open(window.location.protocol + '//' + window.location.hostname + ':8808');
+	}  
+	var i = time; 
+	function dis() {  
+		if (i > 0) {
+			contain.innerHTML = i;
+		} else {
+			contain.innerHTML = '<a href=' + window.location.protocol + '//' + window.location.hostname + ':8808><%:Admin Web%></a>';
+		}
+		i--; 
+	}  
+	timer = setInterval('dis()', 1000);
+	timer = setTimeout('Redirect()', time * 1000);
+</script>  
+<%+footer%>
