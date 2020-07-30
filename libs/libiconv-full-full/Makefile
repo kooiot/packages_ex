@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libiconv-full-full
 PKG_VERSION:=1.11.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 
@@ -34,6 +34,7 @@ define Package/libiconv-full-full
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= library
+  ABI_VERSION:=2
 endef
 
 define Package/libcharset-full
@@ -41,6 +42,7 @@ define Package/libcharset-full
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE+= library
+  ABI_VERSION:=1
 endef
 
 define Package/iconv-full
@@ -77,12 +79,12 @@ endef
 
 define Package/libcharset-full/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharset.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharset.so.* $(1)/usr/lib/
 endef
 
 define Package/libiconv-full-full/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.so.* $(1)/usr/lib/
 endef
 
 define Package/iconv-full/install
