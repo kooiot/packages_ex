@@ -1,0 +1,207 @@
+#! /bin/sh
+
+target=""
+
+. /lib/functions.sh
+. /lib/functions/tlink.sh
+
+cpu_freq_cur="580000000"
+cpu_freq_min="580000000"
+cpu_freq_max="580000000"
+fm_version=1.00
+board_name="bmr,bmr200"
+model_name="BaiMa BMR200"
+
+show_help(){
+    cat <<EOF
+sysinfo  [-h] <sw|psn|temp|hw|module|mac|all>
+
+    -h          This help information
+    sw          Software information
+    hw          Hardware information
+    temp        CPU temperature
+    frq         CPU frequency
+    psn         Product serial number
+    module      The 2G or 4G module
+    mac         The current MAC addresses
+    all         All
+EOF
+}
+
+parse_cmdline(){
+    while getopts h  opt
+    do
+        case $opt in
+            h)
+                show_help
+                exit 0
+                ;;
+        esac
+    done
+
+    shift $(($OPTIND - 1))
+
+    if [ $# -eq 0 ]; then
+        target="all"
+    else
+        case $1 in
+            sw | \
+            hw | \
+            temp | \
+            frq | \
+            module | \
+            mac | \
+            psn | \
+			all)
+                target=$1
+                ;;
+            *)
+                show_help
+                exit 1
+                ;;
+        esac
+    fi
+}
+
+show_software_info(){ # software info
+    local openwrt_distrib="unknown"
+    local kernel_version=$(uname -a)
+
+    if [ -r /etc/openwrt_release ]; then
+        openwrt_distrib=$(sed -nE 's/^DISTRIB_RELEASE="([^"]+)".*/\1/p' /etc/os-release 2> /dev/null)
+    fi
+
+    cat <<EOF
+Software information:
+  Firmware Version:  $fm_version
+  Kernel Version:    ${kernel_version}
+  OpenWRT Version:   ${openwrt_distrib}
+
+EOF
+}
+
+show_thermal_info(){
+    local readonly cpu_thermal_zone=/sys/class/thermal/thermal_zone0
+
+	[ ! -d ${cpu_thermal_zone} ] && return 0
+
+    cat <<EOF
+CPU temperature( °C X 1000 ):
+  current:	$(cat ${cpu_thermal_zone}/temp)
+  $(cat ${cpu_thermal_zone}/trip_point_0_type):	$(cat ${cpu_thermal_zone}/trip_point_0_temp)
+  $(cat ${cpu_thermal_zone}/trip_point_1_type):	$(cat ${cpu_thermal_zone}/trip_point_1_temp)
+  $(cat ${cpu_thermal_zone}/trip_point_2_type):	$(cat ${cpu_thermal_zone}/trip_point_2_temp)
+  $(cat ${cpu_thermal_zone}/trip_point_3_type):	$(cat ${cpu_thermal_zone}/trip_point_3_temp)
+
+EOF
+}
+
+show_cpu_frq_info(){
+    cat <<EOF
+CPU frequency(Hz):
+  Current:  ${cpu_freq_cur}
+  Min:      ${cpu_freq_min}
+  Max:      ${cpu_freq_max}
+
+EOF
+}
+
+show_hardware_info(){
+    local readonly sysfs_emmc_serial="/sys/class/block/mmcblk1/device/serial"
+
+    cpu_hardware=$(sed 's/^cpu model[ \t]*:\ //g; t; /^.*$/d' /proc/cpuinfo 2> /dev/null)
+
+    cat <<EOF
+Hardware information:
+  Board:        ${board_name}
+  PSN:          $(product_sn)
+  Modle:        ${model_name}
+  CPU Type:     ${cpu_hardware}
+EOF
+
+    for i in /sys/class/net/eth*;
+    do
+        if [ -f ${i}/address ]; then
+            echo "  MAC eth${i##/sys/class/net/eth}:     $(cat ${i}/address)"
+        fi
+    done    
+    echo ""
+}
+
+show_psn_info(){
+    cat <<EOF
+  PSN:          $(product_sn)
+EOF
+}
+
+show_module_info(){
+    local module_type="UNKNOWN"
+    local module_model="UNKNOWN"
+    local module_imei="UNKNOWN"
+    local module_sim="UNKNOWN"
+
+	if [ -f "/tmp/sysinfo/3ginfo" ]; then
+		module_type=$(3ginfo_get 'mode')
+		module_model=$(3ginfo_get 'device')
+		module_sim=$(3ginfo_get 'ccid')
+		module_imei=$(3ginfo_get 'cgsn')
+	fi
+
+    cat <<EOF
+2G/4G module info:
+  Type:     ${module_type}
+  Modle:    ${module_model}
+  SIM:      ${module_sim}
+  IMEI:     ${module_imei}
+
+EOF
+}
+
+show_netdev_mac(){
+    for i in /sys/class/net/eth*;
+    do
+        if [ -f ${i}/address ]; then
+            echo "MAC eth${i##/sys/class/net/eth}:    $(cat ${i}/address)"
+        fi
+    done
+	echo ""
+}
+
+show_sysinfo(){
+    local tgt=$1
+
+    case $tgt in
+        "sw")
+            show_software_info
+            ;;
+        "temp")
+            show_thermal_info
+            ;;
+        "frq")
+            show_cpu_frq_info
+            ;;
+        "hw")
+            show_hardware_info
+            ;;
+        "module")
+            show_module_info
+            ;;
+        "mac")
+            show_netdev_mac
+            ;;
+		"psn")
+            show_psn_info
+            ;;
+        "all")
+            show_software_info
+            show_hardware_info
+            show_module_info
+            show_thermal_info
+            show_cpu_frq_info
+            ;;
+    esac
+}
+
+parse_cmdline  $@
+show_sysinfo   $target
+

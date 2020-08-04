@@ -1,0 +1,95 @@
+#!/usr/bin/lua
+
+local nixio = require 'nixio'
+local json = require 'luci.json'
+
+local function exec(cmd)
+	local f, err = io.popen(cmd)
+	if not f then
+		return nil, err
+	end
+	local s = f:read('*a')
+	f:close()
+	return s
+end
+
+local function exec_json(cmd)
+	local result = exec(cmd)
+	if not result then
+		return nil
+	end
+	local r, err = json.decode(result)
+	if not r then
+		return nil, err
+	end
+
+	return r, result
+end
+
+local function info_export(info)
+	local f, err = io.open('/tmp/sysinfo/3ginfo', "w+")
+	if not f then
+		return nil, err
+	end
+	f:write(info)
+	f:close()
+end
+
+
+local function echo_log(log)
+	os.execute('echo "'..log..'" >> /dev/console')
+	os.execute('echo "'..os.date()..': '..log..'" >> /root/wwanleds.log')
+	os.execute('tail -n 500 /root/wwanleds.log > /root/wwanleds.log.new')
+	os.execute('mv -f /root/wwanleds.log.new /root/wwanleds.log')
+	os.execute("sync")
+end
+
+local function restart_wanpwrc()
+	echo_log('Network service restart')
+	os.execute("/etc/init.d/network restart")
+end
+
+local cloud_last = os.time()
+
+local function watch_cloud_status()
+	local now = os.time()
+
+	local str, err = exec('cat /tmp/sysinfo/cloud_status')
+	if str and string.len(str) > 0 then
+		local status, last = string.match(str, '(%d+)%c+(%d+)')
+		if status and last then
+			local last_num = tonumber(last)
+			if tonumber(status) == 1 then
+				--- Use now when status is online (as the timestamp will be updated untill offline)
+				last_num = now
+			end
+
+			if last_num and last_num > cloud_last then
+				cloud_last = last_num
+			end
+		end
+	else
+		-- if file is empty, the programe is not running, skip checking
+		cloud_last = now
+	end
+	--print(now, cloud_last)
+
+	--- If 20 minutes that gateway not connected
+	if now - cloud_last > 1200 then
+		cloud_last = now
+		echo_log('Cloud status out of date (20 min)')
+		restart_wanpwrc()
+	end
+end
+
+os.execute('touch /tmp/sysinfo/cloud_status') --- make sure the file is there
+echo_log('Start wwanleds services...')
+
+while true do
+	local info, info_str = exec_json('3ginfo json')
+	info_export(info_str)
+	if info.ccid and string.len(info.ccid) > 0 then
+		watch_cloud_status()
+	end
+	nixio.nanosleep(15)
+end
