@@ -1,3 +1,7 @@
+NAME="openwrt"
+VERSION="Barrier Breaker"
 ID="openwrt"
 VERSION_ID="14.07"
+OPENWRT_BOARD="mtk762x/generic"
 OPENWRT_ARCH="mipsel_24kc"
+OPENWRT_RELEASE="OpenWrt Barrier Breaker XXX"
