@@ -1,2 +1,3 @@
+ID="openwrt"
 VERSION_ID="14.07"
 OPENWRT_ARCH="mipsel_24kc"

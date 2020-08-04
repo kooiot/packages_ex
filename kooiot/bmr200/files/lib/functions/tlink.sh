@@ -36,12 +36,33 @@ gpio_in() {
 	return $(cat $gpio_path/value)
 }
 
+export_product_sn_kooiot() {
+	product_sn=$(uci -p /var/state/ get system.sys_info.serial 2>/dev/null)
+
+	mkdir -p /tmp/sysinfo
+
+	if [ -z "${product_sn}" ]; then
+		return
+	fi
+
+	[ -e /tmp/sysinfo/product_sn ] || \
+		echo "BMTR01${product_sn:2:6}0${product_sn:8:3}" > /tmp/sysinfo/product_sn
+
+	[ -e /tmp/sysinfo/cloud ] || \
+		echo "ioe.thingsroot.com" > /tmp/sysinfo/cloud
+}
+
+
 product_sn() {
+	if [ ! -e /tmp/sysinfo/product_sn ]; then
+		export_product_sn_kooiot
+	fi
+
 	[ -e /tmp/sysinfo/product_sn ] && cat /tmp/sysinfo/product_sn || echo "UNKNOWN_DEVICE_SN"
 }
 
 ioe_cloud() {
-	[ -e /tmp/sysinfo/cloud ] && cat /tmp/sysinfo/cloud || echo "cloud.kooiot.com"
+	[ -e /tmp/sysinfo/cloud ] && cat /tmp/sysinfo/cloud || echo "ioe.kooiot.com"
 }
 
 avoid_empty_passwd() {
