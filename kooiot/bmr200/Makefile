@@ -5,22 +5,22 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=kooiot_bmr200
+PKG_NAME:=bmr200_freeioe
 PKG_VERSION:=0.1
 PKG_RELEASE:=1
 PKG_LICNESE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/kooiot_bmr200
-  SECTION:=net
-  CATEGORY:=Network
-  TITLE:=BMR200 device support files
+define Package/bmr200_freeioe
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
+  TITLE:=BMR200 FreeIOE Installer
   DEPENDS:=+freeioe
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef
 
-define Package/kooiot_bmr200/description
+define Package/bmr200_freeioe/description
   Be ready for running FreeIOE
 endef
 
@@ -30,8 +30,8 @@ endef
 define Build/Compile
 endef
 
-define Package/kooiot_bmr200/install
+define Package/bmr200_freeioe/install
 	$(CP) ./files/* $(1)
 endef
 
-$(eval $(call BuildPackage,kooiot_bmr200))
+$(eval $(call BuildPackage,bmr200_freeioe))
