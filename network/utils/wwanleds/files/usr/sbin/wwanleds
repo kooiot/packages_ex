@@ -87,12 +87,18 @@ end
 
 local function reset_4g_module()
 	echo_log('4G Wan reset module')
+	local pcie_reset_path = '/sys/class/gpio/pcie_reset/value'
+	local pcie_reset = fs.access(pcie_reset_path)
 
 	os.execute("ifdown 4g_wan")
-	os.execute("echo 1 > /sys/class/gpio/pcie_reset/value")
+	if pcie_reset then
+		os.execute("echo 1 > "..pcie_reset_path)
+	end
 	os.execute("killall -9 uqmi")
 	nixio.nanosleep(1)
-	os.execute("echo 0 > /sys/class/gpio/pcie_reset/value")
+	if pcie_reset then
+		os.execute("echo 0 > "..pcie_reset_path)
+	end
 	nixio.nanosleep(10)
 	os.execute("ifup 4g_wan")
 end
@@ -100,10 +106,18 @@ end
 local function repower_4g_module()
 	echo_log('4G Wan re-power module')
 
+	local pcie_power_path = '/sys/class/gpio/pcie_power/value'
+	local pcie_power = fs.access(pcie_power_path)
+
 	os.execute("ifdown 4g_wan")
-	os.execute("echo 0 > /sys/class/gpio/pcie_power/value")
+	if pcie_power then
+		os.execute("echo 0 > "..pcie_power_path)
+	end
+	os.execute("killall -9 uqmi")
 	nixio.nanosleep(1)
-	os.execute("echo 1 > /sys/class/gpio/pcie_power/value")
+	if pcie_power then
+		os.execute("echo 1 > "..pcie_power_path)
+	end
 	nixio.nanosleep(10)
 	os.execute("ifup 4g_wan")
 end
