@@ -17,11 +17,15 @@
 +widora_neo_32m_config:
 +	echo "Fake config for Widora Neo 32M"
 +kooiot_tlink_c1_config:
-+	echo "Fake config for TLink C1"
++	echo "Fake config for ThingsLink C1"
 +kooiot_tlink_c1_16m_config:
-+	echo "Fake config for TLink C1 (16M)"
++	echo "Fake config for ThingsLink C1 (16M)"
 +kooiot_tlink_c1_32m_config:
-+	echo "Fake config for TLink C1 (32M)"
++	echo "Fake config for ThingsLink C1 (32M)"
++kooiot_tlink_c2_config:
++	echo "Fake config for ThingsLink C2"
++kooiot_tlink_c2_32m_config:
++	echo "Fake config for ThingsLink C2 (32M)"
  #########################################################################
  ## MIPS32 AU1X00
  #########################################################################
