@@ -2,6 +2,50 @@
 
 local nixio = require 'nixio'
 local json = require 'luci.json'
+local _ubus = require 'ubus'
+
+
+local ubus_codes = {
+	"INVALID_COMMAND",
+	"INVALID_ARGUMENT",
+	"METHOD_NOT_FOUND",
+	"NOT_FOUND",
+	"NO_DATA",
+	"PERMISSION_DENIED",
+	"TIMEOUT",
+	"NOT_SUPPORTED",
+	"UNKNOWN_ERROR",
+	"CONNECTION_FAILED"
+}
+
+local function ubus_return(...)
+	if select('#', ...) == 2 then
+		local rv, err = select(1, ...), select(2, ...)
+		if rv == nil and type(err) == "number" then
+			return nil, err, ubus_codes[err]
+		end
+	end
+
+	return ...
+end
+
+function ubus(object, method, data)
+	if not _ubus_connection then
+		_ubus_connection = _ubus.connect()
+		assert(_ubus_connection, "Unable to establish ubus connection")
+	end
+
+	if object and method then
+		if type(data) ~= "table" then
+			data = { }
+		end
+		return ubus_return(_ubus_connection:call(object, method, data))
+	elseif object then
+		return _ubus_connection:signatures(object)
+	else
+		return _ubus_connection:objects()
+	end
+end
 
 local function exec(cmd)
 	local f, err = io.popen(cmd)
@@ -37,16 +81,34 @@ end
 
 
 local function echo_log(log)
-	os.execute('echo "'..log..'" >> /dev/console')
+	print(os.date(), log)
 	os.execute('echo "'..os.date()..': '..log..'" >> /root/wwanleds.log')
 	os.execute('tail -n 500 /root/wwanleds.log > /root/wwanleds.log.new')
 	os.execute('mv -f /root/wwanleds.log.new /root/wwanleds.log')
 	os.execute("sync")
 end
 
-local function restart_wanpwrc()
-	echo_log('Network service restart')
+local function reset_4g_module()
+	echo_log('4G Wan reset module')
+
+	os.execute("ifdown wan")
+	os.execute("gpioctl -m power -p dangle -s off")
+	nixio.nanosleep(1)
+	os.execute("gpioctl -m power -p dangle -s on")
+	nixio.nanosleep(10)
+	os.execute("ifup wan")
+end
+
+local function restart_network()
+	echo_log('Restart network')
+
+	os.execute("ifdown wan")
+	os.execute("gpioctl -m power -p dangle -s off")
+	nixio.nanosleep(1)
+	os.execute("gpioctl -m power -p dangle -s on")
 	os.execute("/etc/init.d/network restart")
+	nixio.nanosleep(10)
+	os.execute("ifup wan")
 end
 
 local cloud_last = os.time()
@@ -58,18 +120,20 @@ local function watch_cloud_status()
 	if str and string.len(str) > 0 then
 		local status, last = string.match(str, '(%d+)%c+(%d+)')
 		if status and last then
-			local last_num = tonumber(last)
 			if tonumber(status) == 1 then
 				--- Use now when status is online (as the timestamp will be updated untill offline)
-				last_num = now
-			end
-
-			if last_num and last_num > cloud_last then
-				cloud_last = last_num
+				os.execute("gpioctl -m led -p online -s on")
+				cloud_last = now
+			else
+				os.execute("gpioctl -m led -p online -s off")
+				if cloud_last > now then
+					cloud_last = now
+				end
 			end
 		end
 	else
 		-- if file is empty, the programe is not running, skip checking
+		os.execute("gpioctl -m led -p online -s off")
 		cloud_last = now
 	end
 	--print(now, cloud_last)
@@ -78,10 +142,79 @@ local function watch_cloud_status()
 	if now - cloud_last > 1200 then
 		cloud_last = now
 		echo_log('Cloud status out of date (20 min)')
-		restart_wanpwrc()
+		os.execute("gpioctl -m led -p online -s off")
+		restart_network()
 	end
 end
 
+local wwan0_not_exits = true
+local wwan0_ip_last_got = os.time()
+local wwan0_reset_times = 0
+
+local function watch_4g_wan()
+	local wwan0_has_ip = false
+
+	--- If there is not 4g_wan or 4g_wan is disabled
+	local wan_4g = ubus('network.interface', 'status', {interface='wan'})
+	if not wan_4g or (not wan_4g.autostart and not wan_4g.errors) then
+		wwan0_not_exits = true
+		--os.execute('echo "4G wan is disabled or not exists !!!!" >> /dev/console')
+		return
+	end
+	--- If this is not usb network
+	if wan_4g.l3_device ~= 'usb0' then
+		return
+	end
+
+	local ipv4_addr = wan_4g['ipv4-address']
+	if ipv4_addr and #ipv4_addr > 0 then
+		wwan0_has_ip = true
+	end
+	local ipv6_addr = wan_4g['ipv6-address']
+	if ipv6_addr and #ipv6_addr > 0 then
+		wwan0_has_ip = true
+	end
+
+	--- If previously there is no wwan0 then just update the last ip got
+	if wwan0_not_exits then
+		wwan0_not_exits = false
+		wwan0_ip_last_got = os.time()
+	end
+
+	--- If 4G got ip connected, then return
+	if wwan0_has_ip then
+		--os.execute('echo "4G wan IP is ok!!!!" >> /dev/console')
+		wwan0_ip_last_got = os.time()
+		wwan0_reset_times = 0
+
+		-- Only watch cloud status if the wwan0 has ip
+		watch_cloud_status()
+
+		return
+	end
+
+	--os.execute('echo "4G wan IP missing" >> /dev/console')
+
+	--- Three minutes ip lost
+	if (os.time() - wwan0_ip_last_got) >  (wwan0_reset_times * 120 + 300) then
+		if wwan0_reset_times < 3 then
+			--- Next check will be two minutes later
+			wwan0_reset_times = wwan0_reset_times + 1
+			cloud_last = os.time()
+			--- Reset 4G module
+			reset_4g_module()
+		else
+			--- already reset 4g module for three times and network still missing
+			wwan0_ip_last_got = os.time()
+			wwan0_reset_times = 0
+			cloud_last = os.time()
+			restart_network()
+		end
+	end
+end
+
+info_export('{}')
+os.execute("gpioctl -m led -p online -s off")
 os.execute('touch /tmp/sysinfo/cloud_status') --- make sure the file is there
 echo_log('Start wwanleds services...')
 
@@ -89,7 +222,7 @@ while true do
 	local info, info_str = exec_json('3ginfo json')
 	info_export(info_str)
 	if info.ccid and string.len(info.ccid) > 0 then
-		watch_cloud_status()
+		watch_4g_wan()
 	end
 	nixio.nanosleep(15)
 end

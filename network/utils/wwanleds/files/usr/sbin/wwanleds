@@ -131,13 +131,15 @@ local function watch_cloud_status()
 	if str and string.len(str) > 0 then
 		local status, last = string.match(str, '(%d+)%c+(%d+)')
 		if status and last then
-			local last_num = tonumber(last)
 			if tonumber(status) == 1 then
 				--- Use now when status is online (as the timestamp will be updated untill offline)
-				last_num = now
-			end
-			if last_num and last_num > cloud_last then
-				cloud_last = last_num
+				cloud_last = now
+			else
+				--- The timestamp updated, but we do not use it
+				if cloud_last > now then
+					-- If the ntp update or TZ changed
+					cloud_last = now
+				end
 			end
 		end
 	else
