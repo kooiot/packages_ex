@@ -11,7 +11,7 @@
 
 	"admin/freeioe/overview": {
 		"title": "Overview",
-		"order": 1,
+		"order": 10,
 		"action": {
 			"type": "view",
 			"path": "freeioe/overview"
@@ -26,7 +26,7 @@
 
 	"admin/freeioe/settings": {
 		"title": "Settings",
-		"order": 2,
+		"order": 20,
 		"action": {
 			"type": "view",
 			"path": "freeioe/settings"
