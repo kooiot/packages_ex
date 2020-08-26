@@ -3,23 +3,23 @@
 'require fs';
 'require rpc';
 
+var callFreeioeInfo = rpc.declare({
+	object: 'freeioe',
+	method: 'info'
+});
+
+var callFreeioeCloud = rpc.declare({
+	object: 'freeioe',
+	method: 'cloud'
+});
+
 return baseclass.extend({
 	title: _('FreeIOE'),
 
-	callFreeioeInfo = rpc.declare({
-		object: 'freeioe',
-		method: 'info'
-	});
-
-	callFreeioeCloud = rpc.declare({
-		object: 'freeioe',
-		method: 'cloud'
-	});
-
 	load: function() {
 		return Promise.all([
-			this.callFreeioeInfo(),
-			this.callFreeioeCloud()
+			L.resolveDefault(callFreeioeInfo(), {}),
+			L.resolveDefault(callFreeioeCloud(), {})
 		]);
 	},
 

@@ -1,15 +1,14 @@
 {
 	"admin/freeioe": {
 		"title": "FreeIOE",
-		"order": "60",
+		"order": 60,
 		"action": {
-			"type": "alias",
-			"path": "admin/freeioe/overview"
+			"type": "firstchild",
+			"preferred": "overview",
+			"recurse": true
 		},
 		"depends": {
-			"acl": [ "luci-app-freeioe" ],
 			"fs": {
-				"/usr/ioe/skynet/skynet": "executable",
 				"/etc/init.d/skynet": "executable"
 			},
 			"uci": { "freeioe": true }
