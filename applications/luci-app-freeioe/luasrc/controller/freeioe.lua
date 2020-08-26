@@ -3,7 +3,7 @@
 module("luci.controller.freeioe", package.seeall)
 
 function index()
-	entry({"admin", "freeioe"}, firstchild(), _("FreeIOE"), 60)
-	entry({"admin", "freeioe", "overview"}, view("freeioe/overview"), _("Overview"), 10)
-	entry({"admin", "freeioe", "settings"}, view("freeioe/settings"), _("Settings"), 20)
+	entry({"admin", "services", "freeioe"}, firstchild(), _("FreeIOE"), 1)
+	entry({"admin", "services", "freeioe", "overview"}, view("freeioe/overview"), _("Overview"), 10)
+	entry({"admin", "services", "freeioe", "settings"}, view("freeioe/settings"), _("Settings"), 20)
 end
