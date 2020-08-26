@@ -9,7 +9,7 @@
  endif
  
  ifeq (include/config.mk,$(wildcard include/config.mk))
-@@ -1663,6 +1663,15 @@
+@@ -1663,6 +1663,19 @@
  
  rt2880_config: unconfig
  	@./mkconfig $(@:_config=) mips ralink_soc rt2880
