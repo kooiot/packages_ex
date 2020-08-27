@@ -1,15 +1,22 @@
 'use strict';
-'require fs';
 'require ui';
-'require uci';
 'require rpc';
+'require dom';
 'require view';
 'require form';
 
-var callFreeioeCfgGet = rpc.declare({
+var formData = {}
+
+var	callFreeioeCfgGet = rpc.declare({
 	object: 'freeioe',
 	method: 'cfg_get',
 	params: [ "cfg" ]
+});
+
+var	callFreeioeCfgSet = rpc.declare({
+	object: 'freeioe',
+	method: 'cfg_set',
+	params: [ "cfg", "conf" ]
 });
 
 return view.extend({
@@ -22,32 +29,45 @@ return view.extend({
 
 	render: function(data) {
 		var m, s, o;
-		var json_data = {};
-		json_data['freeioe'] = data[0];
 
-		m = new form.JSONMap(json_data,
-			_('FreeIOE'),
-			_('<a href="http://freeioe.org">FreeIOE</a> is an opensource IOT Computing-Edge Platform.'));
+		formData['cloud'] = data[0];
+		formData['sys'] = data[1];
 
-		m.lookupOption = function(name, section_id, config_name) {
-			console.log(name, section_id, config_name);
-		}
+		m = new form.JSONMap(formData, 
+			_('Settings'),
+			_('Change those settings may cause connection issue!'));
 
-		s = m.section(form.NamedSection, 'freeioe', _('Settings'));
+		s = m.section(form.NamedSection, 'cloud', _('Cloud Settings'));
 
-		o = s.option(form.Value, 'host', _('Host'));
+		o = s.option(form.Value, 'HOST', _('Cloud Host'));
 		o.datatype    = 'host';
 		o.placeholder = 'ioe.thingsroot.com';
 
-		o = s.option(form.Value, 'port', _('Port'));
+		o = s.option(form.Value, 'PORT', _('Cloud Port'));
 		o.datatype    = 'port';
-		o.placeholder = 22;
+		o.placeholder = 1883;
 
-		o = s.option(form.Value, 'pkg_host', _('App Center'));
+		o = s.option(form.Value, 'KEEPALIVE', _('KeepAlive'));
+		o.datatype    = 'range(0, 600)';
+		o.placeholder = 60;
+		o.readonly = true;
+
+		o = s.option(form.Value, 'EVENT_UPLOAD', _('Event Upload Level'));
+		o.datatype    = 'range(0, 100)';
+		o.placeholder = 90;
+		o.readonly = true;
+
+		o = s.option(form.Flag, 'DATA_UPLOAD', _('Data Upload Enable'));
+		o.rmempty = true
+		o.readonly = true;
+
+		s = m.section(form.NamedSection, 'sys', _('System Settings'));
+
+		o = s.option(form.Value, 'PKG_HOST_URL', _('App Center Host'));
 		o.datatype    = 'pkg_host';
 		o.placeholder = 'ioe.thingsroot.com';
 
-		o = s.option(form.Value, 'cnf_host', _('Conf Center'));
+		o = s.option(form.Value, 'CNF_HOST_URL', _('Conf Center Host'));
 		o.datatype    = 'cnf_host';
 		o.placeholder = 'ioe.thingsroot.com';
 
@@ -58,22 +78,37 @@ return view.extend({
 		var map = document.querySelector('.cbi-map');
 
 		return dom.callClassMethod(map, 'save').then(function() {
-			if (formData.password.pw1 == null || formData.password.pw1.length == 0)
-				return;
+			console.log(formData);
 
-			if (formData.password.pw1 != formData.password.pw2) {
-				ui.addNotification(null, E('p', _('Given password confirmation did not match, password not changed!')), 'danger');
-				return;
-			}
+			var cloud_data = {};
+			cloud_data['HOST'] = formData['cloud']['HOST'];
+			cloud_data['PORT'] = formData['cloud']['PORT'];
 
-			return callSetPassword("root", formData.password.pw1).then(function(success) {
+			var sys_data = {};
+			sys_data['PKG_HOST_URL'] = formData['sys']['PKG_HOST_URL'];
+			sys_data['CNF_HOST_URL'] = formData['sys']['CNF_HOST_URL'];
+
+			return Promise.all([
+				callFreeioeCfgSet('cloud', cloud_data),
+				callFreeioeCfgSet('sys', sys_data)
+			]).then(function(data) {
+				var success = false;
+				if (typeof(data[0]) == 'number' || typeof(data[1]) == 'number') {
+					success = false;
+				} else {
+					success = true;
+				}
+
 				if (success)
-					ui.addNotification(null, E('p', _('The system password has been successfully changed.')), 'info');
+					ui.addNotification(null, E('p', _('The FreeIOE settings has been successfully changed.')), 'info');
 				else
-					ui.addNotification(null, E('p', _('Failed to change the system password.')), 'danger');
+					ui.addNotification(null, E('p', _('Failed to change the FreeIOE settings.')), 'danger');
 
-				formData.password.pw1 = null;
-				formData.password.pw2 = null;
+				formData.cloud.HOST = data[0]['HOST'];
+				formData.cloud.PORT = data[0]['PORT'];
+
+				formData.sys.PKG_HOST_URL = data[1]['PKG_HOST_URL'];
+				formData.sys.CNF_HOST_URL = data[1]['CNF_HOST_URL'];
 
 				dom.callClassMethod(map, 'render');
 			});

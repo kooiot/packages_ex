@@ -38,6 +38,11 @@ return view.extend({
 			_('Cloud Status'),     cloud && cloud.mqtt ? cloud.mqtt.online === 1 ? 'ONLINE' : 'OFFLINE: ' + cloud.mqtt.msg : null,
 		];
 
+		var body = E([
+			E('h2', _('FreeIOE')),
+			E('p', {}, _('<a href="http://freeioe.org">FreeIOE</a> is an opensource IOT Computing-Edge Platform.'))
+		]);
+
 		var table = E('div', { 'class': 'table' });
 
 		for (var i = 0; i < fields.length; i += 2) {
@@ -47,7 +52,9 @@ return view.extend({
 			]));
 		}
 
-		return table
+		body.appendChild(table);
+
+		return body;
 	},
 
 	handleSaveApply: null,
