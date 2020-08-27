@@ -6,50 +6,49 @@
 'require view';
 'require form';
 
-var callFreeioeCloudOption = rpc.declare({
+var callFreeioeCfgGet = rpc.declare({
 	object: 'freeioe',
-	method: 'cloud'
+	method: 'cfg_get',
+	params: [ "cfg" ]
 });
 
 return view.extend({
 	load: function() {
 		return Promise.all([
-			L.resolveDefault(callFreeioeCloudOption(), {})
+			L.resolveDefault(callFreeioeCfgGet('cloud'), {}),
+			L.resolveDefault(callFreeioeCfgGet('sys'), {})
 		]);
 	},
 
 	render: function(data) {
-		var cloud   = data[0],
-			m, s, o;
+		var m, s, o;
+		var json_data = {};
+		json_data['freeioe'] = data[0];
 
-		m = new form.Map('freeioe',
+		m = new form.JSONMap(json_data,
 			_('FreeIOE'),
 			_('<a href="http://freeioe.org">FreeIOE</a> is an opensource IOT Computing-Edge Platform.'));
 
-		s = m.section(form.TypedSection, 'freeioe', _('Settings'));
-		s.anonymous = true;
-		s.addremove = true;
+		m.lookupOption = function(name, section_id, config_name) {
+			console.log(name, section_id, config_name);
+		}
+
+		s = m.section(form.NamedSection, 'freeioe', _('Settings'));
 
 		o = s.option(form.Value, 'host', _('Host'));
 		o.datatype    = 'host';
 		o.placeholder = 'ioe.thingsroot.com';
-		o.cfgvalue = function(section_id) {
-			return uci.get('freeioe', 'cloud', 'host');
-		}
-		o.write = function(section_id, value) {
-			uci.set('freeioe', 'cloud', 'host', value);
-		}
 
 		o = s.option(form.Value, 'port', _('Port'));
 		o.datatype    = 'port';
 		o.placeholder = 22;
 
 		o = s.option(form.Value, 'pkg_host', _('App Center'));
-		o.datatype    = 'host';
+		o.datatype    = 'pkg_host';
 		o.placeholder = 'ioe.thingsroot.com';
 
 		o = s.option(form.Value, 'cnf_host', _('Conf Center'));
-		o.datatype    = 'host';
+		o.datatype    = 'cnf_host';
 		o.placeholder = 'ioe.thingsroot.com';
 
 		return m.render();

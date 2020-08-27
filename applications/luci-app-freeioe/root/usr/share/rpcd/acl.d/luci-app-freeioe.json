@@ -3,7 +3,7 @@
 		"description": "Grant access to freeioe via rpcd and luci",
 		"read": {
 			"ubus": {
-				"freeioe": [ "info", "cloud", "apps", "data", "start_app", "stop_app" ]
+				"freeioe": [ "info", "cloud", "apps", "data", "start_app", "stop_app", "cfg_get", "cfg_set" ]
 			}
 		}
 	}
