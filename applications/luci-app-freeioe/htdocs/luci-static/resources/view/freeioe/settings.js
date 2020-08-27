@@ -33,6 +33,12 @@ return view.extend({
 		o = s.option(form.Value, 'host', _('Host'));
 		o.datatype    = 'host';
 		o.placeholder = 'ioe.thingsroot.com';
+		o.cfgvalue = function(section_id) {
+			return uci.get('freeioe', 'cloud', 'host');
+		}
+		o.write = function(section_id, value) {
+			uci.set('freeioe', 'cloud', 'host', value);
+		}
 
 		o = s.option(form.Value, 'port', _('Port'));
 		o.datatype    = 'port';
