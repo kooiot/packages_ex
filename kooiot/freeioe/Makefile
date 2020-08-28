@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe
-PKG_VERSION:=1335
+PKG_VERSION:=1336
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://localhost/download/freeioe
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=8f346286412dc7c4979f9e37138030cc
+PKG_MD5SUM:=4285440f8a5e4e5288d4452c1022db6a
 
 include $(INCLUDE_DIR)/package.mk
 
