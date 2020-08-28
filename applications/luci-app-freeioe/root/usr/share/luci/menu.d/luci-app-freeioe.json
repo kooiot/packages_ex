@@ -1,5 +1,5 @@
 {
-	"admin/freeioe": {
+	"admin/services/freeioe": {
 		"title": "FreeIOE",
 		"order": 60,
 		"action": {
@@ -9,7 +9,7 @@
 		}
 	},
 
-	"admin/freeioe/overview": {
+	"admin/services/freeioe/overview": {
 		"title": "Overview",
 		"order": 10,
 		"action": {
@@ -24,7 +24,7 @@
 		}
 	},
 
-	"admin/freeioe/settings": {
+	"admin/services/freeioe/settings": {
 		"title": "Settings",
 		"order": 20,
 		"action": {
