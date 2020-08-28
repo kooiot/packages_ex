@@ -1,11 +1,15 @@
 {
 	"admin/services/freeioe": {
 		"title": "FreeIOE",
-		"order": 60,
+		"order": 1,
 		"action": {
-			"type": "firstchild",
-			"preferred": "overview",
-			"recurse": true
+			"type": "alias",
+			"path": "admin/services/freeioe/overview"
+		},
+		"depends": {
+			"fs": {
+				"/etc/init.d/skynet": "executable"
+			}
 		}
 	},
 
@@ -15,12 +19,6 @@
 		"action": {
 			"type": "view",
 			"path": "freeioe/overview"
-		},
-		"depends": {
-			"fs": {
-				"/etc/init.d/skynet": "executable"
-			},
-			"uci": { "freeioe": true }
 		}
 	},
 
@@ -30,12 +28,6 @@
 		"action": {
 			"type": "view",
 			"path": "freeioe/settings"
-		},
-		"depends": {
-			"fs": {
-				"/etc/init.d/skynet": "executable"
-			},
-			"uci": { "freeioe": true }
 		}
 	}
 }
