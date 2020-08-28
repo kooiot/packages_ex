@@ -7,6 +7,7 @@
 			"path": "admin/services/freeioe/overview"
 		},
 		"depends": {
+			"acl": [ "luci-app-freeioe" ],
 			"fs": {
 				"/etc/init.d/skynet": "executable"
 			}
