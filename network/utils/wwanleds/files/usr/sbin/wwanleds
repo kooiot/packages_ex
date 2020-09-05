@@ -39,6 +39,18 @@ local function info_export(info)
 	f:close()
 end
 
+local bbs_path = "/sys/devices/platform/leds/leds/kooiot\\:green\\:bbs/brightness"
+local bs_path = "/sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness"
+local gs_path = "/sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness"
+local ggs_path = "/sys/devices/platform/leds/leds/kooiot\\:green\\:bgs/brightness"
+
+local function _led_control(path, value)
+	if not fs.access(path) then
+		return
+	end
+	os.execute("echo "..value.." > "..path)
+end
+
 local function led_control(info)
 	--[[
 	local sso = ss.new(info)
@@ -58,21 +70,29 @@ local function led_control(info)
 	]]--
 
 	if not info.ccid or string.len(info.ccid) == 0 then
-		os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness")
-		os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+		_led_control(bbs_path, 0)
+		_led_control(bs_path, 0)
+		_led_control(gs_path, 0)
+		_led_control(ggs_path, 0)
 		return
 	end
 
 	local csq = tonumber(info.csq) or 0
 	if csq >= 17 then
-		os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness")
-		os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+		_led_control(bbs_path, 1)
+		_led_control(bs_path, 1)
+		_led_control(gs_path, 1)
+		if csq > 25 then
+			_led_control(ggs_path, 1)
+		end
 	else
-		os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness")
+		_led_control(ggs_path, 0)
+		_led_control(gs_path, 0)
+		_led_control(bbs_path, 1)
 		if csq >= 10  then
-			os.execute("echo 1 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+			_led_control(bs_path, 1)
 		else
-			os.execute("echo 0 > /sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness")
+			_led_control(bs_path, 0)
 		end
 	end
 end
