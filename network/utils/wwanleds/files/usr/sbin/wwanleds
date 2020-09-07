@@ -39,10 +39,10 @@ local function info_export(info)
 	f:close()
 end
 
-local bbs_path = "/sys/devices/platform/leds/leds/kooiot\\:green\\:bbs/brightness"
-local bs_path = "/sys/devices/platform/leds/leds/kooiot\\:green\\:bs/brightness"
-local gs_path = "/sys/devices/platform/leds/leds/kooiot\\:green\\:gs/brightness"
-local ggs_path = "/sys/devices/platform/leds/leds/kooiot\\:green\\:bgs/brightness"
+local bbs_path = "/sys/devices/platform/leds/leds/kooiot:green:bbs/brightness"
+local bs_path = "/sys/devices/platform/leds/leds/kooiot:green:bs/brightness"
+local gs_path = "/sys/devices/platform/leds/leds/kooiot:green:gs/brightness"
+local ggs_path = "/sys/devices/platform/leds/leds/kooiot:green:ggs/brightness"
 
 local function _led_control(path, value)
 	if not fs.access(path) then
