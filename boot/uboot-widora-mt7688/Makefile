@@ -46,9 +46,29 @@ define U-Boot/kooiot_tlink_c2
   BUILD_DEVICES:=kooiot_tlink-c2
 endef
 
+define U-Boot/kooiot_tlink_c2_16m
+  NAME:=ThingsLink C2 (16M)
+  BUILD_DEVICES:=kooiot_tlink-c2-16m
+endef
+
 define U-Boot/kooiot_tlink_c2_32m
-  NAME:=ThingsLink C1 (32M)
+  NAME:=ThingsLink C2 (32M)
   BUILD_DEVICES:=kooiot_tlink-c2-32m
+endef
+
+define U-Boot/kooiot_tlink_c3
+  NAME:=ThingsLink C3
+  BUILD_DEVICES:=kooiot_tlink-c3
+endef
+
+define U-Boot/kooiot_tlink_c3_16m
+  NAME:=ThingsLink C3 (16M)
+  BUILD_DEVICES:=kooiot_tlink-c3-16m
+endef
+
+define U-Boot/kooiot_tlink_c3_32m
+  NAME:=ThingsLink C3 (32M)
+  BUILD_DEVICES:=kooiot_tlink-c3-32m
 endef
 
 define U-Boot/widora_neo_32m
@@ -84,7 +104,11 @@ UBOOT_TARGETS := \
 	kooiot_tlink_c1_16m \
 	kooiot_tlink_c1_32m \
 	kooiot_tlink_c2 \
+	kooiot_tlink_c2_16m \
 	kooiot_tlink_c2_32m \
+	kooiot_tlink_c3 \
+	kooiot_tlink_c3_16m \
+	kooiot_tlink_c3_32m \
 	widora_neo_32m
 
 $(eval $(call BuildPackage/U-Boot))
