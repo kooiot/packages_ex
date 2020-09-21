@@ -8,16 +8,26 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe
-PKG_VERSION:=1347
+PKG_VERSION:=1349
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
-PKG_SOURCE:=$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://localhost/download/freeioe
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_MD5SUM:=9198701ecc75d3935e904a3a9771eb6e
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=32e015bb1e05bb814c451e66d7960e09
 
 include $(INCLUDE_DIR)/package.mk
+
+FREEIOE_URL:=http://localhost/download/freeioe/
+
+define Download/freeioe
+	FILE:=$(PKG_SOURCE)
+	URL:=$(FREEIOE_URL)
+	URL_FILE:=$(PKG_VERSION).tar.gz
+	HASH:=$(PKG_MD5SUM)
+endef
+$(eval $(call Download,freeioe))
 
 define Package/freeioe
   SECTION:=kooiot
