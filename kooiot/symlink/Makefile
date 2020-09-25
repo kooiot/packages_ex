@@ -31,7 +31,7 @@ endif
 RSTRIP:=:
 STRIP:=:
 
-SYMLINK_URL:=http://localhost/download/bin/openwrt/$(VERSION_NUMBER)
+SYMLINK_URL:=http://openwrt.kooiot.com/download/bin/openwrt/$(VERSION_NUMBER)
 
 define Download/symlink
 	FILE:=$(PKG_SOURCE)

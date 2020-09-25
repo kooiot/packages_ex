@@ -19,7 +19,7 @@ PKG_MD5SUM:=5b8395ed496c9fe728148547254bfe8b
 
 include $(INCLUDE_DIR)/package.mk
 
-FREEIOE_URL:=http://localhost/download/freeioe/
+FREEIOE_URL:=http://openwrt.kooiot.com/download/freeioe/
 
 define Download/freeioe
 	FILE:=$(PKG_SOURCE)

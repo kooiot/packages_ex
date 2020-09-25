@@ -32,7 +32,7 @@ RSTRIP:=:
 STRIP:=:
 CheckDependencies:=:
 
-SYMLINK_URL:=http://localhost/download/bin/openwrt/$(VERSION_NUMBER)
+SYMLINK_URL:=http://openwrt.kooiot.com/download/bin/openwrt/$(VERSION_NUMBER)
 
 define Download/focas_ubus
 	FILE:=$(PKG_SOURCE)
