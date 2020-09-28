@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_SOURCE:=$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://localhost/download/focas_armhf_rootfs/
+PKG_SOURCE_URL:=http://openwrt.kooiot.com/download/focas_armhf_rootfs/
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
 PKG_MD5SUM:=3e1c3173dc0fdc824eb643f2c6b572d0
