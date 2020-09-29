@@ -85,6 +85,10 @@ return view.extend({
 		o.placeholder = 90;
 		o.readonly = true;
 
+		o = s.option(form.Flag, 'USING_BETA', _('Beta Mode Enable'));
+		o.rmempty = true
+		o.readonly = true;
+
 		o = s.option(form.Flag, 'DATA_UPLOAD', _('Data Upload Enable'));
 		o.rmempty = true
 		o.readonly = true;

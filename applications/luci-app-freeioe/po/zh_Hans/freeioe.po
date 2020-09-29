@@ -1,132 +1,141 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-#: htdocs/luci-static/resources/view/freeioe/overview.js:43
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/overview.js:43
 msgid ""
 "<a href=\"http://freeioe.org\">FreeIOE</a> is an opensource IOT Computing-"
 "Edge Platform."
 msgstr ""
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:102
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:106
 msgid "Actions"
 msgstr "操作"
 
-#: luasrc/view/freeioe/jump.htm:20
+#: applications/luci-app-freeioe/luasrc/view/freeioe/jump.htm:20
 msgid "Admin Web"
 msgstr "管理页面"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:94
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:98
 msgid "App Center Host"
 msgstr "应用中心地址"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:66
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:88
+msgid "Beta Mode Enable"
+msgstr "开发调试模式"
+
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:66
 msgid "Change those settings may cause connection issue!"
 msgstr "请谨慎修改配置,不正确的配置会导致连接丢失"
 
-#: htdocs/luci-static/resources/view/freeioe/overview.js:37
-#: htdocs/luci-static/resources/view/freeioe/settings.js:70
-#: htdocs/luci-static/resources/view/status/include/22_freeioe.js:34
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/overview.js:37
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:70
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/status/include/22_freeioe.js:34
 msgid "Cloud Host"
 msgstr "云平台地址"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:74
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:74
 msgid "Cloud Port"
 msgstr "云平台"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:68
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:68
 msgid "Cloud Settings"
 msgstr "云平台"
 
-#: htdocs/luci-static/resources/view/freeioe/overview.js:38
-#: htdocs/luci-static/resources/view/status/include/22_freeioe.js:35
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/overview.js:38
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/status/include/22_freeioe.js:35
 msgid "Cloud Status"
 msgstr "云平台状态"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:115
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:119
 msgid "Command failed"
 msgstr "指令失败"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:98
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:102
 msgid "Conf Center Host"
 msgstr "配置中心地址"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:88
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:92
 msgid "Data Upload Enable"
 msgstr "开启数据上传"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:124
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:128
 msgid "Do you really want to restart FreeIOE?"
 msgstr "是否确认重启 FreeIOE 服务"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:83
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:83
 msgid "Event Upload Level"
 msgstr "事件上传等级"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:164
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:168
 msgid "Failed to change the FreeIOE settings."
 msgstr "修改 FreeIOE 配置失败"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:119
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:123
 msgid "Failed to execute \"/etc/init.d/%s %s\" action: %s"
 msgstr ""
 
-#: htdocs/luci-static/resources/view/freeioe/overview.js:36
-#: htdocs/luci-static/resources/view/status/include/22_freeioe.js:33
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/overview.js:36
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/status/include/22_freeioe.js:33
 msgid "Firmware Version"
 msgstr "固件版本"
 
-#: htdocs/luci-static/resources/view/freeioe/overview.js:42
-#: htdocs/luci-static/resources/view/status/include/22_freeioe.js:17
-#: luasrc/view/freeioe/jump.htm:5 luasrc/controller/freeioe.lua:6
-#: root/usr/share/luci/menu.d/luci-app-freeioe.json:3
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/overview.js:42
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/status/include/22_freeioe.js:17
+#: applications/luci-app-freeioe/luasrc/controller/freeioe.lua:6
+#: applications/luci-app-freeioe/luasrc/view/freeioe/jump.htm:5
+#: applications/luci-app-freeioe/root/usr/share/luci/menu.d/luci-app-freeioe.json:3
 msgid "FreeIOE"
 msgstr ""
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:128
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:132
 msgid "FreeIOE will be restarted now!"
 msgstr "FreeIOE 即将重启!"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:78
+#: applications/luci-app-freeioe/root/usr/share/rpcd/acl.d/luci-app-freeioe.json:3
+msgid "Grant access to freeioe via rpcd and luci"
+msgstr ""
+
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:78
 msgid "KeepAlive"
 msgstr ""
 
-#: luasrc/controller/freeioe.lua:7
-#: root/usr/share/luci/menu.d/luci-app-freeioe.json:18
+#: applications/luci-app-freeioe/luasrc/controller/freeioe.lua:7
+#: applications/luci-app-freeioe/root/usr/share/luci/menu.d/luci-app-freeioe.json:18
 msgid "Overview"
 msgstr "概览"
 
-#: htdocs/luci-static/resources/view/freeioe/overview.js:34
-#: htdocs/luci-static/resources/view/status/include/22_freeioe.js:31
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/overview.js:34
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/status/include/22_freeioe.js:31
 msgid "PSN"
 msgstr "产品序列号"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:127
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:131
 msgid "Rebooting..."
 msgstr ""
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:43
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:43
 msgid "Restart FreeIOE"
 msgstr "重启 FreeIOE"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:36
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:36
 msgid "Save Settings"
 msgstr "修改配置"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:65
-#: luasrc/controller/freeioe.lua:8
-#: root/usr/share/luci/menu.d/luci-app-freeioe.json:27
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:65
+#: applications/luci-app-freeioe/luasrc/controller/freeioe.lua:8
+#: applications/luci-app-freeioe/root/usr/share/luci/menu.d/luci-app-freeioe.json:27
 msgid "Settings"
 msgstr "配置"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:92
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:96
 msgid "System Settings"
 msgstr "系统配置"
 
-#: htdocs/luci-static/resources/view/freeioe/settings.js:162
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/settings.js:166
 msgid "The FreeIOE settings has been successfully changed."
 msgstr "FreeIOE 配置修改成功"
 
-#: htdocs/luci-static/resources/view/freeioe/overview.js:35
-#: htdocs/luci-static/resources/view/status/include/22_freeioe.js:32
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/freeioe/overview.js:35
+#: applications/luci-app-freeioe/htdocs/luci-static/resources/view/status/include/22_freeioe.js:32
 msgid "Version"
 msgstr "版本号"
