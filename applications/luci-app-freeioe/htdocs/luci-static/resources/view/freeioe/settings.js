@@ -85,22 +85,18 @@ return view.extend({
 		o.placeholder = 90;
 		o.readonly = true;
 
-		o = s.option(form.Flag, 'USING_BETA', _('Beta Mode Enable'));
-		o.rmempty = true
-		o.readonly = true;
-
-		o = s.option(form.Flag, 'DATA_UPLOAD', _('Data Upload Enable'));
-		o.rmempty = true
-		o.readonly = true;
+		o = s.option(form.Value, 'SECRET', _('Secret'));
+		o.datatype	  = 'text';
+		o.placeholder = 'ZGV2aWNlIGlkCg=='
 
 		s = m.section(form.NamedSection, 'sys', _('System Settings'));
 
 		o = s.option(form.Value, 'PKG_HOST_URL', _('App Center Host'));
-		o.datatype    = 'pkg_host';
+		o.datatype	  = 'text';
 		o.placeholder = 'ioe.thingsroot.com';
 
 		o = s.option(form.Value, 'CNF_HOST_URL', _('Conf Center Host'));
-		o.datatype    = 'cnf_host';
+		o.datatype	  = 'text';
 		o.placeholder = 'ioe.thingsroot.com';
 
 		s = m.section(form.NamedSection, 'action', _('Actions'));
@@ -146,6 +142,7 @@ return view.extend({
 			var cloud_data = {};
 			cloud_data['HOST'] = formData['cloud']['HOST'];
 			cloud_data['PORT'] = formData['cloud']['PORT'];
+			cloud_data['SECRET'] = formData['cloud']['SECRET'];
 
 			var sys_data = {};
 			sys_data['PKG_HOST_URL'] = formData['sys']['PKG_HOST_URL'];
@@ -169,6 +166,7 @@ return view.extend({
 
 				formData.cloud.HOST = data[0]['HOST'];
 				formData.cloud.PORT = data[0]['PORT'];
+				formData.cloud.SECRET = data[0]['SECRET'];
 
 				formData.sys.PKG_HOST_URL = data[1]['PKG_HOST_URL'];
 				formData.sys.CNF_HOST_URL = data[1]['CNF_HOST_URL'];

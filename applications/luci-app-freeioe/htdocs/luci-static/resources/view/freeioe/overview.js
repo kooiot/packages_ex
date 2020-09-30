@@ -31,11 +31,17 @@ return view.extend({
 		    cloud  = data[1];
 
 		var fields = [
-			_('PSN'),              info.hw_id ? info.hw_id + ' / ' + info.id : null,
-			_('Version'),          info.version ? info.version + ' ( ' + info.skynet_version + ' ) ' : null,
-			_('Firmware Version'), info.firmware_version,
-			_('Cloud Host'),       cloud.host,
-			_('Cloud Status'),     cloud && cloud.mqtt ? cloud.mqtt.online === 1 ? 'ONLINE' : 'OFFLINE: ' + cloud.mqtt.msg : null,
+			_('PSN'),				info.hw_id ? info.hw_id + ' / ' + info.id : null,
+			_('Version'),			info.version ? info.version + ' ( ' + info.skynet_version + ' ) ' : null,
+			_('Firmware Version'),	info.firmware_version,
+			_('Beta Mode Enable'),	info.firmware_version,
+			_('Cloud Host'),		cloud.host,
+			_('Cloud Host'),		cloud.port ? cloud.port : null,
+			_('Cloud Status'),		cloud && cloud.mqtt ? cloud.mqtt.online === 1 ? 'ONLINE' : 'OFFLINE: ' + cloud.mqtt.msg : null,
+			_('Data Upload Enable'),cloud ? cloud.data_upload : null,
+			_('Event Upload Level'),cloud ? cloud.event_upload : null,
+			_('Data Cache'),		cloud ? cloud.data_cache : null,
+			_('Secret'),			cloud ? cloud.secret : null,
 		];
 
 		var body = E([
