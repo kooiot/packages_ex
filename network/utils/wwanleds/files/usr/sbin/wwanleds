@@ -39,16 +39,24 @@ local function info_export(info)
 	f:close()
 end
 
-local bbs_path = "/sys/devices/platform/leds/leds/kooiot:green:bbs/brightness"
-local bs_path = "/sys/devices/platform/leds/leds/kooiot:green:bs/brightness"
-local gs_path = "/sys/devices/platform/leds/leds/kooiot:green:gs/brightness"
-local ggs_path = "/sys/devices/platform/leds/leds/kooiot:green:ggs/brightness"
+local led_base_path = "/sys/class/leds/kooiot:"
+local led_base_path_s = "/sys/class/leds/"
 
-local function _led_control(path, value)
-	if not fs.access(path) then
-		return
+local function _led_control(name, value)
+	local path = led_base_path .. name .. "/brightness"
+	local path_s = led_base_path .. name .. "/brightness"
+
+	local _lctrl = function(led_path, led_value)
+		os.execute("echo "..led_value.." > "..led_path)
 	end
-	os.execute("echo "..value.." > "..path)
+
+	if fs.access(path) then
+		_lctrl(path, value)
+	end
+
+	if fs.access(path_s) then
+		_lctrl(path_s, value)
+	end
 end
 
 local function led_control(info)
@@ -70,29 +78,29 @@ local function led_control(info)
 	]]--
 
 	if not info.ccid or string.len(info.ccid) == 0 then
-		_led_control(bbs_path, 0)
-		_led_control(bs_path, 0)
-		_led_control(gs_path, 0)
-		_led_control(ggs_path, 0)
+		_led_control("green:bbs", 0)
+		_led_control("green:bs", 0)
+		_led_control("green:gs", 0)
+		_led_control("green:ggs", 0)
 		return
 	end
 
 	local csq = tonumber(info.csq) or 0
 	if csq >= 17 then
-		_led_control(bbs_path, 1)
-		_led_control(bs_path, 1)
-		_led_control(gs_path, 1)
+		_led_control("green:bbs", 1)
+		_led_control("green:bs", 1)
+		_led_control("green:gs", 1)
 		if csq > 25 then
-			_led_control(ggs_path, 1)
+			_led_control("green:ggs", 1)
 		end
 	else
-		_led_control(ggs_path, 0)
-		_led_control(gs_path, 0)
-		_led_control(bbs_path, 1)
+		_led_control("green:ggs", 0)
+		_led_control("green:gs", 0)
+		_led_control("green:bbs", 1)
 		if csq >= 10  then
-			_led_control(bs_path, 1)
+			_led_control("green:bs", 1)
 		else
-			_led_control(bs_path, 0)
+			_led_control("green:bs", 0)
 		end
 	end
 end
