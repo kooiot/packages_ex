@@ -44,7 +44,7 @@ local led_base_path_s = "/sys/class/leds/"
 
 local function _led_control(name, value)
 	local path = led_base_path .. name .. "/brightness"
-	local path_s = led_base_path .. name .. "/brightness"
+	local path_s = led_base_path_s .. name .. "/brightness"
 
 	local _lctrl = function(led_path, led_value)
 		os.execute("echo "..led_value.." > "..led_path)
