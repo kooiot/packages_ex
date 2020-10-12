@@ -9,34 +9,33 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=focas_ubus
 PKG_VERSION:=20181205
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/version.mk
+
+DL_FILE_VER:=snapshot
+ifeq ($(VERSION_NUMBER),SNAPSHOT)
+DL_FILE_VER=snapshot
+else
+DL_FILE_VER=$(subst -SNAPSHOT,,$(VERSION_NUMBER))
+endif
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_ARCH)-$(PKG_VERSION).tar.gz
-VERSION_NUMBER:=19.07
-
-ifeq ($(PKG_ARCH),arm_cortex-a9_neon)
 FOCAS_MD5SUM:=3e1c3173dc0fdc824eb643f2c6b572d0
-VERSION_NUMBER=17.01
-endif
-ifeq ($(PKG_ARCH),arm_cortex-a7_neon-vfpv4)
-FOCAS_MD5SUM=3e1c3173dc0fdc824eb643f2c6b572d0
-VERSION_NUMBER=19.07
-endif
 
 RSTRIP:=:
 STRIP:=:
 CheckDependencies:=:
 
-SYMLINK_URL:=http://openwrt.kooiot.com/download/bin/openwrt/$(VERSION_NUMBER)
+DL_FILE_URL:=http://openwrt.kooiot.com/download/bin/openwrt/$(DL_FILE_VER)
 
 define Download/focas_ubus
 	FILE:=$(PKG_SOURCE)
-	URL:=$(SYMLINK_URL)/$(PKG_ARCH)/$(PKG_NAME)/
+	URL:=$(DL_FILE_URL)/$(PKG_ARCH)/$(PKG_NAME)/
 	URL_FILE:=$(PKG_VERSION).tar.gz
 	HASH:=$(FOCAS_MD5SUM)
 endef
@@ -47,7 +46,7 @@ define Package/focas_ubus
   CATEGORY:=KooIoT
   TITLE:=Fanuc Focas
   URL:=http://www.kooiot.com
-  DEPENDS:=+freeioe +@KERNEL_DEVTMPFS
+  DEPENDS:=+freeioe +@KERNEL_DEVTMPFS @(arm||x86_64)
 endef
 
 define Package/focas_ubus/description
