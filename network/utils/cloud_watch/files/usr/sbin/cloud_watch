@@ -37,9 +37,9 @@ end
 
 local function echo_log(log)
 	os.execute('echo "'..log..'" >> /dev/console')
-	os.execute('echo "'..os.date()..': '..log..'" >> /root/wwanleds.log')
-	os.execute('tail -n 500 /root/wwanleds.log > /root/wwanleds.log.new')
-	os.execute('mv -f /root/wwanleds.log.new /root/wwanleds.log')
+	os.execute('echo "'..os.date()..': '..log..'" >> /root/cloud_watch.log')
+	os.execute('tail -n 500 /root/cloud_watch.log > /root/cloud_watch.log.new')
+	os.execute('mv -f /root/cloud_watch.log.new /root/cloud_watch.log')
 	os.execute("sync")
 end
 
@@ -82,7 +82,7 @@ local function watch_cloud_status()
 end
 
 os.execute('touch /tmp/sysinfo/cloud_status') --- make sure the file is there
-echo_log('Start wwanleds services...')
+echo_log('Start cloud_watch services...')
 
 while true do
 	local info = sysinfo_module()
