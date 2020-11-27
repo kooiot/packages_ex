@@ -12,13 +12,25 @@ PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 PKG_LICENSE:=GPL-2.0-or-later
 
 include $(INCLUDE_DIR)/package.mk
+include $(STAGING_DIR)/host/mk/qmake.mk
 
 define Package/qt_launcher
   SECTION:=xorg
   CATEGORY:=Xorg
   TITLE:=QT Launcher
   URL:=https://github.com/srdgame/qt_launcher/
-  DEPENDS:=+qt5-core +qt5-widgets +qt5-xml
+  DEPENDS:=+qt5base-core +qt5base-gui +qt5base-widgets +qt5base-xml \
+	  +qt5base-network \
+	  +qt5base-plugin-input-libinput \
+	  +qt5base-plugin-input-evdevtouch \
+	  +qt5base-plugin-input-evdevkeyboard \
+	  +qt5base-plugin-input-evdevmouse \
+	  +qt5base-plugin-imageformats-ico \
+	  +qt5base-plugin-imageformats-jpeg \
+	  +qt5base-plugin-platforms-minimal \
+	  +qt5base-plugin-platforms-linuxfb \
+	  +qt5base-plugin-platforms-offscreen \
+	  +qt5base-plugin-platforms-vnc
 endef
 
 define Build/Configure
