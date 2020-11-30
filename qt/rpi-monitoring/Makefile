@@ -37,7 +37,7 @@ define Package/rpi_monitoring
 	  +qt5quick2-controls2 \
 	  +qt5quick2-qml \
 	  +qt5quick2-qml-module-qtquick-layouts \
-	  +qt5quick2-qml-module-qtquick-windows2
+	  +qt5quick2-qml-module-qtquick-window2
 endef
 
 define Package/rpi_monitoring/install
