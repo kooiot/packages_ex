@@ -31,7 +31,6 @@ define Package/rpi-monitoring
 	  +qt5base-plugin-platforms-linuxfb \
 	  +qt5base-plugin-platforms-offscreen \
 	  +qt5base-plugin-platforms-vnc \
-	  +qt5graphicaleffects \
 	  +qt5quick2-quick \
 	  +qt5quick2-quick-widgets \
 	  +qt5quick2-controls2 \

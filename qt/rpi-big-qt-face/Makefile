@@ -31,7 +31,8 @@ define Package/rpi_big_qt_face
 	  +qt5base-plugin-platforms-minimal \
 	  +qt5base-plugin-platforms-linuxfb \
 	  +qt5base-plugin-platforms-offscreen \
-	  +qt5base-plugin-platforms-vnc
+	  +qt5base-plugin-platforms-vnc \
+	  +qt5base-plugin-sqldrivers-sqlite
 endef
 
 define Package/rpi_big_qt_face/install
