@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=rpi_monitoring
+PKG_NAME:=rpi-monitoring
 PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
@@ -12,13 +12,13 @@ PKG_LICENSE:=GPL-2.0-or-later
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
-include $(STAGING_DIR)/host/mk/qmake.mk
+-include $(STAGING_DIR)/host/mk/qmake.mk
 
-define Package/rpi_monitoring
+define Package/rpi-monitoring
   SECTION:=xorg
   CATEGORY:=Xorg
   TITLE:=QT Launcher
-  URL:=https://github.com/srdgame/rpi_monitoring/
+  URL:=https://github.com/srdgame/rpi-monitoring/
   DEPENDS:=+qt5base-core +qt5base-gui +qt5base-widgets \
 	  +qt5base-xml +qt5base-printSupport \
 	  +qt5base-plugin-input-libinput \
@@ -40,9 +40,9 @@ define Package/rpi_monitoring
 	  +qt5quick2-qml-module-qtquick-window2
 endef
 
-define Package/rpi_monitoring/install
+define Package/rpi-monitoring/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/rpi-monitoring $(1)/usr/bin/
 endef
 
-$(eval $(call BuildPackage,rpi_monitoring))
+$(eval $(call BuildPackage,rpi-monitoring))
