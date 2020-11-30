@@ -7,7 +7,6 @@ PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=https://github.com/srdgame/qt_launcher.git
 PKG_SOURCE_DATE:=2020-11-27
 PKG_SOURCE_VERSION:=c219feb6bfa89874ba922865d8d6c3ae3bb612ea
-PKG_HASH:=f0918b817b15ce4095ab313f13ebfe187342addc7dd628d9dcb80076fc833276
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 PKG_LICENSE:=GPL-2.0-or-later
 

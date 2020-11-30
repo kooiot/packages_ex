@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2015 OpenWrt.org
+# Copyright (C) 2017-2020 Dirk Chang <dirk@kooiot.com>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -39,7 +39,7 @@ define Package/libiconv-full-full
   ABI_VERSION:=2
 endef
 
-define Package/libcharset
+define Package/libcharset-full
   $(call Package/libiconv-full-full/Default)
   SECTION:=libs
   CATEGORY:=Libraries
@@ -47,7 +47,7 @@ define Package/libcharset
   ABI_VERSION:=1
 endef
 
-define Package/iconv
+define Package/iconv-full
   $(call Package/libiconv-full-full/Default)
   DEPENDS:=+libiconv-full-full +libcharset-full
   SECTION:=utils
