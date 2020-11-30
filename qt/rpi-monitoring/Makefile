@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rpi_monitoring
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=https://github.com/srdgame/rpi-monitoring.git
 PKG_SOURCE_DATE:=2020-11-30
-PKG_SOURCE_VERSION:=de37c5fac427e5e652c080fc00d48166b95f07b4
+PKG_SOURCE_VERSION:=4eab6dda5dd30131a2431243a4590d42bb19c76d
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 PKG_LICENSE:=GPL-2.0-or-later
 
