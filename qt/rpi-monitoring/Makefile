@@ -33,7 +33,7 @@ define Package/rpi-monitoring
 	  +qt5base-plugin-platforms-vnc \
 	  +qt5quick2-quick \
 	  +qt5quick2-quick-widgets \
-	  +qt5quick2-controls2 \
+	  +qt5quick2-controls \
 	  +qt5quick2-qml \
 	  +qt5quick2-qml-module-qtquick-layouts \
 	  +qt5quick2-qml-module-qtquick-window2
