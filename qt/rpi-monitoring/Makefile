@@ -27,6 +27,7 @@ define Package/rpi-monitoring
 	  +qt5base-plugin-input-evdevmouse \
 	  +qt5base-plugin-imageformats-ico \
 	  +qt5base-plugin-imageformats-jpeg \
+	  +qt5base-plugin-imageformats-png \
 	  +qt5base-plugin-platforms-minimal \
 	  +qt5base-plugin-platforms-linuxfb \
 	  +qt5base-plugin-platforms-offscreen \

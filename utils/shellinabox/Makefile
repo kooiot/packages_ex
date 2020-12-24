@@ -29,7 +29,7 @@ define Package/shellinabox
   CATEGORY:=Utilities
   TITLE:=Shell In A Box
   URL:=https://github.com/freeioe/shellinabox/
-  DEPENDS:=+zlib
+  DEPENDS:=+zlib +libopenssl
 endef
 
 define Package/shellinabox/description
