@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2018 KooIoT.com
+# Copyright (C) 2018-2021 KooIoT.com
 #
 # This is free software, licensed under MIT
 # See /LICENSE for more information.

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2018-2019 KooIoT.com
+# Copyright (C) 2018-2021 KooIoT.com
 #
 # This is free software, licensed under MIT
 # See /LICENSE for more information.
@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe
-PKG_VERSION:=1377
+PKG_VERSION:=1385
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=434949526b0359fb4ecbdf81d643ad0d
+PKG_MD5SUM:=bb2dc5c98b6df74e1d389d1b6593d425
 
 include $(INCLUDE_DIR)/package.mk
 

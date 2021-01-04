@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2018-2019 KooIoT.com
+# Copyright (C) 2018-2021 KooIoT.com
 #
 # This is free software, licensed under MIT
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet
-PKG_VERSION:=2147
+PKG_VERSION:=2149
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
@@ -25,26 +25,37 @@ SKYNET_VER_NUM=$(subst -SNAPSHOT,,$(VERSION_NUMBER))
 endif
 
 ifeq ($(PKG_ARCH),arm_cortex-a9_neon)
-SKYNET_MD5SUM:=899fdaf4019b34221d7c074767d86f03
+ifeq ($(SKYNET_VER_NUM),17.01)
+SKYNET_MD5SUM:=73097a4d31491c976f5be264b8583a63
+endif
+ifeq ($(SKYNET_VER_NUM),19.07)
+SKYNET_MD5SUM:=e1c951b6e6ad77d16e96b1eca42d5d7f
+endif
 endif
 ifeq ($(PKG_ARCH),x86_64)
-SKYNET_MD5SUM=e210d9762f7b0f904111208d081983bd
+ifeq ($(SKYNET_VER_NUM),19.07)
+SKYNET_MD5SUM=b0a6645ab0f7877c3466af1e7a41c895
+endif
 endif
 ifeq ($(PKG_ARCH),aarch64_cortex-a53)
-SKYNET_MD5SUM=0e287c79441dca7a6328c08bb9d5bf05
+ifeq ($(SKYNET_VER_NUM),snapshot)
+SKYNET_MD5SUM=f3ae62b4f88036ba203b5f114e7eb396
+endif
 endif
 ifeq ($(PKG_ARCH),mipsel_24kc)
-SKYNET_MD5SUM=97851e37c2550c1c2088d151c8348e11
+ifeq ($(SKYNET_VER_NUM),snapshot)
+SKYNET_MD5SUM=91cfce49df22ba61074be1f50a775e88
+endif
 endif
 ifeq ($(PKG_ARCH),mips_24kc)
 SKYNET_MD5SUM=
 endif
 ifeq ($(PKG_ARCH),arm_cortex-a7_neon-vfpv4)
 ifeq ($(SKYNET_VER_NUM),19.07)
-SKYNET_MD5SUM=e47e5e507b1c59b83f4613e4c4e6406a
+SKYNET_MD5SUM=fec075128cc524cdaa7290e45d564225
 endif
 ifeq ($(SKYNET_VER_NUM),snapshot)
-SKYNET_MD5SUM=5c3c4a733b5aaf8a3a509aa1430aa878
+SKYNET_MD5SUM=007dfc1e5bcd924e55e266d47c06d769
 endif
 endif
 

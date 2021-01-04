@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020 Dirk Chang
+# Copyright (C) 2020-2021 KooIoT.com
 #
 #
 
