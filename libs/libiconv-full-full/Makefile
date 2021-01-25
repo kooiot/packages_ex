@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libiconv-full-full
 PKG_VERSION:=1.16
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=libiconv-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/libiconv
@@ -60,6 +60,8 @@ CONFIGURE_ARGS += \
 	--enable-static \
 	--disable-rpath \
 	--enable-relocatable
+
+TARGET_CFLAGS += -fPIC -DPIC
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/libiconv-full-full/include

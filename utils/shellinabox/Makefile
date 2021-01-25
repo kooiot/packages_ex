@@ -4,8 +4,6 @@
 # This is free software, licensed under MIT.
 # See /LICENSE for more information.
 #
-# This Makefile is a skeleton
-#
 
 include $(TOPDIR)/rules.mk
 
@@ -19,6 +17,7 @@ PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=https://github.com/freeioe/shellinabox
 PKG_SOURCE_DATE:=2019-07-07
 PKG_SOURCE_VERSION:=7ea72226de399ac7f11cb6cb5670ace59b5ed491
+PKG_MIRROR_HASH:=b983423ee159cc8dde827d7b45630485f414a30f0fccb5a51b574f27114c4173
 
 PKG_FIXUP:=autoreconf
 
