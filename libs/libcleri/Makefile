@@ -1,0 +1,65 @@
+#
+# Copyright (C) 2021 KooIoT.com
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=libcleri
+PKG_RELEASE:=1
+
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/kooiot/libcleri
+PKG_SOURCE_DATE:=2021-01-26
+PKG_SOURCE_VERSION:=3756dcf5802ade1e4720132d770169b686370493
+# PKG_MIRROR_HASH:=4dc07aa094472873eb14da0e8973d40f91a1f3ce731d3ef1a73735db430dada9
+
+PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
+PKG_LICENSE:=MIT
+PKG_LICENSE_FILES:=LICENSE.md
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/libcleri
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE:=C Left-Right Parser
+  URL:=https://github.com/transceptor-technology/libcleri
+  DEPENDS:=+libpcre2
+endef
+
+define Package/libcleri/description
+  Language parser for the C/C++ programming language. Initially created for SiriDB.
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR)/Release \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		$(MAKE_FLAGS) \
+		ARCH="$(ARCH)" \
+		CC="$(TARGET_CC)"
+	mkdir -p $(PKG_INSTALL_DIR)/usr/include
+	mkdir -p $(PKG_INSTALL_DIR)/usr/lib
+	$(MAKE) -C $(PKG_BUILD_DIR)/Release \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		INSTALL_PATH="$(PKG_INSTALL_DIR)/usr" \
+		$(MAKE_FLAGS) \
+		ARCH="$(ARCH)" \
+		install -i
+endef
+
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include/cleri
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/cleri/* $(1)/usr/include/cleri/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(1)/usr/lib/
+endef
+
+define Package/libcleri/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcleri.so* $(1)/usr/lib/
+endef
+
+$(eval $(call BuildPackage,libcleri))
