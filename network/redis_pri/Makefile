@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=redis
+PKG_NAME:=redis_pri
 PKG_VERSION:=4.0.10
 PKG_RELEASE:=1
 
@@ -33,7 +33,7 @@ MAKE_FLAGS+= \
 	MALLOC="libc" \
 	PREFIX="$(PKG_INSTALL_DIR)/usr"
 
-define Package/redis
+define Package/redis_pri
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Advanced key-value cache and store
@@ -41,7 +41,7 @@ define Package/redis
   URL:=http://redis.io
 endef
 
-define Package/redis/description
+define Package/redis_pri/description
 	Redis is an open source, BSD licensed, advanced key-value cache and store.
 	It is often referred to as a data structure server since keys can contain
 	strings, hashes, lists, sets, sorted sets, bitmaps and hyperloglogs.
@@ -57,7 +57,7 @@ MAKE_FLAGS = \
         $(TARGET_CONFIGURE_OPTS) \
         ARCH=""
 
-define Package/redis/conffiles
+define Package/redis_pri/conffiles
 /etc/redis.conf
 endef
 
@@ -76,7 +76,7 @@ define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)/src/" $(MAKE_FLAGS) CFLAGS="$(TARGET_CPPFLAGS)"  LDFLAGS="$(TARGET_LDFLAGS)"
 endef
 
-define Package/redis/install
+define Package/redis_pri/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/redis-cli $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/redis-server $(1)/usr/bin/
@@ -88,5 +88,5 @@ define Package/redis/install
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/redis.conf $(1)/etc
 endef
 
-$(eval $(call BuildPackage,redis))
+$(eval $(call BuildPackage,redis_pri))
 
