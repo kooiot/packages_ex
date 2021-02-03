@@ -5,14 +5,14 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=aws_iot_greengrass
+PKG_NAME:=asw-iot-greengrass
 PKG_VERSION:=0.1
 PKG_RELEASE:=1
 PKG_LICNESE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/aws_iot_greengrass
+define Package/asw-iot-greengrass
   SECTION:=kooiot
   CATEGORY:=KooIoT
   TITLE:=AWS IOT GreenGrass necessery kernel options selection
@@ -20,7 +20,7 @@ define Package/aws_iot_greengrass
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef
 
-define Package/aws_iot_greengrass/description
+define Package/asw-iot-greengrass/description
   AWS IOT GreenGrass necessery kernel options selection
 endef
 
@@ -30,8 +30,8 @@ endef
 define Build/Compile
 endef
 
-define Package/aws_iot_greengrass/install
+define Package/asw-iot-greengrass/install
 	$(CP) ./files/* $(1)
 endef
 
-$(eval $(call BuildPackage,aws_iot_greengrass))
+$(eval $(call BuildPackage,asw-iot-greengrass))

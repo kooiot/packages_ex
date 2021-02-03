@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=strip_ioe
+PKG_NAME:=strip-ioe
 PKG_VERSION:=20200723
 PKG_RELEASE:=1
 PKG_LICENSE:=MIT
@@ -16,7 +16,7 @@ PKG_ARCH=$(ARCH_PACKAGES)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/strip_ioe
+define Package/strip-ioe
   SECTION:=kooiot
   CATEGORY:=KooIoT
   TITLE:=Strip IOE
@@ -24,7 +24,7 @@ define Package/strip_ioe
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef
 
-define Package/strip_ioe/description
+define Package/strip-ioe/description
 	Strip FreeIOE for devices which flash is limited 
 endef
 
@@ -34,11 +34,11 @@ endef
 define Build/Compile
 endef
 
-define Package/strip_ioe/install
+define Package/strip-ioe/install
 	$(CP) ./files/* $(1)
 endef
 
-define Package/strip_ioe/postinst
+define Package/strip-ioe/postinst
 #!/bin/sh
 if [ -n "$${IPKG_INSTROOT}" ] # if run within buildroot
 then
@@ -47,4 +47,4 @@ then
 fi
 endef
 
-$(eval $(call BuildPackage,strip_ioe))
+$(eval $(call BuildPackage,strip-ioe))

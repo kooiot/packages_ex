@@ -7,13 +7,13 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=factory_tlink
+PKG_NAME:=factory-tlink
 PKG_VERSION:=20190808
 PKG_RELEASE:=2
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/factory_tlink
+define Package/factory-tlink
   SECTION:=kooiot
   CATEGORY:=KooIoT
   TITLE:=Factory TLink Devices
@@ -21,15 +21,15 @@ define Package/factory_tlink
   DEPENDS:=+freeioe
 endef
 
-define Package/factory_tlink/description
+define Package/factory-tlink/description
 	Factory make scripts used by TLink devices
 endef
 
 define Build/Compile
 endef
 
-define Package/factory_tlink/install
+define Package/factory-tlink/install
 	$(CP) ./files/* $(1)
 endef
 
-$(eval $(call BuildPackage,factory_tlink))
+$(eval $(call BuildPackage,factory-tlink))

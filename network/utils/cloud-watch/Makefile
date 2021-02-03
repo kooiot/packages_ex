@@ -5,14 +5,14 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=cloud_watch
+PKG_NAME:=cloud-watch
 PKG_VERSION:=0.6
 PKG_RELEASE:=1
 PKG_LICNESE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/cloud_watch
+define Package/cloud-watch
   SECTION:=net
   CATEGORY:=Network
   TITLE:=WWAN restart by watching cloud connnection status
@@ -20,7 +20,7 @@ define Package/cloud_watch
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef
 
-define Package/cloud_watch/description
+define Package/cloud-watch/description
   Utils to restart wwan module by watch the cloud connection status exported by FreeIOE
 endef
 
@@ -30,8 +30,8 @@ endef
 define Build/Compile
 endef
 
-define Package/cloud_watch/install
+define Package/cloud-watch/install
 	$(CP) ./files/* $(1)
 endef
 
-$(eval $(call BuildPackage,cloud_watch))
+$(eval $(call BuildPackage,cloud-watch))
