@@ -6,6 +6,18 @@ STOP=90
 
 USE_PROCD=1
 
+if [ -e /mnt/data ]; then
+	echo "Data folder is ready"
+else
+	ln -s /root /mnt/data
+fi
+
+if [ -e /mnt/data/siridb ]; then
+	echo "DB folder is ready"
+else
+	mkdir -p /mnt/data/siridb
+fi
+
 start_service () {
 	procd_open_instance
 	procd_set_param command siridb-server
