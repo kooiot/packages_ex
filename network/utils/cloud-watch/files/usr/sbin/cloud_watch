@@ -12,6 +12,97 @@ local function exec(cmd)
 	return s
 end
 
+local function echo_log(log)
+	os.execute('echo "'..log..'" >> /dev/console')
+	os.execute('echo "'..os.date()..': '..log..'" >> /root/cloud_watch.log')
+	os.execute('tail -n 500 /root/cloud_watch.log > /root/cloud_watch.log.new')
+	os.execute('mv -f /root/cloud_watch.log.new /root/cloud_watch.log')
+	os.execute("sync")
+end
+
+local function gen_gcom_script(at_cmd)
+	local script = [[opengt
+ set com 115200n81
+ set comecho off
+ set senddelay 0.02
+ waitquiet 0.2 0.2
+ flash 0.1
+
+:start
+ send "AT+%s^m"
+ get 1 "" $s
+ print $s
+
+:continue
+ exit 0
+ ]]
+	return string.format(script, at_cmd)
+end
+
+local function create_gcom_script(script, at_cmd)
+	local path = '/tmp/__gcom_'..script
+	local f, err = io.open(path, 'w+')
+	if not f then
+		return nil, err
+	end
+	f:write(gen_gcom_script(at_cmd))
+	f:close()
+	return path
+end
+
+local function auto_port_exec(script, at_cmd)
+	local port = '/dev/ttyUSB2'
+	local script_path = '/etc/gcom/'..script
+	local f, err = io.open(script_path, 'r')
+	if not f then
+		script_path, err = create_gcom_script(script, at_cmd)
+		if not script_path then
+			return nil, err
+		end
+	else
+		f:close()
+	end
+
+	return exec('gcom -d '..port..' -s '..script_path)
+end
+
+--- CCID sim card id
+local function get_ccid()
+	local s, err = auto_port_exec('getccid.gcom', 'CCID')
+	if not s then
+		return nil, err
+	end
+
+	local ccid = string.match(s, '+CCID:%s-(%w+)')
+	if not ccid then
+		return nil, s
+	end
+	return ccid
+end
+
+local gpio_export = false -- For F
+local sn, ssn
+
+local function sysinfo_psn()
+	if sn and ssn then
+		return sn, ssn
+	end
+
+	local cmd = 'sysinfo psn'
+	local result = exec(cmd)
+	if not result then
+		return nil
+	end
+
+	sn = string.match(result, 'PSN:%s+([^%c]+)')
+	if not sn then
+		return nil
+	end
+
+	ssn = string.sub(sn, 1, 7)
+	return sn, ssn
+end
+
 local function sysinfo_module()
 	--print('sysinfo_module')
 
@@ -21,36 +112,54 @@ local function sysinfo_module()
 		return nil
 	end
 	
+	local device_f = false
 	local module = string.match(result, 'Modle:%s+([^%c]+)')
 	local ccid = string.match(result, 'SimCard:%s+([^%c]+)')
+	local sn, ssn = sysinfo_psn()
+	if ssn == '2-31104' or ssn == '2-31101' or ssn == '2-31103' then
+		device_f = true
+		if not gpio_export then
+			echo_log('Export 4G gpio for F series device')
+			os.execute("echo 1 > /sys/class/gpio/export")
+			os.execute("echo out > /sys/class/gpio/gpio1/direction")
+			os.execute("echo 1 > /sys/class/gpio/gpio1/value")
+			gpio_export = true
+		end
+	end
+
 	if ccid == 'UNKNOWN ERROR' then
 		ccid = nil
+	else
+		if device_f then
+			--- F208H or F202H
+			ccid = get_ccid()
+		end
 	end
+
 	--print('MODULE', module)
 	--print('CCID', ccid)
 
 	return {
 		module = module,
-		ccid = ccid
+		ccid = ccid,
+		device_f = device_f
 	}
 end
 
-local function echo_log(log)
-	os.execute('echo "'..log..'" >> /dev/console')
-	os.execute('echo "'..os.date()..': '..log..'" >> /root/cloud_watch.log')
-	os.execute('tail -n 500 /root/cloud_watch.log > /root/cloud_watch.log.new')
-	os.execute('mv -f /root/cloud_watch.log.new /root/cloud_watch.log')
-	os.execute("sync")
-end
-
-local function restart_wanpwrc()
+local function restart_wanpwrc(info)
 	echo_log('4G Wan service restart')
-	os.execute("/etc/init.d/wanpwrc restart")
+	if info.device_f then
+		os.execute("echo 0 > /sys/class/gpio/gpio1/value")
+		nixio.nanosleep(12)
+		os.execute("echo 1 > /sys/class/gpio/gpio1/value")
+	else
+		os.execute("/etc/init.d/wanpwrc restart")
+	end
 end
 
 local cloud_last = os.time()
 
-local function watch_cloud_status()
+local function watch_cloud_status(info)
 	local now = os.time()
 
 	local str, err = exec('cat /tmp/sysinfo/cloud_status')
@@ -77,7 +186,7 @@ local function watch_cloud_status()
 	if now - cloud_last > 1200 then
 		cloud_last = now
 		echo_log('Cloud status out of date (20 min)')
-		restart_wanpwrc()
+		restart_wanpwrc(info)
 	end
 end
 
@@ -87,7 +196,7 @@ echo_log('Start cloud_watch services...')
 while true do
 	local info = sysinfo_module()
 	if info.module and info.ccid and string.len(info.ccid) > 0 then
-		watch_cloud_status()
+		watch_cloud_status(info)
 	end
 	nixio.nanosleep(15)
 end
