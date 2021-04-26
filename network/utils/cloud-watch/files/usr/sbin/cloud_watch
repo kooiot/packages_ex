@@ -182,6 +182,17 @@ local function watch_cloud_status(info)
 	end
 	--print(now, cloud_last)
 
+	if now - cloud_last > 600 then
+		local str, err = exec('cat /tmp/sysinfo/online_check')
+		if str and string.len(str) > 0 then
+			-- lua5.1
+			local r, err = os.execute('ping '..str)
+			if r == 0 then
+				cloud_last = now
+			end
+		end
+	end
+
 	--- If 20 minutes that gateway not connected
 	if now - cloud_last > 1200 then
 		cloud_last = now
