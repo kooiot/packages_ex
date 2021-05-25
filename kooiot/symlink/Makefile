@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=symlink
 PKG_VERSION:=20191204
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -46,7 +46,7 @@ define Package/symlink
   CATEGORY:=KooIoT
   TITLE:=SymLink
   URL:=http://www.symid.com
-  DEPENDS:=+libstdcpp +luci +libopenssl +libcurl +zip +unzip +zlib
+  DEPENDS:=+libstdcpp +luci +libopenssl +@OPENSSL_WITH_SM234 +@OPENSSL_ENGINE_BUILTIN +libcurl +zip +unzip +zlib
 endef
 
 define Package/symlink/description
