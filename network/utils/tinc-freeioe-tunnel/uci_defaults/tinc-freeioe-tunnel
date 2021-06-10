@@ -1,10 +1,18 @@
 #!/bin/sh
 
 uci -q show network.symrouter || {
-	uci add_list network.lan.ifname='symbridge'
+	if ["$(uci -q get network.lan.device)" = "br-lan"] then
+		uci add_list network.@device[0].ports='symbridge'
+	else
+		uci add_list network.lan.ifname='symbridge'
+	fi
 	uci set network.symrouter='interface'
 	uci set network.symrouter.proto='static'
-	uci set network.symrouter.ifname='symrouter'
+	if ["$(uci -q get network.lan.device)" = "br-lan"] then
+		uci set network.symrouter.device='symrouter'
+	else
+		uci set network.symrouter.ifname='symrouter'
+	fi
 	uci set network.symrouter.ipaddr='10.222.0.1'
 	uci set network.symrouter.netmask='255.255.255.0'
 
