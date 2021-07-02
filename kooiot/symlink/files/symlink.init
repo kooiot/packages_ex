@@ -4,6 +4,28 @@
 START=99
 USE_PROCD=1
 
+if [ -e /dev/mmcblk1p3 ]
+then
+	mount -a # Make sure all fs mounted
+	if [ ! -e /mnt/sympad ]
+	then
+		echo "MKDIR /mnt/sympad" > /dev/console
+		mkdir -p /mnt/data/_sympad
+		ln -s /mnt/data/_sympad /mnt/sympad
+		if [ ! -e /mnt/sympad/LDog.ex ]
+		then
+			echo "CP SymLink files..." > /dev/console
+			cp -r -u /mnt/sympad_pkg/* /mnt/sympad/
+		fi
+	fi
+	if [ ! -e /mnt/symbackup ]
+	then
+		echo "MKDIR /mnt/symbackup" > /dev/console
+		mkdir -p /mnt/data/_symbackup
+		ln -s /mnt/data/_symbackup /mnt/symbackup
+	fi
+fi
+
 start_service () {
 	logger -t "Symlink" -p user.notice "Start!" 
 	procd_open_instance

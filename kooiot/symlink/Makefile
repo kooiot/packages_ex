@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=symlink
 PKG_VERSION:=20191204
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -91,18 +91,18 @@ CONFIGURE_ARGS += --symgrid_none
 endif
 
 define Package/symlink/install
-	$(INSTALL_DIR) $(1)/mnt/sympad
-	$(CP) -rf $(PKG_BUILD_DIR)/src/sympad/* $(1)/mnt/sympad
-	chmod a+x $(1)/mnt/sympad/LDog.ex
-	chmod a+x $(1)/mnt/sympad/SXDaemon.exa
-	chmod a+x $(1)/mnt/sympad/SLKernal.exa
+	$(INSTALL_DIR) $(1)/mnt/sympad_pkg
+	$(CP) -rf $(PKG_BUILD_DIR)/src/sympad/* $(1)/mnt/sympad_pkg
+	chmod a+x $(1)/mnt/sympad_pkg/LDog.ex
+	chmod a+x $(1)/mnt/sympad_pkg/SXDaemon.exa
+	chmod a+x $(1)/mnt/sympad_pkg/SLKernal.exa
 
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/symlink.init $(1)/etc/init.d/symlink
 
 	if [ -f ./files/$(SYMLINK_PROJECT_DIR)/db.xml ]; then \
-		$(INSTALL_DIR) $(1)/mnt/sympad/project; \
-		$(CP) ./files/$(SYMLINK_PROJECT_DIR)/* $(1)/mnt/sympad/project; \
+		$(INSTALL_DIR) $(1)/mnt/sympad_pkg/project; \
+		$(CP) ./files/$(SYMLINK_PROJECT_DIR)/* $(1)/mnt/sympad_pkg/project; \
 	fi
 endef
 
