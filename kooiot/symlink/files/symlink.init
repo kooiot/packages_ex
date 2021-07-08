@@ -16,6 +16,10 @@ then
 		then
 			echo "CP SymLink files..." > /dev/console
 			cp -r -u /mnt/sympad_pkg/* /mnt/sympad/
+			if [ -e /mnt/data/_sympad_pre ]
+			then
+				cp -r -u /mnt/data/_sympad_pre/* /mnt/sympad/
+			fi
 		fi
 	fi
 	if [ ! -e /mnt/symbackup ]
