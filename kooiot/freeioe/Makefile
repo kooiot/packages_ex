@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe
-PKG_VERSION:=1463
+PKG_VERSION:=1467
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=42425daa88cdb63cc58fe03c134b3cdd
+PKG_MD5SUM:=06e4c3596b699355b2ad83da0f8f3118
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -39,6 +39,10 @@ endef
 
 define Package/freeioe/description
 	FreeIOE is platform for internet of everythings running on embedded machine, built on top of Skynet.
+endef
+
+define Package/freeioe/config
+source "$(SOURCE)/Config.in"
 endef
 
 define Build/Prepare
@@ -66,6 +70,8 @@ define Package/freeioe/install
 
 	$(INSTALL_DIR) $(1)/usr/ioe/ipt
 	$(CP) $(DL_DIR)/$(PKG_SOURCE) $(1)/usr/ioe/ipt/freeioe.tar.gz
+
+	$(if $(FREEIOE_CLOUD_HOST),echo $(FREEIOE_CLOUD_HOST_ADDR) > $(1)/usr/ioe/freeioe.cloud.host)
 
 ifeq ($(PKG_ARCH),x86_64)
 	$(INSTALL_DIR) $(1)/etc/profile.d

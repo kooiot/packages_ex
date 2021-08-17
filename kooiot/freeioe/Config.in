@@ -1,0 +1,13 @@
+if PACKAGE_freeioe
+
+config FREEIOE_CLOUD_HOST
+	bool
+	prompt "Enable cloud host specify"
+
+config FREEIOE_CLOUD_HOST_ADDR
+	string
+	default ioe.kooiot.com
+	prompt "Freeioe Cloud Host"
+	depends on FREEIOE_CLOUD_HOST
+
+endif
