@@ -6,7 +6,7 @@ config FREEIOE_CLOUD_HOST
 
 config FREEIOE_CLOUD_HOST_ADDR
 	string
-	default ioe.kooiot.com
+	default iot.kooiot.com
 	prompt "Freeioe Cloud Host"
 	depends on FREEIOE_CLOUD_HOST
 
