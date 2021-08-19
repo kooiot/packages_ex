@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe
-PKG_VERSION:=1467
-PKG_RELEASE:=2
+PKG_VERSION:=1469
+PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=06e4c3596b699355b2ad83da0f8f3118
+PKG_MD5SUM:=d57a5ec0afdbb7c31fb3080be0c3b139
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -71,9 +71,10 @@ define Package/freeioe/install
 	$(INSTALL_DIR) $(1)/usr/ioe/ipt
 	$(CP) $(DL_DIR)/$(PKG_SOURCE) $(1)/usr/ioe/ipt/freeioe.tar.gz
 
-	echo $(if $(CONFIG_FREEIOE_CLOUD_HOST_ADDR),$(CONFIG_FREEIOE_CLOUD_HOST_ADDR),"iot.kooiot.com") > $(PKG_BUILD_DIR)/freeioe.cloud.host
+	echo 'IOE_CLOUD_HOST='$(if $(CONFIG_FREEIOE_CLOUD_HOST_ADDR),$(CONFIG_FREEIOE_CLOUD_HOST_ADDR),"iot.kooiot.com") > $(PKG_BUILD_DIR)/freeioe.env
+	echo 'IOE_PKG_URL='$(if $(CONFIG_FREEIOE_CLOUD_PKG_URL),$(CONFIG_FREEIOE_CLOUD_PKG_URL),"iot.kooiot.com") >> $(PKG_BUILD_DIR)/freeioe.env
 
-	$(if $(CONFIG_FREEIOE_CLOUD_HOST),$(CP) $(PKG_BUILD_DIR)/freeioe.cloud.host $(1)/usr/ioe/)
+	$(if $(CONFIG_FREEIOE_CLOUD_HOST),$(CP) $(PKG_BUILD_DIR)/freeioe.env $(1)/usr/ioe/.env)
 
 ifeq ($(PKG_ARCH),x86_64)
 	$(INSTALL_DIR) $(1)/etc/profile.d

@@ -10,4 +10,10 @@ config FREEIOE_CLOUD_HOST_ADDR
 	prompt "Freeioe Cloud Host"
 	depends on FREEIOE_CLOUD_HOST
 
+config FREEIOE_CLOUD_PKG_URL
+	string
+	default iot.kooiot.com
+	prompt "Freeioe PKG URL"
+	depends on FREEIOE_CLOUD_HOST
+
 endif
