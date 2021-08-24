@@ -155,8 +155,16 @@ local cloud_last = os.time()
 local function watch_cloud_status()
 	local now = os.time()
 
+	local has_symlink = false
+	if fs.access('/etc/rc.d/S99symlink') then
+		has_symlink = true
+	end
+	if fs.access('/etc/rc.d/S22symlink') then
+		has_symlink = true
+	end
+
 	local str, err = exec('cat /tmp/sysinfo/cloud_status')
-	if str and string.len(str) > 0 then
+	if not has_symlink and str and string.len(str) > 0 then
 		local status, last = string.match(str, '(%d+)%c+(%d+)')
 		if status and last then
 			if tonumber(status) == 1 then
