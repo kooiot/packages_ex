@@ -72,8 +72,8 @@ define Package/freeioe/install
 	$(CP) $(DL_DIR)/$(PKG_SOURCE) $(1)/usr/ioe/ipt/freeioe.tar.gz
 
 	echo '[freeioe]' > $(PKG_BUILD_DIR)/freeioe.conf
-	echo 'IOE_CLOUD_HOST='$(if $(CONFIG_FREEIOE_CLOUD_HOST_ADDR),$(CONFIG_FREEIOE_CLOUD_HOST_ADDR),"") >> $(PKG_BUILD_DIR)/freeioe.conf
-	echo 'IOE_PKG_URL='$(if $(CONFIG_FREEIOE_CLOUD_PKG_URL),$(CONFIG_FREEIOE_CLOUD_PKG_URL),"") >> $(PKG_BUILD_DIR)/freeioe.conf
+	echo 'IOE_CLOUD_HOST='$(if $(CONFIG_FREEIOE_CLOUD_HOST_ADDR),$(CONFIG_FREEIOE_CLOUD_HOST_ADDR),"ioe.thingsroot.com") >> $(PKG_BUILD_DIR)/freeioe.conf
+	echo 'IOE_PKG_URL='$(if $(CONFIG_FREEIOE_CLOUD_PKG_URL),$(CONFIG_FREEIOE_CLOUD_PKG_URL),"ioe.thingsroot.com") >> $(PKG_BUILD_DIR)/freeioe.conf
 	echo 'IOE_PKG_VERSION='$(if $(CONFIG_FREEIOE_CLOUD_PKG_VER),$(CONFIG_FREEIOE_CLOUD_PKG_VER),"1") >> $(PKG_BUILD_DIR)/freeioe.conf
 
 	$(if $(CONFIG_FREEIOE_CLOUD_HOST),$(CP) $(PKG_BUILD_DIR)/freeioe.conf $(1)/etc/)
