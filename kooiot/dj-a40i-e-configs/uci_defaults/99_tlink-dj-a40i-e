@@ -1,0 +1,13 @@
+#!/bin/sh
+
+uci -q show network.lan1dhcp || {
+	uci set network.lan1dhcp='interface'
+	uci set network.lan1dhcp.proto='dhcp'
+	if [ "$(uci -q get network.lan.device)" == "br-lan" ]; then
+		uci set network.lan1dhcp.device='br-lan'
+	else
+		uci set network.lan1dhcp.ifname='br-lan'
+	fi
+
+	uci commit network
+}
