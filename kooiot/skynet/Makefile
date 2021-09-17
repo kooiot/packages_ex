@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet
-PKG_VERSION:=2243
-PKG_RELEASE:=2
+PKG_VERSION:=2267
+PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -26,25 +26,25 @@ endif
 
 ifeq ($(PKG_ARCH),arm_cortex-a9_neon)
 ifeq ($(SKYNET_VER_NUM),17.01)
-SKYNET_MD5SUM:=e9cc17acc4373059c46b3b46372d314c
+SKYNET_MD5SUM:=afa6a125923e46b16c34a446df7aca52
 endif
 ifeq ($(SKYNET_VER_NUM),19.07)
-SKYNET_MD5SUM:=36091b2ed6444b7ae382cf4a903ae350
+SKYNET_MD5SUM:=1d721733628f0dd8081feb0a8b14599a
 endif
 endif
 ifeq ($(PKG_ARCH),x86_64)
 ifeq ($(SKYNET_VER_NUM),19.07)
-SKYNET_MD5SUM=c2f0f18c7ff28d5f1dd81d781e0c4491
+SKYNET_MD5SUM=a60daacd64c4a45a03f8037cb24eb248
 endif
 endif
 ifeq ($(PKG_ARCH),aarch64_cortex-a53)
 ifeq ($(SKYNET_VER_NUM),snapshot)
-SKYNET_MD5SUM=2ce1652cfc7123bf6cdd8f32ec37e0a3
+SKYNET_MD5SUM=e117a1e2cc0c4b70c9e5304b6548e38b
 endif
 endif
 ifeq ($(PKG_ARCH),mipsel_24kc)
 ifeq ($(SKYNET_VER_NUM),snapshot)
-SKYNET_MD5SUM=41bc2f8e07fc9628cd79009e77e2ca48
+SKYNET_MD5SUM=106d6bac6df86f334de9943f559319d2
 endif
 endif
 ifeq ($(PKG_ARCH),mips_24kc)
@@ -52,10 +52,10 @@ SKYNET_MD5SUM=
 endif
 ifeq ($(PKG_ARCH),arm_cortex-a7_neon-vfpv4)
 ifeq ($(SKYNET_VER_NUM),19.07)
-SKYNET_MD5SUM=0b5c073689927b837cdc72fc91a14607
+SKYNET_MD5SUM=bb34309fe6943929f4c8187186bb18d6
 endif
 ifeq ($(SKYNET_VER_NUM),snapshot)
-SKYNET_MD5SUM=1c0ed3e032dbf912076f7ed9296a3d2b
+SKYNET_MD5SUM=9f011072d78fe4dba2fc774067605140
 endif
 endif
 
