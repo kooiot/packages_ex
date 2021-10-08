@@ -186,7 +186,7 @@ local function watch_cloud_status(info)
 		local str, err = exec('cat /tmp/sysinfo/online_check')
 		if str and string.len(str) > 0 then
 			-- lua5.1
-			local r, err = os.execute('ping '..str)
+			local r, err = os.execute('ping -c 1 '..str)
 			if r == 0 then
 				cloud_last = now
 			end

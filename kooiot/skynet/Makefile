@@ -24,6 +24,11 @@ else
 SKYNET_VER_NUM=$(subst -SNAPSHOT,,$(VERSION_NUMBER))
 endif
 
+# ifeq ($(VERSION_NUMBER),19.07.7)
+### Fixed the version number for 19.07.7
+# SKYNET_VER_NUM=19.07
+# endif
+
 ifeq ($(PKG_ARCH),arm_cortex-a9_neon)
 ifeq ($(SKYNET_VER_NUM),17.01)
 SKYNET_MD5SUM:=afa6a125923e46b16c34a446df7aca52
