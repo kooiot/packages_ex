@@ -39,7 +39,8 @@ define Package/sdlnrj-xfrm
 		   +@KERNEL_XFRM_MODE_TUNNEL \
 		   +@KERNEL_XFRM_MODE_BEET \
 		   +@KERNEL_NETFILTER \
-		   +@KERNEL_TUN
+		   +@KERNEL_TUN \
+		   +xfrm
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef
 
