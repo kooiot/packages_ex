@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019 Dirk Chang
+# Copyright (C) 2021 Dirk Chang
 #
 #
 
@@ -13,10 +13,9 @@ PKG_LICNESE:=MIT
 include $(INCLUDE_DIR)/package.mk
 
 define Package/br-lan-dhcp
-  SECTION:=kooiot
-  CATEGORY:=KooIoT
+  SECTION:=net
+  CATEGORY:=Network
   TITLE:=Lan Bridge DHCP Eanble Configurations
-  DEPENDS:=+freeioe
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef
 
