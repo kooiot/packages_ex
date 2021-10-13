@@ -15,7 +15,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/sdlnrj-xfrm
   SECTION:=kooiot
   CATEGORY:=KooIoT
-  TITLE:=AWS IOT GreenGrass necessery kernel options selection
+  TITLE:=ShanDong LuNeng Software necessery kernel options selection
   DEPENDS:=+@KERNEL_CRYPTO_CBC \
 		   +@KERNEL_CRYPTO_HMAC \
 		   +@KERNEL_CRYPTO_MD5 \
