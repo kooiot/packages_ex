@@ -60,6 +60,9 @@ ifeq ($(PKG_ARCH),arm_cortex-a7_neon-vfpv4)
 ifeq ($(SKYNET_VER_NUM),19.07)
 SKYNET_MD5SUM=a5b542ff0f6df5ef98bba40d368bd29d
 endif
+ifeq ($(SKYNET_VER_NUM),21.02)
+SKYNET_MD5SUM=efb740e9c97d05656f2e44323ea7d754
+endif
 ifeq ($(SKYNET_VER_NUM),snapshot)
 SKYNET_MD5SUM=efb740e9c97d05656f2e44323ea7d754
 endif
