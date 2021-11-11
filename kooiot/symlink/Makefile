@@ -46,7 +46,10 @@ define Package/symlink
   CATEGORY:=KooIoT
   TITLE:=SymLink
   URL:=http://www.symid.com
-  DEPENDS:=+libstdcpp +luci +libopenssl +@OPENSSL_WITH_SM234 +@OPENSSL_ENGINE_BUILTIN +libcurl +zip +unzip +zlib
+  DEPENDS:=+libstdcpp +luci +libopenssl \
+		+@OPENSSL_WITH_NPN \
+		+@OPENSSL_WITH_SM234 +@OPENSSL_ENGINE_BUILTIN \
+		+libcurl +zip +unzip +zlib
 endef
 
 define Package/symlink/description
