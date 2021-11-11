@@ -40,7 +40,7 @@ define Package/sdlnrj-xfrm
 		   +@KERNEL_XFRM_MODE_BEET \
 		   +@KERNEL_NETFILTER \
 		   +@KERNEL_TUN \
-		   +xfrm
+		   +ip-full
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef
 
