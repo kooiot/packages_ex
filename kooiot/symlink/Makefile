@@ -49,7 +49,7 @@ define Package/symlink
   DEPENDS:=+libstdcpp +luci +libopenssl \
 		+@OPENSSL_WITH_NPN \
 		+@OPENSSL_WITH_SM234 +@OPENSSL_ENGINE_BUILTIN \
-		+libcurl +zip +unzip +zlib
+		+libcurl +zip +unzip +zlib +symlink-psn
 endef
 
 define Package/symlink/description
