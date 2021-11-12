@@ -11,19 +11,19 @@ product_sn_encode() {
 	local seq="${spsn:15:5}"
 
 	case "${typ}" in
-		"32100")
+		"32101")
 			echo "TRTX01${week:2:4}0${seq}"
 			;;
 		"32102")
 			echo "TRTS01${week:2:4}0${seq}"
 			;;
-		"32104")
+		"32103")
 			echo "TRTK01${week:2:4}0${seq}"
 			;;
-		"32106")
+		"32104")
 			echo "DLYM01${week:2:4}0${seq}"
 			;;
-		"32108")
+		"32105")
 			echo "DLYM02${week:2:4}0${seq}"
 			;;
 	esac
@@ -37,19 +37,19 @@ product_sn_decode() {
 
 	case "${typ}" in
 		"TRTX01")
-			echo "2-32100-00${week}-${seq:1:5}"
+			echo "2-32101-00${week}-${seq:1:5}"
 			;;
 		"TRTS01")
 			echo "2-32102-00${week}-${seq:1:5}"
 			;;
 		"TRTK01")
-			echo "2-32104-00${week}-${seq:1:5}"
+			echo "2-32103-00${week}-${seq:1:5}"
 			;;
 		"DLYM01")
-			echo "2-32106-00${week}-${seq:1:5}"
+			echo "2-32104-00${week}-${seq:1:5}"
 			;;
 		"DLYM02")
-			echo "2-32108-00${week}-${seq:1:5}"
+			echo "2-32105-00${week}-${seq:1:5}"
 			;;
 	esac
 }
