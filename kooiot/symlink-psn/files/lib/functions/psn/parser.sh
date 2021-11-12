@@ -21,10 +21,10 @@ product_sn_encode() {
 			echo "TRTK01${week:2:4}0${seq}"
 			;;
 		"32106")
-			echo "TRTM08${week:2:4}0${seq}"
+			echo "DLYM01${week:2:4}0${seq}"
 			;;
 		"32108")
-			echo "TRTM16${week:2:4}0${seq}"
+			echo "DLYM02${week:2:4}0${seq}"
 			;;
 	esac
 }
@@ -45,10 +45,10 @@ product_sn_decode() {
 		"TRTK01")
 			echo "2-32104-00${week}-${seq:1:5}"
 			;;
-		"TRTM08")
+		"DLYM01")
 			echo "2-32106-00${week}-${seq:1:5}"
 			;;
-		"TRTM16")
+		"DLYM02")
 			echo "2-32108-00${week}-${seq:1:5}"
 			;;
 	esac
