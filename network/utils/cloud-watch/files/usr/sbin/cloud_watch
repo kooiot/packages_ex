@@ -15,8 +15,7 @@ end
 local function echo_log(log)
 	os.execute('echo "'..log..'" >> /dev/console')
 	os.execute('echo "'..os.date()..': '..log..'" >> /root/cloud_watch.log')
-	os.execute('tail -n 500 /root/cloud_watch.log > /root/cloud_watch.log.new')
-	os.execute('mv -f /root/cloud_watch.log.new /root/cloud_watch.log')
+	os.execute('/usr/sbin/log_roll_by_count 1000 /root/cloud_watch.log')
 	os.execute("sync")
 end
 
@@ -159,6 +158,8 @@ local function restart_wanpwrc(info)
 end
 
 local cloud_last = os.time()
+local ping_last = os.time()
+local reset_times = 0
 
 local function watch_cloud_status(info)
 	local now = os.time()
@@ -170,35 +171,56 @@ local function watch_cloud_status(info)
 			if tonumber(status) == 1 then
 				--- Use now when status is online (as the timestamp will be updated untill offline)
 				cloud_last = now
+				reset_times = 0
 			else
 				--- offline timestamp will be updated, but we will not use it
 				if cloud_last > now then
 					cloud_last = now
+					reset_times = 0
 				end
 			end
 		end
 	else
 		-- if file is empty, the programe is not running, skip checking
 		cloud_last = now
+		ping_last = now
+		reset_times = 0
 	end
 	--print(now, cloud_last)
 
-	if now - cloud_last > 600 then
+	--- ping check per min
+	if now - ping_last > 60 then
 		local str, err = exec('cat /tmp/sysinfo/online_check')
 		if str and string.len(str) > 0 then
 			-- lua5.1
 			local r, err = os.execute('ping -c 1 '..str)
 			if r == 0 then
-				cloud_last = now
+				ping_last = now
+				reset_times = 0
+			else
+				echo_log('ping failed')
 			end
+		else
+			--- No online check ip just set to now
+			ping_last = now
 		end
 	end
 
-	--- If 20 minutes that gateway not connected
-	if now - cloud_last > 1200 then
-		cloud_last = now
-		echo_log('Cloud status out of date (20 min)')
+	--- If reset times more than 3
+	if reset_times > 3 then
+		ping_last = now
+		echo_log('4G Wan failure reboot device!')
+		os.execute('sync')
+		os.execute('reboot')
+	end
+
+	--- reset the 4g module or repower it?
+	if (now - ping_last) > 180 or (now - cloud_last) > 180 then
+		echo_log('4G Wan failure reset module!')
 		restart_wanpwrc(info)
+		reset_times = reset_times + 1
+		ping_last = ping_last + 120
+		cloud_last = cloud_last + 120
 	end
 end
 
