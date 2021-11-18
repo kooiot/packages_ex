@@ -195,6 +195,7 @@ local function watch_cloud_status(info)
 			-- lua5.1
 			local r, err = os.execute('ping -c 1 '..str)
 			if r == 0 then
+				cloud_last = now  -- overwrite the cloud_last here
 				ping_last = now
 				reset_times = 0
 			else
