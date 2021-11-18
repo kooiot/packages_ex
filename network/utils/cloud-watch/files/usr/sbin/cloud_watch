@@ -147,12 +147,13 @@ local function sysinfo_module()
 end
 
 local function restart_wanpwrc(info)
-	echo_log('4G Wan service restart')
 	if info.device_f then
+		echo_log('4G Module reset(gpio) (F20X)')
 		os.execute("echo 0 > /sys/class/gpio/gpio1/value")
 		nixio.nanosleep(12)
 		os.execute("echo 1 > /sys/class/gpio/gpio1/value")
 	else
+		echo_log('4G Wan service restart(wanpwrc)')
 		os.execute("/etc/init.d/wanpwrc restart")
 	end
 end
