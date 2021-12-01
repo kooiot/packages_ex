@@ -171,12 +171,10 @@ local function watch_cloud_status(info)
 			if tonumber(status) == 1 then
 				--- Use now when status is online (as the timestamp will be updated untill offline)
 				cloud_last = now
-				reset_times = 0
 			else
 				--- offline timestamp will be updated, but we will not use it
 				if cloud_last > now then
 					cloud_last = now
-					reset_times = 0
 				end
 			end
 		end
@@ -184,7 +182,6 @@ local function watch_cloud_status(info)
 		-- if file is empty, the programe is not running, skip checking
 		cloud_last = now
 		ping_last = now
-		reset_times = 0
 	end
 	--print(now, cloud_last)
 
@@ -204,6 +201,9 @@ local function watch_cloud_status(info)
 		else
 			--- No online check ip just set to now
 			ping_last = now
+			if cloud_last == now then
+				reset_times = 0 --- Clear the reset times here if there is no online check
+			end
 		end
 	end
 
