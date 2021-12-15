@@ -118,22 +118,26 @@ local function do_auto_upgrade()
 		end
 	end
 
-
 	return true
 end
 
 local function run_proc()
 	local check_last = 0
-	local check_period = (tonumber(conf.PERIOD) or 365) * 3600 * 24 -- per day
 
 	while true do
-		if os.time() - check_last > check_period then
-			local r, err = do_auto_upgrade()
-			if r then
-				check_last = os.time()
-			else
-				echo_log('do auto_upgrade error:'..err)
-				-- will be retried after ten minutes
+		conf = get_conf()
+
+		local check_period = (tonumber(conf.PERIOD) or 365) * 3600 * 24 -- per day
+
+		if tonumber(conf.RUN) == 1 then
+			if os.time() - check_last > check_period then
+				local r, err = do_auto_upgrade()
+				if r then
+					check_last = os.time()
+				else
+					echo_log('do auto_upgrade error:'..err)
+					-- will be retried after ten minutes
+				end
 			end
 		end
 
