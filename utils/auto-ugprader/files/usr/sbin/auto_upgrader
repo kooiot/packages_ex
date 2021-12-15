@@ -13,15 +13,9 @@ local function exec(cmd)
 end
 
 local function echo_log(log)
+	print(log)
 	os.execute('echo "'..log..'" >> /dev/console')
 	os.execute('echo "'..os.date()..': '..log..'" >> /mnt/data/auto_upgrader.log')
-end
-
-local function replace_opkg_source(url)
-	exec([[sed -ie '/kooiot/d' /etc/opkg/distfeeds.conf]])
-	exec([[sed -ie '/kooiot/d' /etc/opkg/customfeeds.conf]])
-	exec('echo "src/gz kooiot '..url..' >> /etc/opkg/distfeeds.conf')
-	exec([[sed -ie "/option check_signature/d" /etc/opkg.conf]]) -- disable signature check
 end
 
 local function get_conf()
@@ -63,15 +57,15 @@ local function get_sys_info()
 	if not s then
 		return info
 	end
-	info.board_name = string.match(info, 'Board:%s*(%w+)')
-	print('board_name', info.board_name)
-	info.sn = string.match(info, '%s+SN:%s*(%w+)')
+	info.board_name = string.match(s, 'Board:%s*([%w,-]+)')
+	--print('board_name', info.board_name)
+	info.sn = string.match(s, '%s+SN:%s*(%w+)')
 	if not info.sn then
-		info.sn = string.match(info, '%s+PSN:%s*(%w+)')
+		info.sn = string.match(s, '%s+PSN:%s*(%w+)')
 	end
-	print('sn', info.sn)
-	info.firmware_version = string.match(info, 'Firmware Version:%s*(%w+)')
-	print('firmware_version', info.firmware_version)
+	--print('sn', info.sn)
+	info.firmware_version = string.match(s, 'Firmware Version:%s*(%w+)')
+	--print('firmware_version', info.firmware_version)
 
 	return info
 end
@@ -84,8 +78,11 @@ local function upgrade_sys(file, md5, force)
 		echo_log('Failed to calc file md5')
 		return nil, 'Failed to calc file md5'
 	end
-	if string.sub(file_md5, 1, string.len(md5)) ~= md5 then
+	file_md5 = string.sub(file_md5, 1, string.len(md5))
+	if file_md5 ~= md5 then
 		echo_log('md5 not equal')
+		--print(file_md5, md5, string.len(file_md5), string.len(md5))
+		os.execute('rm -f '..file)
 		return nil, 'md5 not equal'
 	end
 
@@ -103,8 +100,16 @@ local conf = get_conf()
 local os_info = get_os_info()
 local sys_info = get_sys_info()
 
+local function replace_opkg_source(url)
+	local url = url..'/'..os_info.VERSION..'/packages/'..os_info.OPENWRT_ARCH..'/kooiot'
+	exec([[sed -ie '/kooiot/d' /etc/opkg/distfeeds.conf]])
+	exec([[sed -ie '/kooiot/d' /etc/opkg/customfeeds.conf]])
+	exec('echo "src/gz kooiot '..url..'" >> /etc/opkg/distfeeds.conf')
+	exec([[sed -ie "/option check_signature/d" /etc/opkg.conf]]) -- disable signature check
+end
+
 nixio.nanosleep(15)
-replace_opkg_source()
+replace_opkg_source(conf.URL)
 
 local do_x1_to_x1s_upgrade
 local function do_auto_upgrade()
@@ -112,6 +117,7 @@ local function do_auto_upgrade()
 	-- X1 to X1s checking
 	if string.match(sys_info.sn, '^TRTX01') then
 		local yymm = tonumber(string.sub(sys_info.sn, 7, 10))
+		--print('X1', yymm)
 		if yymm >= 2143 and sys_info.board_name == 'kooiot,tlink-x1' then
 			-- this should be x1s not x1, so force upgrade
 			return do_x1_to_x1s_upgrade()
@@ -148,7 +154,7 @@ end
 
 do_x1_to_x1s_upgrade = function ()
 	echo_log('upgrade firmware as from x1 to x1s')
-	local url = conf.url..'/'..os_info.VERSION..'/targets/'..os_info.OPENWRT_BOARD..'/openwrt-sunxi-cortexa7-sun8i-h3-tlink-x1s-squashfs-sdcard.img.gz'
+	local url = conf.URL..'/'..os_info.VERSION..'/targets/'..os_info.OPENWRT_BOARD..'/openwrt-sunxi-cortexa7-sun8i-h3-tlink-x1s-squashfs-sdcard.img.gz'
 	echo_log('url:'..url)
 	local r, err = os.execute('wget -q -c -O /mnt/data/x1-to-x1s.img.gz '..url)
 	if r ~= 0 then
@@ -164,6 +170,7 @@ do_x1_to_x1s_upgrade = function ()
 
 	local f, err = io.open('/mnt/data/x1-to-x1s.img.gz.md5')
 	local md5 = f:read('*a')
+	md5 = string.sub(md5, 1, 32)
 
 	return upgrade_sys('/mnt/data/x1-to-x1s.img.gz', md5, true)
 end
