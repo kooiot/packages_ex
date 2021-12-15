@@ -1,0 +1,168 @@
+#!/usr/bin/lua
+
+local nixio = require 'nixio'
+
+local function exec(cmd)
+	local f, err = io.popen(cmd)
+	if not f then
+		return nil, err
+	end
+	local s = f:read('*a')
+	f:close()
+	return s
+end
+
+local function echo_log(log)
+	os.execute('echo "'..log..'" >> /dev/console')
+	os.execute('echo "'..os.date()..': '..log..'" >> /mnt/data/auto_upgrader.log')
+end
+
+local function replace_opkg_source(url)
+	exec([[sed -ie '/kooiot/d' /etc/opkg/distfeeds.conf]])
+	exec([[sed -ie '/kooiot/d' /etc/opkg/customfeeds.conf]])
+	exec('echo "src/gz kooiot '..url..' >> /etc/opkg/distfeeds.conf')
+	exec([[sed -ie "/option check_signature/d" /etc/opkg.conf]]) -- disable signature check
+end
+
+local function get_conf()
+	local conf = {}
+	local f, err = io.open('/etc/auto_upgrader.conf')
+	if not f then
+		return conf
+	end
+
+	for line in f:lines() do
+		local k, v = string.match(line, '([^=]+)=(.+)')
+		if k and v then
+			conf[k] = v
+		end
+	end
+	return conf
+end
+
+local function get_os_info()
+	local info = {}
+
+	local f, err = io.open('/etc/os-release')
+	if not f then
+		return info
+	end
+
+	for line in f:lines() do
+		local k, v = string.match(line, '([^=]+)="(.+)"')
+		if k and v then
+			info[k] = v
+		end
+	end
+	return info
+end
+
+local function get_sys_info()
+	local info = {}
+	local s, err = exec('sysinfo')
+	if not s then
+		return info
+	end
+	info.board_name = string.match(info, 'Board:%s*(%w+)')
+	print('board_name', info.board_name)
+	info.sn = string.match(info, '%s+SN:%s*(%w+)')
+	if not info.sn then
+		info.sn = string.match(info, '%s+PSN:%s*(%w+)')
+	end
+	print('sn', info.sn)
+	info.firmware_version = string.match(info, 'Firmware Version:%s*(%w+)')
+	print('firmware_version', info.firmware_version)
+
+	return info
+end
+
+local function upgrade_sys(file, md5, force)
+	echo_log('Upgrade from file'..file)
+	echo_log('Upgrade file md5'..md5)
+	local file_md5, err = exec('md5sum '..file)
+	if not file_md5 then
+		echo_log('Failed to calc file md5')
+		return nil, 'Failed to calc file md5'
+	end
+	if string.sub(file_md5, 1, string.len(md5)) ~= md5 then
+		echo_log('md5 not equal')
+		return nil, 'md5 not equal'
+	end
+
+	if not force then
+		os.execute("sysupgrade "..file..' &')
+	else
+		os.execute("sysupgrade -F "..file..' &')
+	end
+	return true
+end
+
+echo_log('Start auto_upgrade services...')
+
+local conf = get_conf()
+local os_info = get_os_info()
+local sys_info = get_sys_info()
+
+nixio.nanosleep(15)
+replace_opkg_source()
+
+local do_x1_to_x1s_upgrade
+local function do_auto_upgrade()
+	os.execute('opkg update && opkg install auto-upgrader') -- will be restarted after this installation
+	-- X1 to X1s checking
+	if string.match(sys_info.sn, '^TRTX01') then
+		local yymm = tonumber(string.sub(sys_info.sn, 7, 10))
+		if yymm >= 2143 and sys_info.board_name == 'kooiot,tlink-x1' then
+			-- this should be x1s not x1, so force upgrade
+			return do_x1_to_x1s_upgrade()
+		end
+	end
+
+
+	return true
+end
+
+local function run_proc()
+	local check_last = 0
+	local check_period = (tonumber(conf.PERIOD) or 365) * 3600 * 24 -- per day
+
+	while true do
+		if os.time() - check_last > check_period then
+			local r, err = do_auto_upgrade()
+			if r then
+				check_last = os.time()
+			else
+				echo_log('do auto_upgrade error:'..err)
+				-- will be retried after ten minutes
+			end
+		end
+
+		-- Sleep ten minutes
+		nixio.nanosleep(600)
+	end
+end
+
+do_x1_to_x1s_upgrade = function ()
+	echo_log('upgrade firmware as from x1 to x1s')
+	local url = conf.url..'/'..os_info.VERSION..'/targets/'..os_info.OPENWRT_BOARD..'/openwrt-sunxi-cortexa7-sun8i-h3-tlink-x1s-squashfs-sdcard.img.gz'
+	echo_log('url:'..url)
+	local r, err = os.execute('wget -q -c -O /mnt/data/x1-to-x1s.img.gz '..url)
+	if r ~= 0 then
+		echo_log('download failed, error:'..r)
+		return nil, 'download failed'
+	end
+	os.execute('rm -f /mnt/data/x1-to-x1s.img.gz.md5')
+	r, err = os.execute('wget -q -O /mnt/data/x1-to-x1s.img.gz.md5 '..url..'.md5')
+	if r ~= 0 then
+		echo_log('download md5 file failed')
+		return nil, 'download failed'
+	end
+
+	local f, err = io.open('/mnt/data/x1-to-x1s.img.gz.md5')
+	local md5 = f:read('*a')
+
+	return upgrade_sys('/mnt/data/x1-to-x1s.img.gz', md5, true)
+end
+
+run_proc() -- run at end
+
