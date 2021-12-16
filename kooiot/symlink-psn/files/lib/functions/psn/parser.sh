@@ -12,12 +12,10 @@ product_sn_encode() {
 	local week="${spsn:8:6}"
 	local seq="${spsn:15:5}"
 
-	case "$(board_name)" in
-	"kooiot,tlink-x1"|\
-	"kooiot,tlink-x1s")
-		type="KEEP_TRT_WAY"
+	if [ "$ver" == "T" ]; then
+		typ="KEEP_TRT_WAY"
 		;;
-	esac
+	fi
 
 	case "${typ}" in
 		"32101")
@@ -50,7 +48,7 @@ product_sn_decode() {
 	case "$(board_name)" in
 	"kooiot,tlink-x1"|\
 	"kooiot,tlink-x1s")
-		type="KEEP_TRT_WAY"
+		typ="KEEP_TRT_WAY"
 		;;
 	esac
 
