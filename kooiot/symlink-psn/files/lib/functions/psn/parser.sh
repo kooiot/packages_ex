@@ -14,7 +14,6 @@ product_sn_encode() {
 
 	if [ "$ver" == "T" ]; then
 		typ="KEEP_TRT_WAY"
-		;;
 	fi
 
 	case "${typ}" in
