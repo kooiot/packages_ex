@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. /lib/functions.sh
+
 # SymLink PSN example: 2-32101-001935-00100
 # PSN: TRTX011935000100
 
@@ -9,6 +11,13 @@ product_sn_encode() {
 	local typ="${spsn:2:5}"
 	local week="${spsn:8:6}"
 	local seq="${spsn:15:5}"
+
+	case "$(board_name)" in
+	"kooiot,tlink-x1"|\
+	"kooiot,tlink-x1s")
+		type="KEEP_TRT_WAY"
+		;;
+	esac
 
 	case "${typ}" in
 		"32101")
@@ -26,6 +35,9 @@ product_sn_encode() {
 		"32105")
 			echo "DLYM02${week:2:4}0${seq}"
 			;;
+		*)
+			echo "$spsn"
+			;;
 	esac
 }
 
@@ -34,6 +46,13 @@ product_sn_decode() {
 	local typ="${psn:0:6}"
 	local week="${psn:6:4}"
 	local seq="${psn:10:6}"
+
+	case "$(board_name)" in
+	"kooiot,tlink-x1"|\
+	"kooiot,tlink-x1s")
+		type="KEEP_TRT_WAY"
+		;;
+	esac
 
 	case "${typ}" in
 		"TRTX01")
@@ -50,6 +69,9 @@ product_sn_decode() {
 			;;
 		"DLYM02")
 			echo "2-32105-00${week}-${seq:1:5}"
+			;;
+		*)
+			echo "$psn"
 			;;
 	esac
 }
