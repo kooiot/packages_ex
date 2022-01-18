@@ -4,6 +4,20 @@
 . /lib/functions.sh
 . /lib/functions/tlink.sh
 
+install_show() {
+	for file in `ls /sys/class/leds/`; do
+		if [ -d /sys/class/leds/$file ]; then
+			if [ -f /sys/class/leds/$file/brightness ]; then
+				echo "default-on" > /sys/class/leds/$file/trigger
+			fi
+		fi
+	done
+	while [ "1" = "1" ]; do
+		echo "Install to emmc...." > /dev/console
+		sleep 1
+	done
+}
+
 failure_show() {
 	for file in `ls /sys/class/leds/`; do
 		if [ -d /sys/class/leds/$file ]; then
@@ -32,8 +46,9 @@ tlink_make() {
 	echo "Starting to doing factory make for board: $1" > /tmp/tlink_make.log
 	echo "Starting to doing factory make for board: $1" > /dev/console
 
-	/sbin/install_to_emmc -f
+	install_show
 
+	/sbin/install_to_emmc -f
 
 	if [ $? -ne 0 ]; then
 		echo "INSTALL FAILED!!!" > /dev/console
@@ -41,28 +56,28 @@ tlink_make() {
 		failure_show
 	fi
 
+	if [ -e /mnt/factory_tlink ]; then
+		mkdir -p /mnt/data
+		mount /dev/mmcblk1p3 /mnt/data
+		if [ $? -eq 0 ]; then
+			echo "INSTALL FAILED!!!" > /dev/console
+			echo "INSTALL FAILED!!!" >> /tmp/tlink_make.log
+			failure_show
+		fi
+		mkdir -p /mnt/data/factory_tlink
+		cp -fpR /mnt/factory_tlink /mnt/data/
+	fi
+
 	echo "INSTALL OS DONE!!!!!" > /dev/console
 	echo "INSTALL OS DONE!!!!!" >> /tmp/tlink_make.log
-
-	echo "Start FreeIOE for hwtest" > /dev/console
-	echo "Start FreeIOE for hwtest" >> /tmp/tlink_make.log
-
-	cd /usr/ioe/skynet
-
-	export IOE_HWTEST_FINISH_HALT=1
-	./skynet ioe/hwtest_config
-
-	if [ $? -ne 0 ]; then
-		echo "HWTEST START FAILED!!!" > /dev/console
-		echo "HWTEST START FAILED!!!" >> /tmp/tlink_make.log
-		failure_show
-	fi
 }
 
 case "$(board_name)" in
 "kooiot,tlink-x1" | \
+"kooiot,tlink-x3" | \
+"kooiot,tlink-s1" | \
 "kooiot,tlink-r1")
-	tlink_make_pre ${board_name}
+	# tlink_make_pre ${board_name}
 	tlink_make ${board_name}
 	;;
 *)

@@ -1,0 +1,57 @@
+#! /bin/sh
+
+
+. /lib/functions.sh
+. /lib/functions/tlink.sh
+
+failure_show() {
+	for file in `ls /sys/class/leds/`; do
+		if [ -d /sys/class/leds/$file ]; then
+			if [ -f /sys/class/leds/$file/brightness ]; then
+				echo "heartbeat" > /sys/class/leds/$file/trigger
+			fi
+		fi
+	done
+	while [ "1" = "1" ]; do
+		echo "ERROR" > /dev/console
+		sleep 1
+	done
+}
+
+tlink_test() {
+	mkdir -p /mnt/data/factory-tlink
+
+	echo "Starting to doing factory make for board: $1" > /mnt/data/factory-tlink/tlink_test.log
+	echo "Starting to doing factory make for board: $1" > /dev/console
+
+	# Run test init script
+	if [ -e /mnt/data/factory-tlink/tlink_test.sh ]; then
+		sh /mnt/data/factory-tlink/tlink_test.sh
+	else
+		echo "No test script shell" > /dev/console
+		echo "No test script shell" >> /mnt/data/factory-tlink/tlink_test.log
+	fi
+
+	if [ $? -ne 0 ]; then
+		echo "INSTALL FAILED!!!" > /dev/console
+		echo "INSTALL FAILED!!!" >> /mnt/data/factory-tlink/tlink_test.log
+		failure_show
+	fi
+
+	echo "INSTALL OS DONE!!!!!" > /dev/console
+	echo "INSTALL OS DONE!!!!!" >> /mnt/data/factory-tlink/tlink_test.log
+}
+
+case "$(board_name)" in
+"kooiot,tlink-x1" | \
+"kooiot,tlink-x3" | \
+"kooiot,tlink-s1" | \
+"kooiot,tlink-r1")
+	# tlink_test_pre ${board_name}
+	tlink_test ${board_name}
+	;;
+*)
+	echo "UNKNOWN Board to do factory test!!!!" > /dev/console
+	failure_show
+	;;
+esac
