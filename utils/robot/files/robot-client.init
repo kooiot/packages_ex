@@ -5,7 +5,7 @@ USE_PROCD=1
 
 NAME=robot-client
 PROG=/usr/bin/$NAME
-CONF_FILE=/etc/robot/client/config.yaml
+CONF_FILE=/etc/robot/robot-client/config.yaml
 
 _err() {
 	echo "$*" >&2

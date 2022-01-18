@@ -7,8 +7,8 @@ PKG_RELEASE:=$(AUTORELEASE)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=https://github.com/kooiot/robot
 PKG_SOURCE_DATE:=2022-01-18
-PKG_SOURCE_VERSION:=8e6767b5b5c3466338ca8a298286254e870fc401
-PKG_MIRROR_HASH:=1c55cee8b35e9e11bf86e5f80ca1d666ee96225bd9ea6e9c555328285374f039
+PKG_SOURCE_VERSION:=9944a92255f2f9b036f004c995ab725d1dc4bd20
+PKG_MIRROR_HASH:=
 
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 PKG_LICENSE:=MIT
@@ -22,17 +22,17 @@ GO_PKG:=github.com/kooiot/robot
 GO_PKG_BUILD_PKG:=github.com/kooiot/robot/cmd/...
 
 include $(INCLUDE_DIR)/package.mk
-include ../../lang/golang/golang-package.mk
+include ../../golang.mk
 
 define Package/robot/install
 	$(call GoPackage/Package/Install/Bin,$(PKG_INSTALL_DIR))
 
 	$(INSTALL_DIR) $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/robot-$(2) $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(2) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/robot/$(2)/
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/conf/$(2)/* $(1)/etc/robot/$(2)/
+	$(CP) $(PKG_BUILD_DIR)/conf/$(2)/* $(1)/etc/robot/$(2)/
 	$(INSTALL_DIR) $(1)/etc/init.d/
-	$(INSTALL_BIN) ./files/robot-$(2).init $(1)/etc/init.d/robot-$(2)
+	$(INSTALL_BIN) ./files/$(2).init $(1)/etc/init.d/$(2)
 endef
 
 define Package/robot/template
