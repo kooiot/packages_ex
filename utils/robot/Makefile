@@ -59,5 +59,5 @@ endef
 
 $(eval $(call Package/robot/template,robot-client,client))
 $(eval $(call Package/robot/template,robot-server,server))
-$(eval $(call BuildPackage,robotc))
-$(eval $(call BuildPackage,robots))
+$(eval $(call BuildPackage,robot-client))
+$(eval $(call BuildPackage,robot-server))
