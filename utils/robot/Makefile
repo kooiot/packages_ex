@@ -6,7 +6,7 @@ PKG_RELEASE:=$(AUTORELEASE)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=https://github.com/kooiot/robot
 PKG_SOURCE_DATE:=2022-01-19
-PKG_SOURCE_VERSION:=81c4b3e93f127cad05aa16e77ef515999d2d52b2
+PKG_SOURCE_VERSION:=4c1e103a69a237d4a217732faeabaee146eaf501
 PKG_MIRROR_HASH:=
 
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -27,7 +27,8 @@ define Package/robot/install
 	$(call GoPackage/Package/Install/Bin,$(PKG_INSTALL_DIR))
 
 	$(INSTALL_DIR) $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(2) $(1)/usr/bin/
+	# $(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/$(2) $(1)/usr/bin/
+	$(INSTALL_BIN) $(GO_PKG_BUILD_BIN_DIR)/$(2) $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/robot/$(2)/
 	$(CP) $(PKG_BUILD_DIR)/conf/$(2)/* $(1)/etc/robot/$(2)/
 	$(INSTALL_DIR) $(1)/etc/init.d/
