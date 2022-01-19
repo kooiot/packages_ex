@@ -58,6 +58,8 @@ define Package/robot/template
 endef
 
 $(eval $(call Package/robot/template,robot-client,client))
+$(eval $(call Package/robot/template,robot-pong,pong))
 $(eval $(call Package/robot/template,robot-server,server))
 $(eval $(call BuildPackage,robot-client))
+$(eval $(call BuildPackage,robot-pong))
 $(eval $(call BuildPackage,robot-server))
