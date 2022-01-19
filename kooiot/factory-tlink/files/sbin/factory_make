@@ -12,10 +12,6 @@ install_show() {
 			fi
 		fi
 	done
-	while [ "1" = "1" ]; do
-		echo "Install to emmc...." > /dev/console
-		sleep 1
-	done
 }
 
 failure_show() {

@@ -18,7 +18,7 @@ define Package/factory-tlink
   CATEGORY:=KooIoT
   TITLE:=Factory TLink Devices
   URL:=http://freeioe.org
-  DEPENDS:=+freeioe
+  DEPENDS:=+robot-client
 endef
 
 define Package/factory-tlink/description
