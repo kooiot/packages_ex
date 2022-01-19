@@ -12,3 +12,4 @@ echo "untrusted comment: Local build key\nRWTM6d+8ELraWs5mgLVvXjWu0abxvMzBra4vQG
 opkg update && opkg install factory-tlink robot-client
 
 cp -p /usr/bin/robot-client /mnt/factory-tlink/
+cp -p /etc/robot/robot-client/* /mnt/factory-tlink/
