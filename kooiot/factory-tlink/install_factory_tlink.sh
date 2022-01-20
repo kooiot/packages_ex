@@ -10,10 +10,14 @@ echo "src/gz kooiot http://freeioe.oss-cn-beijing.aliyuncs.com/openwrt/${DISTRIB
 echo "untrusted comment: Local build key" > /etc/opkg/keys/cce9dfbc10bada5a
 echo "RWTM6d+8ELraWs5mgLVvXjWu0abxvMzBra4vQGSnNzCBbT6+lnAcAggc" >> /etc/opkg/keys/cce9dfbc10bada5a
 
-/etc/init.d/symlink stop
-/etc/init.d/symlink disable
-/etc/init.d/skynet stop
-/etc/init.d/skynet disable
+if [ -e /etc/init.d/symlink ]; then
+	/etc/init.d/symlink stop
+	/etc/init.d/symlink disable
+fi
+if [ -e /etc/init.d/skynet ]; then
+	/etc/init.d/skynet stop
+	/etc/init.d/skynet disable
+fi
 
 opkg update && opkg install factory-tlink robot-client
 

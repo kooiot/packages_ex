@@ -21,6 +21,15 @@ failure_show() {
 tlink_test() {
 	mkdir -p /mnt/data/factory-tlink
 
+	if [ -e /etc/init.d/symlink ]; then
+		/etc/init.d/symlink stop
+		/etc/init.d/symlink disable
+	fi
+	if [ -e /etc/init.d/skynet ]; then
+		/etc/init.d/skynet stop
+		/etc/init.d/skynet disable
+	fi
+
 	echo "Starting to doing factory make for board: $1" > /mnt/data/factory-tlink/tlink_test.log
 	echo "Starting to doing factory make for board: $1" > /dev/console
 

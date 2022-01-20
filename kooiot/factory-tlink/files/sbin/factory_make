@@ -62,11 +62,12 @@ tlink_make() {
 		fi
 		mkdir -p /mnt/data/factory_tlink
 		cp -fpR /mnt/factory_tlink /mnt/data/
+		sync
 	fi
 
 	echo "INSTALL OS DONE!!!!!" > /dev/console
 	echo "INSTALL OS DONE!!!!!" >> /tmp/tlink_make.log
-	halt
+	# halt
 }
 
 case "$(board_name)" in
