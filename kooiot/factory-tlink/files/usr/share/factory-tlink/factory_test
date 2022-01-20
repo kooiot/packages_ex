@@ -25,8 +25,8 @@ tlink_test() {
 	echo "Starting to doing factory make for board: $1" > /dev/console
 
 	# Run test init script
-	if [ -e /mnt/data/factory-tlink/tlink_test.sh ]; then
-		sh /mnt/data/factory-tlink/tlink_test.sh
+	if [ -e /mnt/data/factory-tlink/test_run.sh ]; then
+		sh /mnt/data/factory-tlink/test_run.sh
 	else
 		echo "No test script shell" > /dev/console
 		echo "No test script shell" >> /mnt/data/factory-tlink/tlink_test.log

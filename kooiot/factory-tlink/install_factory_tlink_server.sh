@@ -13,7 +13,8 @@ echo "src/gz kooiot http://freeioe.oss-cn-beijing.aliyuncs.com/openwrt/${DISTRIB
 if [ -f /etc/opkg/keys/cce9dfbc10bada5a ]; then
 echo "opkg key exists"
 else
-echo "untrusted comment: Local build key\nRWTM6d+8ELraWs5mgLVvXjWu0abxvMzBra4vQGSnNzCBbT6+lnAcAggc" > /etc/opkg/keys/cce9dfbc10bada5a
+echo "untrusted comment: Local build key" > /etc/opkg/keys/cce9dfbc10bada5a
+echo "RWTM6d+8ELraWs5mgLVvXjWu0abxvMzBra4vQGSnNzCBbT6+lnAcAggc" >> /etc/opkg/keys/cce9dfbc10bada5a
 fi
 
 opkg update && opkg install robot-server robot-pong

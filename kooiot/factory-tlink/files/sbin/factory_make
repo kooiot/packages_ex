@@ -66,6 +66,7 @@ tlink_make() {
 
 	echo "INSTALL OS DONE!!!!!" > /dev/console
 	echo "INSTALL OS DONE!!!!!" >> /tmp/tlink_make.log
+	halt
 }
 
 case "$(board_name)" in
