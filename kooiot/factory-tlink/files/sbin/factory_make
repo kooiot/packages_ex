@@ -52,7 +52,7 @@ tlink_make() {
 		failure_show
 	fi
 
-	if [ -e /mnt/factory_tlink ]; then
+	if [ -e /mnt/factory-tlink ]; then
 		mkdir -p /mnt/data
 		mount /dev/mmcblk1p3 /mnt/data
 		if [ $? -eq 0 ]; then
@@ -60,8 +60,8 @@ tlink_make() {
 			echo "INSTALL FAILED!!!" >> /tmp/tlink_make.log
 			failure_show
 		fi
-		mkdir -p /mnt/data/factory_tlink
-		cp -fpR /mnt/factory_tlink /mnt/data/
+		mkdir -p /mnt/data/factory-tlink
+		cp -fpR /mnt/factory-tlink /mnt/data/
 		sync
 	fi
 
