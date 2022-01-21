@@ -26,6 +26,7 @@ fi
 opkg update && opkg install factory-tlink robot-client
 
 /etc/init.d/robot-client stop
+/etc/init.d/robot-client disable
 
 cp -f /usr/share/factory-tlink/rc.local /etc/rc.local
 cp -r /usr/share/factory-tlink /mnt/factory-tlink
