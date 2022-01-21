@@ -6,7 +6,7 @@ USE_PROCD=1
 NAME=robot-server
 PROG=/usr/bin/$NAME
 CONF_FILE=/etc/robot/robot-server/config.yaml
-WORK_DIR=/var/robot-server
+WORK_DIR=/var/robot
 
 _err() {
 	echo "$*" >&2
