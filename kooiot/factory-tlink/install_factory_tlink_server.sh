@@ -18,3 +18,5 @@ echo "RWTM6d+8ELraWs5mgLVvXjWu0abxvMzBra4vQGSnNzCBbT6+lnAcAggc" >> /etc/opkg/key
 fi
 
 opkg update && opkg install robot-server robot-pong
+
+# TODO: Change network IPs
