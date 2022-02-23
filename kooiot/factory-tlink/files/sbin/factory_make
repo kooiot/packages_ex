@@ -59,14 +59,19 @@ tlink_make() {
 			echo "MOUNT FAILED!!!" >> /tmp/tlink_make.log
 			failure_show
 		fi
+
 		mkdir -p /mnt/data/factory-tlink
 		cp -fpR /mnt/factory-tlink /mnt/data/
 		sync
-	fi
 
-	echo "INSTALL OS DONE!!!!!" > /dev/console
-	echo "INSTALL OS DONE!!!!!" >> /tmp/tlink_make.log
-	# halt
+		echo "INSTALL OS DONE!!!!!" > /dev/console
+		echo "INSTALL OS DONE!!!!!" >> /tmp/tlink_make.log
+		halt
+	else
+		echo "FACTORY FILES MISSING !!!" > /dev/console
+		echo "FACTORY FILES MISSING !!!" >> /tmp/tlink_make.log
+		failure_show
+	fi
 }
 
 case "$(board_name)" in
