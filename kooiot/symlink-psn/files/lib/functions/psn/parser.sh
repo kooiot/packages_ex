@@ -5,6 +5,18 @@
 # SymLink PSN example: 2-32101-001935-00100
 # PSN: TRTX011935000100
 
+product_sn_x01_x03() {
+	local sn_num="$1"
+	case "$(board_name)" in
+		"kooiot,tlink-x1")
+			echo "TRTX01${sn_num}"
+		;;
+		"kooiot,tlink-x3")
+			echo "TRTX03${sn_num}"
+		;;
+	esac
+}
+
 product_sn_encode() {
 	local spsn="$1"
 	local ver="${spsn:0:1}"
@@ -18,7 +30,7 @@ product_sn_encode() {
 
 	case "${typ}" in
 		"32101")
-			echo "TRTX01${week:2:4}0${seq}"
+			product_sn_x01_x03 "${week:2:4}0${seq}"
 			;;
 		"32102")
 			echo "TRTS01${week:2:4}0${seq}"
@@ -53,6 +65,9 @@ product_sn_decode() {
 
 	case "${typ}" in
 		"TRTX01")
+			echo "2-32101-00${week}-${seq:1:5}"
+			;;
+		"TRTX03")
 			echo "2-32101-00${week}-${seq:1:5}"
 			;;
 		"TRTS01")
