@@ -77,7 +77,22 @@ local function led_control(info)
 	end
 	]]--
 
+	local show = true
 	if not info.ccid or string.len(info.ccid) == 0 then
+		show = false
+	end
+	local csq = tonumber(info.csq) or 0
+
+	if fs.access("/lib/functions/tlink_csq_leds.sh") then
+		if show then
+			os.execute("sh /lib/functions/tlink_csq_leds.sh 1 "..csq)
+		else
+			os.execute("sh /lib/functions/tlink_csq_leds.sh 0 "..csq)
+		end
+		return
+	end
+
+	if not show then
 		_led_control("green:bbs", 0)
 		_led_control("green:bs", 0)
 		_led_control("green:gs", 0)
@@ -85,17 +100,20 @@ local function led_control(info)
 		return
 	end
 
-	local csq = tonumber(info.csq) or 0
 	if csq >= 17 then
 		_led_control("green:bbs", 1)
 		_led_control("green:bs", 1)
+
 		_led_control("green:gs", 1)
 		if csq > 25 then
 			_led_control("green:ggs", 1)
+		else
+			_led_control("green:ggs", 0)
 		end
 	else
 		_led_control("green:ggs", 0)
 		_led_control("green:gs", 0)
+
 		_led_control("green:bbs", 1)
 		if csq >= 10  then
 			_led_control("green:bs", 1)
@@ -138,11 +156,13 @@ local function repower_4g_module()
 
 	os.execute("ifdown 4g_wan")
 	if pcie_power then
+		echo_log('4G module power off')
 		os.execute("echo 0 > "..pcie_power_path)
 	end
 	os.execute("killall -9 uqmi")
 	nixio.nanosleep(1)
 	if pcie_power then
+		echo_log('4G module power on')
 		os.execute("echo 1 > "..pcie_power_path)
 	end
 	nixio.nanosleep(10)
@@ -154,16 +174,19 @@ local cloud_last = os.time()
 local function watch_cloud_status()
 	local now = os.time()
 
-	local has_symlink = false
+	local online_check_disable = false
 	if fs.access('/etc/rc.d/S99symlink') then
-		has_symlink = true
+		online_check_disable = true
 	end
 	if fs.access('/etc/rc.d/S22symlink') then
-		has_symlink = true
+		online_check_disable = true
+	end
+	if fs.access('/etc/online_check_disabled') then
+		online_check_disable = true
 	end
 
 	local str, err = exec('cat /tmp/sysinfo/cloud_status')
-	if not has_symlink and str and string.len(str) > 0 then
+	if not online_check_disable and str and string.len(str) > 0 then
 		local status, last = string.match(str, '(%d+)%c+(%d+)')
 		if status and last then
 			if tonumber(status) == 1 then
