@@ -44,6 +44,9 @@ product_sn_encode() {
 		"32105")
 			echo "DLYM02${week:2:4}0${seq}"
 			;;
+		"32106")
+			echo "TRTK02${week:2:4}0${seq}"
+			;;
 		*)
 			echo "$spsn"
 			;;
@@ -75,6 +78,9 @@ product_sn_decode() {
 			;;
 		"TRTK01")
 			echo "2-32103-00${week}-${seq:1:5}"
+			;;
+		"TRTK02")
+			echo "2-32106-00${week}-${seq:1:5}"
 			;;
 		"DLYM01")
 			echo "2-32104-00${week}-${seq:1:5}"
