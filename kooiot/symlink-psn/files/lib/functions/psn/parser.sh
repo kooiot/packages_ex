@@ -8,11 +8,15 @@
 product_sn_x01_x03() {
 	local sn_num="$1"
 	case "$(board_name)" in
-		"kooiot,tlink-x1")
+		"kooiot,tlink-x1"|\
+		"kooiot,tlink-x1s")
 			echo "TRTX01${sn_num}"
 		;;
 		"kooiot,tlink-x3")
 			echo "TRTX03${sn_num}"
+		;;
+		*)
+			echo "UNKNOWN.Board!"
 		;;
 	esac
 }
