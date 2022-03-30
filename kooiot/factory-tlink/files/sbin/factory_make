@@ -76,6 +76,7 @@ tlink_make() {
 
 case "$(board_name)" in
 "kooiot,tlink-x1" | \
+"kooiot,tlink-x1s" | \
 "kooiot,tlink-x3" | \
 "kooiot,tlink-s1" | \
 "kooiot,tlink-k1" | \
