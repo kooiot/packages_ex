@@ -1,4 +1,5 @@
-#!/bin/bash 
+#!/bin/sh
+
 MAX_COUNT=$1
 LOG_FILE=$2
 
