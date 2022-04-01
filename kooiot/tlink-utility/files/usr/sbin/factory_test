@@ -1,0 +1,36 @@
+#! /bin/sh
+
+. /lib/functions.sh
+. /lib/functions/tlink.sh
+
+tlink_test() {
+	echo "Starting to doing factory test for board: $1" > /mnt/data/factory_test.log
+	echo "Starting to doing factory test for board: $1" > /dev/console
+
+	if [ -e /mnt/data/factory-tlink/test_run.sh ]; then
+		echo "Run Factory Test!" > /dev/console
+		echo "Run Factory Test!" >> /mnt/data/factory_test.log
+		sh /mnt/data/factory-tlink/test_run.sh
+	else
+		echo "Factory Test MISSING!!!" > /dev/console
+		echo "Factory Test MISSING!!!" >> /mnt/data/factory_test.log
+	fi
+}
+
+case "$(board_name)" in
+"kooiot,tlink-x1" | \
+"kooiot,tlink-x1s" | \
+"kooiot,tlink-x3" | \
+"kooiot,tlink-s1" | \
+"kooiot,tlink-k1" | \
+"kooiot,tlink-k2" | \
+"kooiot,tlink-m408" | \
+"kooiot,tlink-m416" | \
+"kooiot,tlink-r1")
+	# tlink_make_pre ${board_name}
+	tlink_test ${board_name}
+	;;
+*)
+	echo "UNKNOWN Board to do factory test!!!!" > /dev/console
+	;;
+esac

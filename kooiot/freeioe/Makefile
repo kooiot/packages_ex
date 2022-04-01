@@ -34,7 +34,7 @@ define Package/freeioe
   CATEGORY:=KooIoT
   TITLE:=FreeIOE
   URL:=https://github.com/freeioe/freeioe
-  DEPENDS:=+skynet +process-monitor
+  DEPENDS:=+skynet +process-monitor +tlink-utility
 endef
 
 define Package/freeioe/description
