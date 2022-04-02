@@ -30,5 +30,6 @@ opkg update && opkg install factory-tlink robot-client
 
 cp -f /usr/share/factory-tlink/rc.local /etc/rc.local
 cp -r /usr/share/factory-tlink /mnt/factory-tlink
+rm -f /mnt/factory-tlink/rc.local
 cp -p /usr/bin/robot-client /mnt/factory-tlink/
 cp -p /etc/robot/robot-client/* /mnt/factory-tlink/

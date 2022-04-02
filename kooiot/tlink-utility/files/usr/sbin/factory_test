@@ -8,6 +8,18 @@ tlink_test() {
 	echo "Starting to doing factory test for board: $1" > /dev/console
 
 	if [ -e /mnt/data/factory-tlink/test_run.sh ]; then
+		echo "Stop SymLink&FreeIOE App!" > /dev/console
+		echo "Stop SymLink&FreeIOE App!" >> /mnt/data/factory_test.log
+
+		if [ -e /etc/init.d/symlink ]; then
+			/etc/init.d/symlink stop
+			# SymLink takes few seconds for closing
+			sleep 10
+		fi
+		if [ -e /etc/init.d/skynet ]; then
+			/etc/init.d/skynet stop
+		fi
+
 		echo "Run Factory Test!" > /dev/console
 		echo "Run Factory Test!" >> /mnt/data/factory_test.log
 		sh /mnt/data/factory-tlink/test_run.sh
