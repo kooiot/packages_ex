@@ -1,0 +1,41 @@
+#! /bin/sh
+
+. /lib/functions.sh
+
+product_sn() {
+	sysinfo psn | sed 's/^[ \t]*PSN[ \t]*:[ \t]*\ //g; t; /^.*$/d'
+}
+
+tlink_test() {
+	echo "Starting to doing factory test for board: $1"
+	echo "Starting to doing factory test for board: $1" >> /root/factory_test.log
+
+	if [ -e /root/factory-tlink/test_run.sh ]; then
+		echo "Stop SymLink&FreeIOE App!"
+		echo "Stop SymLink&FreeIOE App!" >> /root/factory_test.log
+
+		if [ -e /etc/init.d/symlink ]; then
+			/etc/init.d/symlink stop
+			# SymLink takes few seconds for closing
+			sleep 10
+		fi
+		if [ -e /etc/init.d/skynet ]; then
+			/etc/init.d/skynet stop
+		fi
+
+		# 4G Power GPIO
+		echo 1 > /sys/class/gpio/export
+		echo out > /sys/class/gpio/gpio1/direction
+		echo 1 > /sys/class/gpio/gpio1/value
+
+		echo "Run Factory Test! PSN:$(product_sn)"
+		echo "Run Factory Test! PSN:$(product_sn)" >> /root/factory_test.log
+		sh /root/factory-tlink/test_run.sh "/root/factory-tlink" $(product_sn)
+	else
+		echo "Factory Test MISSING!!!"
+		echo "Factory Test MISSING!!!" >> /root/factory_test.log
+	fi
+}
+
+# tlink_make_pre ${board_name}
+tlink_test $(board_name)

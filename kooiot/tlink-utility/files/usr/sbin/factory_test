@@ -4,11 +4,11 @@
 . /lib/functions/tlink.sh
 
 tlink_test() {
-	echo "Starting to doing factory test for board: $1" > /mnt/data/factory_test.log
-	echo "Starting to doing factory test for board: $1" > /dev/console
+	echo "Starting to doing factory test for board: $1"
+	echo "Starting to doing factory test for board: $1" >> /mnt/data/factory_test.log
 
 	if [ -e /mnt/data/factory-tlink/test_run.sh ]; then
-		echo "Stop SymLink&FreeIOE App!" > /dev/console
+		echo "Stop SymLink&FreeIOE App!"
 		echo "Stop SymLink&FreeIOE App!" >> /mnt/data/factory_test.log
 
 		if [ -e /etc/init.d/symlink ]; then
@@ -20,11 +20,11 @@ tlink_test() {
 			/etc/init.d/skynet stop
 		fi
 
-		echo "Run Factory Test!" > /dev/console
+		echo "Run Factory Test!"
 		echo "Run Factory Test!" >> /mnt/data/factory_test.log
 		sh /mnt/data/factory-tlink/test_run.sh
 	else
-		echo "Factory Test MISSING!!!" > /dev/console
+		echo "Factory Test MISSING!!!"
 		echo "Factory Test MISSING!!!" >> /mnt/data/factory_test.log
 	fi
 }
@@ -39,8 +39,8 @@ case "$(board_name)" in
 "kooiot,tlink-m408" | \
 "kooiot,tlink-m416" | \
 "kooiot,tlink-r1")
-	# tlink_make_pre ${board_name}
-	tlink_test ${board_name}
+	# tlink_make_pre $(board_name)
+	tlink_test $(board_name)
 	;;
 *)
 	echo "UNKNOWN Board to do factory test!!!!" > /dev/console
