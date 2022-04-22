@@ -1,0 +1,169 @@
+{
+  "apps": {
+    "net_info": {
+      "sn": "55dbe391ba",
+      "version": 22,
+      "name": "APP00000115",
+      "conf": {
+        "auto_start": true,
+        "enable_web": true
+      }
+    },
+    "ptt": {
+      "name": "APP00000114",
+      "sn": "b1a871d36d",
+      "auto": 1,
+      "version": "19",
+      "conf": {
+        "server_port": 17000,
+        "server_addr": "dxkjyjy.cn",
+        "tcp_devices": [
+          {
+            "dest_ip": "127.0.0.1",
+            "id": "wrt_web",
+            "key": 0,
+            "remote_port": "0",
+            "dest_port": "80"
+          },
+          {
+            "dest_ip": "127.0.0.1",
+            "id": "wrt_ssh",
+            "key": 1,
+            "remote_port": "0",
+            "dest_port": "22"
+          },
+          {
+            "dest_ip": "127.0.0.1",
+            "id": "byc_web",
+            "key": 2,
+            "remote_port": "0",
+            "dest_port": "55000"
+          },
+          {
+            "dest_ip": "192.168.8.200",
+            "id": "rdp",
+            "key": 3,
+            "remote_port": "0",
+            "dest_port": "3389"
+          }
+        ],
+        "protocol": "tcp",
+        "enable_remoteDebug": false,
+        "token": "F^AYnHp29U=M96#o&ESqXB3pL=$)W*qr"
+      }
+    },
+    "s2n": {
+      "name": "APP00000441",
+      "sn": "bc64fcfa79",
+      "version": "808",
+      "conf": {
+        "kick_same_ip": false,
+        "serial": {
+          "data_bits": 8,
+          "flow_control": "OFF",
+          "baudrate": 9600,
+          "stop_bits": 1,
+          "parity": "None",
+          "port": "\/dev\/ttyS1"
+        },
+        "tcp_server": {
+          "nodelay": true,
+          "host": "0.0.0.0",
+          "port": 4000
+        }
+      }
+    },
+    "s2n1": {
+      "name": "APP00000441",
+      "sn": "7558a9a3af",
+      "version": "808",
+      "conf": {
+        "kick_same_ip": false,
+        "serial": {
+          "data_bits": 8,
+          "flow_control": "OFF",
+          "baudrate": 9600,
+          "stop_bits": 1,
+          "parity": "None",
+          "port": "\/dev\/ttyS2"
+        },
+        "tcp_server": {
+          "nodelay": true,
+          "host": "0.0.0.0",
+          "port": 4001
+        }
+      }
+    },
+    "plc": {
+      "conf": {
+        "devs": [
+          {
+            "tpl": "plc",
+            "desc": "s7-200",
+            "name": "s7-200",
+            "key": 1,
+            "host": "172.16.0.1",
+            "sn": "s7-200"
+          }
+        ],
+        "tpls": [
+          {
+            "id": "TPL000000911",
+            "description": "pile",
+            "ver": 4,
+            "key": 2,
+            "name": "plc"
+          }
+        ],
+        "cycle": 1000
+      },
+      "auto": 1,
+      "version": "24",
+      "name": "APP00000208",
+      "sn": "c6c32fe1db"
+    },
+    "plc_mqtt": {
+      "version": "328",
+      "auto": 1,
+      "conf": {
+        "options": {
+          "period": 1,
+          "data_upload_dpp": 10240,
+          "disable_cov": false,
+          "ttl": 300,
+          "enable_data_cache": true
+        },
+        "has_options_ex": "yes",
+        "mqtt": {
+          "client_cert": "",
+          "client_id": "plc_mqtt",
+          "enable_tls": false,
+          "port": 1883,
+          "server": "127.0.0.1",
+          "client_key": "",
+          "tls_cert": "",
+          "tls_insecure": false,
+          "username": "hskj",
+          "password": "hskj1234"
+        },
+        "devs": [
+          {
+            "sn": "%SN%.plc.s7-200",
+            "key": 1
+          }
+        ],
+        "options_ex": {
+          "upload_event": 0,
+          "disable_data_em": false,
+          "disable_data": false,
+          "disable_command": false,
+          "disable_output": false,
+          "disable_devices": false,
+          "disable_compress": true
+        }
+      },
+      "name": "APP00000259",
+      "sn": "b0a8323750"
+    }
+  }
+}

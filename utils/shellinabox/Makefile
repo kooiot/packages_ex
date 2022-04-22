@@ -26,6 +26,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/shellinabox
   SECTION:=utils
   CATEGORY:=Utilities
+  SUBMENU:=Terminal
   TITLE:=Shell In A Box
   URL:=https://github.com/freeioe/shellinabox
   DEPENDS:=+zlib +libopenssl
