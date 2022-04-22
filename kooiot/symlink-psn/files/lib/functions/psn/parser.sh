@@ -34,7 +34,8 @@ product_sn_encode() {
 
 	case "${typ}" in
 		"32101")
-			product_sn_x01_x03 "${week:2:4}0${seq}"
+			# product_sn_x01_x03 "${week:2:4}0${seq}"
+			echo "TRTX01${week:2:4}0${seq}"
 			;;
 		"32102")
 			echo "TRTS01${week:2:4}0${seq}"
@@ -49,6 +50,9 @@ product_sn_encode() {
 			echo "DLYM02${week:2:4}0${seq}"
 			;;
 		"32106")
+			echo "TRTX03${week:2:4}0${seq}"
+			;;
+		"32107")
 			echo "TRTK02${week:2:4}0${seq}"
 			;;
 		*)
@@ -74,9 +78,6 @@ product_sn_decode() {
 		"TRTX01")
 			echo "2-32101-00${week}-${seq:1:5}"
 			;;
-		"TRTX03")
-			echo "2-32101-00${week}-${seq:1:5}"
-			;;
 		"TRTS01")
 			echo "2-32102-00${week}-${seq:1:5}"
 			;;
@@ -91,6 +92,12 @@ product_sn_decode() {
 			;;
 		"DLYM02")
 			echo "2-32105-00${week}-${seq:1:5}"
+			;;
+		"TRTX03")
+			echo "2-32106-00${week}-${seq:1:5}"
+			;;
+		"TRTK02")
+			echo "2-32107-00${week}-${seq:1:5}"
 			;;
 		*)
 			echo "$psn"
