@@ -38,8 +38,9 @@ endef
 
 define Package/robot/template
   define Package/$(1)
-    SECTION:=utils
-    CATEGORY:=Utilities
+    SECTION:=kooiot
+    CATEGORY:=KooIoT
+    SUBMENU:=Utilities
     TITLE:=$(1) - robot for executing tasks $(2)
     URL:=https://github.com/kooiot/robot
     DEPENDS:=$(GO_ARCH_DEPENDS)

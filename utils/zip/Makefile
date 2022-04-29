@@ -26,8 +26,9 @@ PKG_CHECK_FORMAT_SECURITY:=0
 include $(INCLUDE_DIR)/package.mk
 
 define Package/zip
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
+  SUBMENU:=Utilities
   DEPENDS:=
   TITLE:=Archiver for .zip files
   URL:=http://infozip.sourceforge.net/Zip.html

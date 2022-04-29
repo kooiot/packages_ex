@@ -23,8 +23,9 @@ PKG_LICENSE_FILES:=
 include $(INCLUDE_DIR)/package.mk
 
 define Package/process-monitor
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
+  SUBMENU:=Utilities
   TITLE:=Process Monitor
   URL:=http://kooiot.com
 endef

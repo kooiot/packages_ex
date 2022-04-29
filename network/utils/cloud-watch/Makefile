@@ -13,8 +13,9 @@ PKG_LICNESE:=MIT
 include $(INCLUDE_DIR)/package.mk
 
 define Package/cloud-watch
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
+  SUBMENU:=Network Utilities
   TITLE:=WWAN restart by watching cloud connnection status
   DEPENDS:=+freeioe
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>

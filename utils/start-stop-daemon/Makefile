@@ -25,8 +25,9 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/dpkg-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/start-stop-daemon
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
+  SUBMENU:=Utilities
   TITLE:=Start-Stop-Daemon
   URL:=http://debian.org
 endef

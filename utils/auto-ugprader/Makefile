@@ -13,8 +13,9 @@ PKG_LICNESE:=MIT
 include $(INCLUDE_DIR)/package.mk
 
 define Package/auto-upgrader
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
+  SUBMENU:=Utilities
   TITLE:=Auto upgrade system detected by condition
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
   URL:=http://kooiot.com

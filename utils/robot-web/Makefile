@@ -22,8 +22,9 @@ PKG_SOURCE_URL:=https://github.com/kooiot/robot-web/releases/download/v$(PKG_VER
 PKG_HASH:=0108ec9524778540e7aa85d1f90e9fa11ba73abdda4b4f4c44d0981dfc0ce1b8
 
 define Package/robot-web
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
+  SUBMENU:=Utilities
   TITLE:=robot-web - for robot server web ui
   URL:=https://github.com/kooiot/robot-web
   DEPENDS:=+nginx

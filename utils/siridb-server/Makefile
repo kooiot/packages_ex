@@ -23,8 +23,8 @@ PKG_LICENSE_FILES:=LICENSE.md
 include $(INCLUDE_DIR)/package.mk
 
 define Package/siridb-server
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
   SUBMENU:=Database
   TITLE:=SiriDB time series database
   URL:=https://github.com/SiriDB/siridb-server

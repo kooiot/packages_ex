@@ -13,8 +13,9 @@ PKG_LICENSE:=MIT
 include $(INCLUDE_DIR)/package.mk
 
 define Package/wwanleds
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
+  SUBMENU:=Network Utilities
   TITLE:=WWAN network LED indicator
   DEPENDS:=+3ginfo-text
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>

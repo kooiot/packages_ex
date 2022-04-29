@@ -13,8 +13,9 @@ PKG_LICNESE:=MIT
 include $(INCLUDE_DIR)/package.mk
 
 define Package/tinc-freeioe-tunnel
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
+  SUBMENU:=Network Utilities
   TITLE:=FreeIOE network tunnel over tinc
   DEPENDS:=+tinc
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>

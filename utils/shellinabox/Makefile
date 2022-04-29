@@ -24,8 +24,8 @@ PKG_FIXUP:=autoreconf
 include $(INCLUDE_DIR)/package.mk
 
 define Package/shellinabox
-  SECTION:=utils
-  CATEGORY:=Utilities
+  SECTION:=kooiot
+  CATEGORY:=KooIoT
   SUBMENU:=Terminal
   TITLE:=Shell In A Box
   URL:=https://github.com/freeioe/shellinabox
