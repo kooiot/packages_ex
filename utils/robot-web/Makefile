@@ -1,16 +1,25 @@
+#
+# Copyright (C) 2018-2022 KooIoT.com
+#
+# This is free software, licensed under MIT
+# See /LICENSE for more information.
+# 
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=robot-web
-PKG_VERSION:=0.1.0
+PKG_VERSION:=0.2.0
 PKG_RELEASE:=1
 
-PKG_SOURCE:=v$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://github.com/kooiot/robot-web/releases/download/v$(PKG_VERSION)/v$(PKG_VERSION).tar.gz?
-PKG_HASH:=721d474d28e94ed9ff577140cbbce17ef5c666be0e8ec4555f2909ef494f3044
-
+PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
-PKG_LICENSE:=MIT
-PKG_LICENSE_FILES:=
+
+include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/version.mk
+
+PKG_SOURCE:=v$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=https://github.com/kooiot/robot-web/releases/download/v$(PKG_VERSION)/robot-web-v$(PKG_VERSION).tar.gz?
+PKG_HASH:=0108ec9524778540e7aa85d1f90e9fa11ba73abdda4b4f4c44d0981dfc0ce1b8
 
 define Package/robot-web
   SECTION:=utils
@@ -38,6 +47,8 @@ endef
 define Package/robot-web/install
 	$(INSTALL_DIR) $(1)/html/robot
 	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/html/robot/
+
+	$(CP) ./files/* $(1)
 endef
 
 $(eval $(call BuildPackage,robot-web))
