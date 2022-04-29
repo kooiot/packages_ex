@@ -3,7 +3,7 @@
 export_f20x_uid_mac() {
 	local count="$1"
 	local uid_file="/sys/fsl_otp/HW_OCOTP_CFG1"
-	local uid mac0 mac1 mac2 mac3
+	local uid mac0 mac1 mac2 mac3 mac_val
 	local mac_base="b0c9"
 
 	if [ -z "$count" ]; then
@@ -42,6 +42,14 @@ export_f20x_uid_mac() {
 
 	return 0
 }
+
+mac_file="/sys/fsl_otp/HW_OCOTP_MAC0"
+mac_0=$(cat ${mac_file})
+
+if [ $mac_0 != "0x0" ]; then
+	echo "MAC exists!"
+	exit 0
+fi
 
 mac="$(export_f20x_uid_mac 2)"
 
