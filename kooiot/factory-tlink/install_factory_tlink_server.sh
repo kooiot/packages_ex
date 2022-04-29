@@ -17,6 +17,6 @@ echo "untrusted comment: Local build key" > /etc/opkg/keys/cce9dfbc10bada5a
 echo "RWTM6d+8ELraWs5mgLVvXjWu0abxvMzBra4vQGSnNzCBbT6+lnAcAggc" >> /etc/opkg/keys/cce9dfbc10bada5a
 fi
 
-opkg update && opkg install robot-server robot-pong
+opkg update && opkg install robot-server robot-pong robot-web
 
 # TODO: Change network IPs
