@@ -1,0 +1,17 @@
+server {
+	listen      8080;
+	server_name	_;
+	root		/html/robot;
+	index		index.html index.htm;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+
+	location /api/ {
+		proxy_set_header Host $host;
+		proxy_read_timeout 120;
+		proxy_redirect off;
+		proxy_pass http://192.168.1.139:8780;
+	}
+}
