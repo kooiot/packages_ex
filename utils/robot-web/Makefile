@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=robot-web
 PKG_VERSION:=0.2.0
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -27,7 +27,7 @@ define Package/robot-web
   SUBMENU:=Utilities
   TITLE:=robot-web - for robot server web ui
   URL:=https://github.com/kooiot/robot-web
-  DEPENDS:=+nginx
+  DEPENDS:=+robot-server
 endef
 
 define Package/robot-web/description
@@ -48,8 +48,17 @@ endef
 define Package/robot-web/install
 	$(INSTALL_DIR) $(1)/html/robot
 	$(CP) $(PKG_BUILD_DIR)/src/* $(1)/html/robot/
+endef
 
-	$(CP) ./files/* $(1)
+define Package/robot-web/postinst
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
+
+# Link to /mnt/data/robot
+mkdir -p /mnt/data/robot
+ln -s /html/robot /mnt/data/robot/static >/dev/null 2>&1
+
+exit 0
 endef
 
 $(eval $(call BuildPackage,robot-web))
