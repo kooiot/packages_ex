@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=robot-web
-PKG_VERSION:=0.2.0
-PKG_RELEASE:=3
+PKG_VERSION:=0.3.0
+PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -19,7 +19,7 @@ include $(INCLUDE_DIR)/version.mk
 
 PKG_SOURCE:=v$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/kooiot/robot-web/releases/download/v$(PKG_VERSION)/robot-web-v$(PKG_VERSION).tar.gz?
-PKG_HASH:=0108ec9524778540e7aa85d1f90e9fa11ba73abdda4b4f4c44d0981dfc0ce1b8
+PKG_HASH:=9dd25c616e4061f7ce04dd261d3743b0cc3bfd33439497411417c67a6a24e129
 
 define Package/robot-web
   SECTION:=kooiot
