@@ -20,3 +20,12 @@ fi
 opkg update && opkg install robot-server robot-pong robot-web
 
 # TODO: Change network IPs
+
+uci del network.lan.netmask
+uci del network.lan.ipaddr
+uci add_list network.lan.ipaddr='192.168.0.139/24'
+uci add_list network.lan.ipaddr='192.168.1.139/24'
+uci add_list network.lan.ipaddr='192.168.2.139/24'
+uci add_list network.lan.ipaddr='192.168.3.139/24'
+uci add_list network.lan.ipaddr='192.168.4.139/24'
+uci commit network
