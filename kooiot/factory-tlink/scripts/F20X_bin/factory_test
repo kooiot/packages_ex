@@ -37,5 +37,10 @@ tlink_test() {
 	fi
 }
 
+if [ -f /sbin/gen_mac_from_uid.sh ];
+then
+	sh /sbin/gen_mac_from_uid.sh
+fi
+
 # tlink_make_pre ${board_name}
 tlink_test $(board_name)

@@ -3,7 +3,7 @@
 export_f20x_uid_mac() {
 	local count="$1"
 	local uid_file="/sys/fsl_otp/HW_OCOTP_CFG1"
-	local uid mac0 mac1 mac2 mac3 mac_val
+	local uid mac0 mac1 mac2 mac3 mac_val mac0_val mac0_num
 	local mac_base="b0c9"
 
 	if [ -z "$count" ]; then
@@ -33,9 +33,10 @@ export_f20x_uid_mac() {
 			ret="${ret} ${mac_val}"
 		fi
 
-		mac0_val=`expr ${mac0} + 1`
-		mac0_val=$(( ${mac0_val} % 100 ))
-		mac0=$(printf '%02d' ${mac0_val})
+		mac0_num=$(printf %d 0x${mac0})
+		mac0_val=`expr ${mac0_num} + 1`
+		mac0_val=$(( ${mac0_val} % 256 ))
+		mac0=$(printf '%02x' ${mac0_val})
 	done
 
 	echo "${ret}"
