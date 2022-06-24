@@ -4,12 +4,6 @@ config FREEIOE_CLOUD_HOST
 	bool
 	prompt "Enable cloud host specify"
 
-config FREEIOE_CLOUD_PKG_VER
-	int
-	default 2
-	prompt "Package interface version"
-	depends on FREEIOE_CLOUD_HOST
-
 config FREEIOE_CLOUD_HOST_ADDR
 	string
 	default iot.kooiot.com
