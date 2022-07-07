@@ -170,9 +170,6 @@ CCID=$(echo "$O" | awk -F[,\ ] '/^\+CCID/ {print $2}')
 
 # CPSI
 CPSI=$(echo "$O" | awk -F[,\ ] '/^\+CPSI/ {print $2}')
-if [ "x$CPSI" = "x" ]; then
-	CPSI=$(echo "$O" | awk '/^\+SGCELLINFOEX/ {print $2}')
-fi
 
 # CGSN
 CGSN=$(echo "$O" | awk -F[,\ ] '/^\+CGSN/ {print $2}')
@@ -404,6 +401,11 @@ CGMI=$(echo "$O" | awk -F[,\ ] '/^\+CGMI:/ {print $2}')
 if [ "x$CGMI" = "xMEIG" ]; then
 	# Fixed MeiGe CCID issue
 	CCID=$(echo $CCID | sed 's/"//g')
+
+	# Fixed CPSI
+	if [ "x$CPSI" = "x" ]; then
+		CPSI=$(echo "$O" | awk -F[:] '/^\+SGCELLINFOEX/ {print $2}')
+	fi
 
 	# Using 5G RSRP/RSRQ/SINR
 	WORK_MODE=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $4}' | sed 's/"//g')
