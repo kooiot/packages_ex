@@ -15,17 +15,26 @@ opengt
  gosub readatcmdnr
  let $v=$s
 
- let $c="AT+CPSI?^m"
- let $r="+CPSI"
- gosub readatcmd
+ if len($v) > 3 goto cgmiok
 
+ let $c="ATE1; +CGMI^m"
+ let $r="+CGMI"
+ gosub readatcmd
+ let $v=$s
+
+:cgmiok
  let $c="AT+CGSN^m"
  gosub readatcmdnr
  print "\n+CGSN: ",$s
 
-
  let $c="AT+CCID^m"
  let $r="+CCID"
+ gosub readatcmd
+
+ if $toupper($mid($v,8,4)) = "MEIG" goto meig
+
+ let $c="AT+CPSI?^m"
+ let $r="+CPSI"
  gosub readatcmd
 
  if $toupper($mid($v,0,3)) = "HUA" goto huawei
@@ -140,6 +149,58 @@ opengt
  let $c="ATE1; +CGMM^m"
  gosub readatcmdnr
  print "\nDEVICE:",$v," ",$s,"\n"
+
+ exit 0
+
+:meig
+ let $c="AT+SGCELLINFOEX^m"
+ let $r="+SGCELLINFOEX"
+ gosub readatcmd
+
+ let $c="AT\^SYSINFOEX^m"
+ let $r="\^SYSINFOEX"
+ gosub readatcmd
+
+ let $c="AT\^CSNR?^m"
+ let $r="\^CSNR"
+ gosub readatcmd
+
+ let $c="AT\^LTERSRP?^m"
+ let $r="\^LTERSRP"
+ gosub readatcmd
+
+ let $c="AT\^HCSQ?^m"
+ let $r="\^HCSQ"
+ gosub readatcmd
+
+ let $c="AT\^SYSINFO^m"
+ let $r="\^SYSINFO"
+ gosub readatcmd
+
+ let $c="AT+COPS=3,2;+COPS?^m"
+ let $r="+COPS"
+ gosub readatcmd
+
+ let $c="AT+CREG=2;+CREG?^m"
+ let $r="+CREG"
+ gosub readatcmd
+
+ let $c="AT+CGREG=2;+CGREG?^m"
+ let $r="+CGREG"
+ gosub readatcmd
+
+ let $c="AT+CEREG=2;+CEREG?^m"
+ let $r="+CEREG"
+ gosub readatcmd
+
+ let $c="AT+CGEQNEG=1^m"
+ let $r="+CGEQNEG"
+ gosub readatcmd
+
+ let $c="ATE1; +CGMM^m"
+ let $r="+CGMM"
+ gosub readatcmd
+ print "\nDEVICE: MEIG ",$mid($s, 8, 32),"\n"
 
  exit 0
 

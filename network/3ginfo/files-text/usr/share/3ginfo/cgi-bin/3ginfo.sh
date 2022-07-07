@@ -170,6 +170,9 @@ CCID=$(echo "$O" | awk -F[,\ ] '/^\+CCID/ {print $2}')
 
 # CPSI
 CPSI=$(echo "$O" | awk -F[,\ ] '/^\+CPSI/ {print $2}')
+if [ "x$CPSI" = "x" ]; then
+	CPSI=$(echo "$O" | awk '/^\+SGCELLINFOEX/ {print $2}')
+fi
 
 # CGSN
 CGSN=$(echo "$O" | awk -F[,\ ] '/^\+CGSN/ {print $2}')
@@ -395,6 +398,45 @@ if [ "x$TECH" != "x" ]; then
 			RSRQ=$(awk 'BEGIN {print -20 + '$PARAM4'/2}')
 			;;
 	esac
+fi
+
+CGMI=$(echo "$O" | awk -F[,\ ] '/^\+CGMI:/ {print $2}')
+if [ "x$CGMI" = "xMEIG" ]; then
+	# Fixed MeiGe CCID issue
+	CCID=$(echo $CCID | sed 's/"//g')
+
+	# Using 5G RSRP/RSRQ/SINR
+	WORK_MODE=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $4}' | sed 's/"//g')
+	CGMI="$WORK_MODE"
+	if [ "x$WORK_MODE" = "xNR5G" ]; then
+		NR5G_RSRQ=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $9}')
+		NR5G_RSRP=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $10}')
+		NR5G_SNR=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $11}')
+
+		if [ "x$NR5G_RSRQ" = "x" ]; then
+			NR5G_RSRQ=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $5}')
+			NR5G_RSRP=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $6}')
+			NR5G_SNR=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $7}')
+		fi
+
+		RSRQ=$(awk 'BEGIN {print -43.5 + '$NR5G_RSRQ'/2}')
+		RSRP=$(awk 'BEGIN {print -157 + '$NR5G_RSRP'}')
+		SINR=$(awk 'BEGIN {print -23.5 + '$NR5G_SNR'/2}')
+
+		# If CSQ is invalid then using RSRP
+		if [ "x$CSQ" = "x-" ]; then
+			if [ $NR5G_RSRP -le 126 -a $NR5G_RSRP -ge 0 ]; then
+				CSQ=$(($NR5G_RSRP * 32/128))
+				CSQ=`awk -v a=$CSQ 'BEGIN {print(int(a)==(a))?int(a):int(a)+1}'`
+				CSQ_PER=$(($CSQ * 100/31))
+				CSQ_COL="red"
+				[ $CSQ -ge 10 ] && CSQ_COL="orange"
+				[ $CSQ -ge 15 ] && CSQ_COL="yellow"
+				[ $CSQ -ge 20 ] && CSQ_COL="green"
+				CSQ_RSSI=$((2 * CSQ - 113))
+			fi
+		fi
+	fi
 fi
 
 if [ -n "$SEC" ]; then
