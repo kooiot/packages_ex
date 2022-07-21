@@ -1,0 +1,10 @@
+#!/bin/sh
+
+[ -f /etc/lcd4linux.conf.pk ] &&  exit 0
+[ -f /etc/lcd4linux.conf.tlink ] || exit 0
+
+mv /etc/lcd4linux.conf /etc/lcd4linux.conf.pk
+cp /etc/lcd4linux.conf.tlink /etc/lcd4linux.conf
+
+exit 0
+
