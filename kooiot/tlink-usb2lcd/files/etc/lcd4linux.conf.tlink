@@ -83,7 +83,17 @@ Widget RAM {
 
 Widget RAMUsed {
     class  'Text'
-    expression meminfo('MemUsed')/1024
+    expression (meminfo('MemTotal') - meminfo('MemFree'))/1024
+    postfix ' MB RAM'
+    width  11
+    precision 0
+    align  'R'
+    update tick
+}
+
+Widget RAMFree {
+    class  'Text'
+    expression meminfo('MemFree')/1024
     postfix ' MB RAM'
     width  11
     precision 0
@@ -500,6 +510,15 @@ Widget Time {
     update 1000
 }
 
+Widget CloudStatus {
+    class 'Text'
+    expression file::readline('/tmp/sysinfo/cloud_status', 1)
+    prefix ' OL:'
+    width 6
+    align 'PC'
+    update 1000
+}
+
 Layout Default {
     Row1 {
 	Col1  'OS'
@@ -693,7 +712,7 @@ Layout TLink {
     }
     Row2 {
         Col1  'Busy'
-        Col10 'RAMUsed'
+        Col10 'CloudStatus'
     }
 }
 
