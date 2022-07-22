@@ -61,6 +61,8 @@ define Package/freeioe/preinst
 #!/bin/sh
 [ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
 
+[ -f /etc/uci-defaults/99_tlink-usb2lcd ] && rm -f /etc/uci-defaults/99_tlink-usb2lcd
+
 # stop service if PKG_UPGRADE
 [ "$${PKG_UPGRADE}" = "1" ] && /etc/init.d/lcd4linux stop >/dev/null 2>&1
 

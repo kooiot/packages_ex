@@ -80,6 +80,17 @@ Widget RAM {
     update tick
 }
 
+
+Widget RAMUsed {
+    class  'Text'
+    expression meminfo('MemUsed')/1024
+    postfix ' MB RAM'
+    width  11
+    precision 0
+    align  'R'
+    update tick
+}
+
 Widget Busy {
     class 'Text'
     expression proc_stat::cpu('busy', 500)
@@ -681,8 +692,8 @@ Layout TLink {
         Col1  'Eth_br_lan'
     }
     Row2 {
-        Col1  'CPU'
-        Col10 'RAM'
+        Col1  'Busy'
+        Col10 'RAMUsed'
     }
 }
 
