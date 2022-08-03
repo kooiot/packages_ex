@@ -129,7 +129,32 @@ else
 		touch /tmp/pincode_was_given
 	fi
 
-	O=$(gcom -d $DEVICE -s $RES/scripts/3ginfo.gcom 2>/dev/null)
+	devname="$(basename "$DEVICE")"
+	IdVendor=
+	IdProduct=
+	case "$devname" in
+		'ttyUSB'*)
+			devpath="$(readlink -f /sys/class/tty/$devname/device)"
+			idVendor="$( ls "$devpath"/../../../*/idVendor )"
+			idProduct="$( ls "$devpath"/../../../*/idProduct )"
+			[ -f "$idVendor" ] && IdVendor=$(cat $idVendor)
+			[ -f "$idProduct" ] && IdProduct=$(cat $idProduct)
+			;;
+        *)
+			;;
+	esac
+
+	case "$IdVendor:$IdProduct" in
+		"2c7c:0900")
+			O=$(gcom -d $DEVICE -s $RES/scripts/quectel_rm500.gcom 2>/dev/null)
+			;;
+		"2dee:4d52")
+			O=$(gcom -d $DEVICE -s $RES/scripts/meig_srm811.gcom 2>/dev/null)
+			;;
+		*)
+			O=$(gcom -d $DEVICE -s $RES/scripts/3ginfo.gcom 2>/dev/null)
+			;;
+	esac
 fi
 
 if [ "x$1" = "xtest" ]; then
