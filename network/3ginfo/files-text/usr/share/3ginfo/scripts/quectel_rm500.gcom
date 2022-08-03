@@ -15,6 +15,10 @@ opengt
  let $r="+CCID"
  gosub readatcmd
 
+ let $c="AT+CGSN^m"
+ gosub readatcmdnr
+ print "\n+CGSN: ",$s
+
  let $c="ATE1;+CGMI^m"
  gosub readatcmdnr
  let $v=$s
