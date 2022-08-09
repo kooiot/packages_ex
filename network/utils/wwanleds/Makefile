@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wwanleds
-PKG_VERSION:=1.6
+PKG_VERSION:=2.0
 PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 

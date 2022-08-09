@@ -130,12 +130,12 @@ local function echo_log(log)
 	os.execute("sync")
 end
 
-local function reset_4g_module()
-	echo_log('4G Wan reset module')
+local function reset_wwan_module(iface_name)
+	echo_log(iface_name..' reset module')
 	local pcie_reset_path = '/sys/class/gpio/pcie_reset/value'
 	local pcie_reset = fs.access(pcie_reset_path)
 
-	os.execute("ifdown 4g_wan")
+	os.execute("ifdown "..iface_name)
 	if pcie_reset then
 		os.execute("echo 1 > "..pcie_reset_path)
 	end
@@ -145,33 +145,33 @@ local function reset_4g_module()
 		os.execute("echo 0 > "..pcie_reset_path)
 	end
 	nixio.nanosleep(10)
-	os.execute("ifup 4g_wan")
+	os.execute("ifup "..iface_name)
 end
 
-local function repower_4g_module()
-	echo_log('4G Wan re-power module')
+local function repower_wwan_module(iface_name)
+	echo_log(iface_name..' re-power module')
 
 	local pcie_power_path = '/sys/class/gpio/pcie_power/value'
 	local pcie_power = fs.access(pcie_power_path)
 
-	os.execute("ifdown 4g_wan")
+	os.execute("ifdown "..iface_name)
 	if pcie_power then
-		echo_log('4G module power off')
+		echo_log(face_name..' module power off')
 		os.execute("echo 0 > "..pcie_power_path)
 	end
 	os.execute("killall -9 uqmi")
 	nixio.nanosleep(1)
 	if pcie_power then
-		echo_log('4G module power on')
+		echo_log(iface_name..' module power on')
 		os.execute("echo 1 > "..pcie_power_path)
 	end
 	nixio.nanosleep(10)
-	os.execute("ifup 4g_wan")
+	os.execute("ifup "..iface_name)
 end
 
 local cloud_last = os.time()
 
-local function watch_cloud_status()
+local function watch_cloud_status(iface_name)
 	local now = os.time()
 
 	local online_check_disable = false
@@ -220,7 +220,7 @@ local function watch_cloud_status()
 	if now - cloud_last > 1200 then
 		cloud_last = now
 		echo_log('Cloud status out of date (20 min)')
-		repower_4g_module()
+		repower_wwan_module(iface_name)
 	end
 end
 
@@ -228,19 +228,11 @@ local wwan0_not_exits = true
 local wwan0_ip_last_got = os.time()
 local wwan0_reset_times = 0
 
-local function watch_4g_wan()
+local function check_wwan_status(iface_name)
 	local wwan0_has_ip = false
 
-	--- If there is not 4g_wan or 4g_wan is disabled
-	local wan_4g = util.ubus('network.interface', 'status', {interface='4g_wan'})
-	if not wan_4g or (not wan_4g.autostart and not wan_4g.errors) then
-		wwan0_not_exits = true
-		--os.execute('echo "4G wan is disabled or not exists !!!!" >> /dev/console')
-		return
-	end
-
-	--- Get the 4g_wan_4 interface and check whether has got IP or not
-	local iface = util.ubus('network.interface', 'status', {interface='4g_wan_4'})
+	--- Get the <iface>_4 interface and check whether has got IP or not
+	local iface = util.ubus('network.interface', 'status', {interface=iface_name..'_4'})
 	if iface and iface.l3_device == 'wwan0' then
 		local ipv4_addr = iface['ipv4-address']
 		if ipv4_addr and #ipv4_addr > 0 then
@@ -248,8 +240,8 @@ local function watch_4g_wan()
 		end
 	end
 
-	--- Get the 4g_wan_6 interface and check whether has got IP or not
-	local iface6 = util.ubus('network.interface', 'status', {interface='4g_wan_6'})
+	--- Get the <iface>_6 interface and check whether has got IP or not
+	local iface6 = util.ubus('network.interface', 'status', {interface=iface_name..'_6'})
 	if iface6 and iface.l3_device == 'wwan0' then
 		local ipv6_addr = iface['ipv6-address']
 		if ipv6_addr and #ipv6_addr > 0 then
@@ -257,9 +249,9 @@ local function watch_4g_wan()
 		end
 	end
 
-	-- Get the 3g-4g_wan inteface and check whether has got IP or not
-	local iface = util.ubus('network.interface', 'status', {interface='4g_wan'})
-	if iface and iface.l3_device == '3g-4g_wan' then
+	-- Get the 3g-<iface> inteface and check whether has got IP or not
+	local iface = util.ubus('network.interface', 'status', {interface=iface_name})
+	if iface and iface.l3_device == '3g-'..iface then
 		local ipv4_addr = iface['ipv4-address']
 		if ipv4_addr and #ipv4_addr > 0 then
 			wwan0_has_ip = true
@@ -283,7 +275,7 @@ local function watch_4g_wan()
 		wwan0_reset_times = 0
 
 		-- Only watch cloud status if the wwan0 has ip
-		watch_cloud_status()
+		watch_cloud_status(iface_name)
 
 		return
 	end
@@ -296,14 +288,14 @@ local function watch_4g_wan()
 			--- Next check will be two minutes later
 			wwan0_reset_times = wwan0_reset_times + 1
 			cloud_last = os.time()
-			--- Reset 4G module
-			reset_4g_module()
+			--- Reset wwan module
+			reset_wwan_module(iface_name)
 		else
-			--- already reset 4g module for three times and network still missing
+			--- already reset wwan module for three times and network still missing
 			wwan0_ip_last_got = os.time()
 			wwan0_reset_times = 0
 			cloud_last = os.time()
-			repower_4g_module()
+			repower_wwan_module(iface_name)
 		end
 	end
 
@@ -316,6 +308,28 @@ local function watch_4g_wan()
 	]]--
 end
 
+local function watch_wwan_status()
+	local wan_iface = util.ubus('network.interface', 'status', {interface='4g_wan'})
+	if wan_iface then
+		--- If 4g_wan iface is disabled
+		if (not wan_iface.autostart and not wan_iface.errors) then
+			wwan0_not_exits = true
+			return
+		end
+		return check_wwan_status('4g_wan')
+	end
+
+	local wan_iface = util.ubus('network.interface', 'status', {interface='5g_wan'})
+	if wan_iface then
+		--- If 5g_wan iface is disabled
+		if (not wan_iface.autostart and not wan_iface.errors) then
+			wwan0_not_exits = true
+			return
+		end
+		return check_wwan_status('5g_wan')
+	end
+end
+
 info_export('{}')
 os.execute('touch /tmp/sysinfo/cloud_status') --- make sure the file is there
 echo_log('Start wwanleds services...')
@@ -325,7 +339,7 @@ while true do
 	info_export(info_str)
 	led_control(info)	
 	if info.ccid and string.len(info.ccid) > 0 then
-		watch_4g_wan()
+		watch_wwan_status()
 	end
 	nixio.nanosleep(15)
 end
