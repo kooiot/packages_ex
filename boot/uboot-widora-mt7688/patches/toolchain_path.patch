@@ -9,7 +9,7 @@
  endif
  
  ifeq (include/config.mk,$(wildcard include/config.mk))
-@@ -1663,6 +1663,27 @@
+@@ -1663,6 +1663,29 @@
  
  rt2880_config: unconfig
  	@./mkconfig $(@:_config=) mips ralink_soc rt2880
@@ -28,6 +28,8 @@
 +	echo "Fake config for ThingsLink C2 (16M)"
 +kooiot_tlink_c2_32m_config:
 +	echo "Fake config for ThingsLink C2 (32M)"
++kooiot_tlink_c2_v2_config:
++	echo "Fake config for ThingsLink C2 V2 (32M)"
 +kooiot_tlink_c3_config:
 +	echo "Fake config for ThingsLink C3"
 +kooiot_tlink_c3_16m_config:

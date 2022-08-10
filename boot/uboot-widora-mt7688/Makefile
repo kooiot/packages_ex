@@ -51,6 +51,11 @@ define U-Boot/kooiot_tlink_c2_16m
   BUILD_DEVICES:=kooiot_tlink-c2-16m
 endef
 
+define U-Boot/kooiot_tlink_c2_v2
+  NAME:=ThingsLink C2 V2 (32M)
+  BUILD_DEVICES:=kooiot_tlink-c2-v2
+endef
+
 define U-Boot/kooiot_tlink_c2_32m
   NAME:=ThingsLink C2 (32M)
   BUILD_DEVICES:=kooiot_tlink-c2-32m
@@ -106,6 +111,7 @@ UBOOT_TARGETS := \
 	kooiot_tlink_c2 \
 	kooiot_tlink_c2_16m \
 	kooiot_tlink_c2_32m \
+	kooiot_tlink_c2_v2 \
 	kooiot_tlink_c3 \
 	kooiot_tlink_c3_16m \
 	kooiot_tlink_c3_32m \
