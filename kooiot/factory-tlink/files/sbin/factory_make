@@ -38,15 +38,15 @@ tlink_make_pre() {
 }
 
 tlink_make() {
+	echo "Starting to doing factory make for board: $1" > /dev/kmsg
 	echo "Starting to doing factory make for board: $1" > /tmp/tlink_make.log
-	echo "Starting to doing factory make for board: $1" > /dev/console
 
 	install_show
 
 	/sbin/install_to_emmc -f
 
 	if [ $? -ne 0 ]; then
-		echo "INSTALL FAILED!!!" > /dev/console
+		echo "INSTALL FAILED!!!" > /dev/kmsg
 		echo "INSTALL FAILED!!!" >> /tmp/tlink_make.log
 		failure_show
 	fi
@@ -55,7 +55,7 @@ tlink_make() {
 		mkdir -p /mnt/data
 		mount /dev/mmcblk1p3 /mnt/data
 		if [ $? -ne 0 ]; then
-			echo "MOUNT FAILED!!!" > /dev/console
+			echo "MOUNT FAILED!!!" > /dev/kmsg
 			echo "MOUNT FAILED!!!" >> /tmp/tlink_make.log
 			failure_show
 		fi
@@ -64,11 +64,11 @@ tlink_make() {
 		cp -fpR /mnt/factory-tlink /mnt/data/
 		sync
 
-		echo "INSTALL OS DONE!!!!!" > /dev/console
+		echo "INSTALL OS DONE!!!!!" > /dev/kmsg
 		echo "INSTALL OS DONE!!!!!" >> /tmp/tlink_make.log
 		halt
 	else
-		echo "FACTORY FILES MISSING !!!" > /dev/console
+		echo "FACTORY FILES MISSING !!!" > /dev/kmsg
 		echo "FACTORY FILES MISSING !!!" >> /tmp/tlink_make.log
 		failure_show
 	fi
@@ -88,7 +88,7 @@ case "$(board_name)" in
 	tlink_make ${board_name}
 	;;
 *)
-	echo "UNKNOWN Board to do factory make!!!!" > /dev/console
+	echo "UNKNOWN Board to do factory make!!!!" > /dev/kmsg
 	failure_show
 	;;
 esac
