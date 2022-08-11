@@ -251,7 +251,7 @@ local function check_wwan_status(iface_name)
 
 	-- Get the 3g-<iface> inteface and check whether has got IP or not
 	local iface = util.ubus('network.interface', 'status', {interface=iface_name})
-	if iface and iface.l3_device == '3g-'..iface then
+	if iface and iface.l3_device == '3g-'..iface_name then
 		local ipv4_addr = iface['ipv4-address']
 		if ipv4_addr and #ipv4_addr > 0 then
 			wwan0_has_ip = true
