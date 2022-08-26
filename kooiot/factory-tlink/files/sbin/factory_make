@@ -81,6 +81,7 @@ case "$(board_name)" in
 "kooiot,tlink-s1" | \
 "kooiot,tlink-k1" | \
 "kooiot,tlink-k2" | \
+"kooiot,tlink-k2x" | \
 "kooiot,tlink-m408" | \
 "kooiot,tlink-m416" | \
 "kooiot,tlink-r1")
