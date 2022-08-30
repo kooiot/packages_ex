@@ -62,8 +62,8 @@ opengt
 
  let $c="ATE1;+CGMM^m"
  let $r="+CGMM"
- gosub readatcmd
- print "\nDEVICE:",$v," ",$mid($s, 8, 32),"\n"
+ gosub readatcmdnr
+ print "\nDEVICE:",$v," ",$s,"\n"
 
  exit 0
 
