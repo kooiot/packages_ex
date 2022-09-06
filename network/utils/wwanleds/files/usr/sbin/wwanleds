@@ -153,14 +153,24 @@ local function repower_wwan_module(iface_name)
 
 	local pcie_power_path = '/sys/class/gpio/pcie_power/value'
 	local pcie_power = fs.access(pcie_power_path)
+	local pcie_on_off_path = '/sys/class/gpio/pcie_on_off/value'
+	local pcie_on_off = fs.access(pcie_power_path)
 
 	os.execute("ifdown "..iface_name)
+	if pcie_on_off then
+		echo_log(face_name..' module power off(soft)')
+		os.execute("echo 0 > "..pcie_on_off_path)
+		nixio.nanosleep(3) -- 3 seconds
+	end
 	if pcie_power then
 		echo_log(face_name..' module power off')
 		os.execute("echo 0 > "..pcie_power_path)
 	end
 	os.execute("killall -9 uqmi")
 	nixio.nanosleep(1)
+	if pcie_on_off then
+		os.execute("echo 1 > "..pcie_on_off_path)
+	end
 	if pcie_power then
 		echo_log(iface_name..' module power on')
 		os.execute("echo 1 > "..pcie_power_path)
@@ -228,12 +238,12 @@ local wwan0_not_exits = true
 local wwan0_ip_last_got = os.time()
 local wwan0_reset_times = 0
 
-local function check_wwan_status(iface_name)
+local function check_wwan_status(iface_name, l3_dev)
 	local wwan0_has_ip = false
 
 	--- Get the <iface>_4 interface and check whether has got IP or not
 	local iface = util.ubus('network.interface', 'status', {interface=iface_name..'_4'})
-	if iface and iface.l3_device == 'wwan0' then
+	if iface and iface.l3_device == l3_dev then
 		local ipv4_addr = iface['ipv4-address']
 		if ipv4_addr and #ipv4_addr > 0 then
 			wwan0_has_ip = true
@@ -242,7 +252,7 @@ local function check_wwan_status(iface_name)
 
 	--- Get the <iface>_6 interface and check whether has got IP or not
 	local iface6 = util.ubus('network.interface', 'status', {interface=iface_name..'_6'})
-	if iface6 and iface.l3_device == 'wwan0' then
+	if iface6 and iface.l3_device == l3_dev then
 		local ipv6_addr = iface['ipv6-address']
 		if ipv6_addr and #ipv6_addr > 0 then
 			wwan0_has_ip = true
@@ -262,7 +272,7 @@ local function check_wwan_status(iface_name)
 		end
 	end
 
-	--- If previously there is no wwan0 then just update the last ip got
+	--- If previously there is no wwan then just update the last ip got
 	if wwan0_not_exits then
 		wwan0_not_exits = false
 		wwan0_ip_last_got = os.time()
@@ -274,7 +284,7 @@ local function check_wwan_status(iface_name)
 		wwan0_ip_last_got = os.time()
 		wwan0_reset_times = 0
 
-		-- Only watch cloud status if the wwan0 has ip
+		-- Only watch cloud status if the wwan has ip
 		watch_cloud_status(iface_name)
 
 		return
@@ -316,7 +326,7 @@ local function watch_wwan_status()
 			wwan0_not_exits = true
 			return
 		end
-		return check_wwan_status('4g_wan')
+		return check_wwan_status('4g_wan', 'wwan0')
 	end
 
 	local wan_iface = util.ubus('network.interface', 'status', {interface='5g_wan'})
@@ -326,7 +336,7 @@ local function watch_wwan_status()
 			wwan0_not_exits = true
 			return
 		end
-		return check_wwan_status('5g_wan')
+		return check_wwan_status('5g_wan', 'usb0')
 	end
 end
 
