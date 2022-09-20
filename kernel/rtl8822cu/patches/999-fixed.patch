@@ -1,0 +1,121 @@
+--- a/Makefile	2020-12-14 10:06:58.000000000 +0800
++++ b/Makefile	2022-09-13 18:09:59.938028760 +0800
+@@ -25,7 +25,7 @@
+ EXTRA_LDFLAGS += --strip-debug
+ 
+ CONFIG_AUTOCFG_CP = n
+-
++CONFIG_RTW_ACS=y
+ ########################## WIFI IC ############################
+ CONFIG_MULTIDRV = n
+ CONFIG_RTL8188E = n
+@@ -59,7 +59,7 @@
+ CONFIG_LPS_MODE = default
+ CONFIG_USB_AUTOSUSPEND = n
+ CONFIG_HW_PWRP_DETECTION = n
+-CONFIG_BT_COEXIST = y
++CONFIG_BT_COEXIST = n
+ CONFIG_WAPI_SUPPORT = n
+ CONFIG_EFUSE_CONFIG_FILE = y
+ CONFIG_EXT_CLK = n
+@@ -103,7 +103,7 @@
+ CONFIG_RTW_DEBUG = y
+ # default log level is _DRV_INFO_ = 4,
+ # please refer to "How_to_set_driver_debug_log_level.doc" to set the available level.
+-CONFIG_RTW_LOG_LEVEL = 4
++CONFIG_RTW_LOG_LEVEL = 3
+ 
+ # enable /proc/net/rtlxxxx/ debug interfaces
+ CONFIG_PROC_DEBUG = y
+@@ -136,7 +136,8 @@
+ #bit0: ROAM_ON_EXPIRED, #bit1: ROAM_ON_RESUME, #bit2: ROAM_ACTIVE
+ CONFIG_ROAMING_FLAG = 0x3
+ ###################### Platform Related #######################
+-CONFIG_PLATFORM_I386_PC = y
++CONFIG_PLATFORM_OPENWRT = y
++CONFIG_PLATFORM_I386_PC = n
+ CONFIG_PLATFORM_ANDROID_X86 = n
+ CONFIG_PLATFORM_ANDROID_INTEL_X86 = n
+ CONFIG_PLATFORM_JB_X86 = n
+@@ -986,9 +987,9 @@
+ RTL871X := rtl8822c
+ ifeq ($(CONFIG_USB_HCI), y)
+ ifeq ($(CONFIG_BT_COEXIST), n)
+-MODULE_NAME = 8812cu
++MODULE_NAME = rtl8812cu
+ else
+-MODULE_NAME = 88x2cu
++MODULE_NAME = rtl88x2cu
+ endif
+ endif
+ ifeq ($(CONFIG_PCI_HCI), y)
+@@ -1330,6 +1331,16 @@
+ EXTRA_CFLAGS += -DCONFIG_RTW_80211R
+ endif
+ 
++ifeq ($(CONFIG_PLATFORM_OPENWRT), y)
++ifdef EXT_EXTRA_CFLAGS
++EXTRA_CFLAGS += $(EXT_EXTRA_CFLAGS)
++else
++EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
++EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
++EXTRA_CFLAGS += -DCONFIG_RTW_HOSTAPD_ACS
++endif
++endif
++
+ ifeq ($(CONFIG_PLATFORM_I386_PC), y)
+ EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
+ EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
+@@ -2328,6 +2339,9 @@
+ endif
+ 
+ ifneq ($(KERNELRELEASE),)
++KERNELRELEASE := $(shell uname -r)
++$(warning ~~~~~~~~~ $(KERNELRELEASE))
++endif
+ 
+ ########### this part for *.mk ############################
+ include $(src)/hal/phydm/phydm.mk
+@@ -2438,15 +2452,21 @@
+ $(MODULE_NAME)-$(CONFIG_MP_INCLUDED)+= core/rtw_bt_mp.o
+ endif
+ 
++ifneq ($(CONFIG_RTL8822CU),)
++$(warning aaaaaaaaaaaaaaaaaaaaa )
+ obj-$(CONFIG_RTL8822CU) := $(MODULE_NAME).o
+ 
+ else
++$(warning bbbbbbbbbbbbbbbbbbbb )
++$(warning $(MODULE_NAME))
++obj-m := $(MODULE_NAME).o
+ 
+-export CONFIG_RTL8822CU = m
++#export CONFIG_RTL8822CU = m
+ 
+ all: modules
+ 
+ modules:
++	echo $(MODULE_NAME)
+ 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
+ 
+ strip:
+--- a/os_dep/linux/os_intfs.c
++++ b/os_dep/linux/os_intfs.c
+@@ -246,7 +246,7 @@
+ int rtw_bw_mode = 0x21;
+ #endif
+ int rtw_ampdu_enable = 1;/* for enable tx_ampdu , */ /* 0: disable, 0x1:enable */
+-int rtw_rx_stbc = 1;/* 0: disable, bit(0):enable 2.4g, bit(1):enable 5g, default is set to enable 2.4GHZ for IOT issue with bufflao's AP at 5GHZ */
++int rtw_rx_stbc = 3;/* 0: disable, bit(0):enable 2.4g, bit(1):enable 5g, default is set to enable 2.4GHZ for IOT issue with bufflao's AP at 5GHZ */
+ #if (defined(CONFIG_RTL8814A) || defined(CONFIG_RTL8814B) || defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8822C)) && defined(CONFIG_PCI_HCI)
+ int rtw_rx_ampdu_amsdu = 2;/* 0: disabled, 1:enabled, 2:auto . There is an IOT issu with DLINK DIR-629 when the flag turn on */
+ #elif ((defined(CONFIG_RTL8822B) || defined(CONFIG_RTL8822C)) && defined(CONFIG_SDIO_HCI))
+@@ -313,7 +313,7 @@
+ #endif /* CONFIG_80211N_HT */
+ 
+ #ifdef CONFIG_80211AC_VHT
+-int rtw_vht_enable = 1; /* 0:disable, 1:enable, 2:force auto enable */
++int rtw_vht_enable = 2; /* 0:disable, 1:enable, 2:force auto enable */
+ module_param(rtw_vht_enable, int, 0644);
+ 
+ int rtw_vht_24g_enable = 1; /* 0:disable, 1:enable */

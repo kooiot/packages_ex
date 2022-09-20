@@ -1,0 +1,12 @@
+--- a/Makefile
++++ b/Makefile
+@@ -27,6 +27,9 @@
+ ifneq ($(CONFIG_RTW88_8822CE),m)
+ ccflags-y += -DCONFIG_RTW88_8822CE=y
+ endif
++ifneq ($(CONFIG_RTW88_8822C),m)
++ccflags-y += -DCONFIG_RTW88_8822C=y
++endif
+ ifneq ($(CONFIG_RTW88_8822CU),m)
+ ccflags-y += -DCONFIG_RTW88_8822CU=y
+ endif
