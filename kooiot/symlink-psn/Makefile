@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=symlink-psn
-PKG_VERSION:=2022-07-28
+PKG_VERSION:=2022-10-10
 PKG_RELEASE:=1
 PKG_LICNESE:=MIT
 

@@ -52,8 +52,41 @@ product_sn_encode() {
 		"32106")
 			echo "TRTX03${week:2:4}0${seq}"
 			;;
-		"32107")
-			echo "TRTK02${week:2:4}0${seq}"
+		"34100")
+			echo "TRTK20${week:2:4}0${seq}"
+			;;
+		"34101")
+			echo "TRTK21${week:2:4}0${seq}"
+			;;
+		"34102")
+			echo "TRTK22${week:2:4}0${seq}"
+			;;
+		"34103")
+			echo "TRTK23${week:2:4}0${seq}"
+			;;
+		"34104")
+			echo "TRTK24${week:2:4}0${seq}"
+			;;
+		"34105")
+			echo "TRTK25${week:2:4}0${seq}"
+			;;
+		"34106")
+			echo "TRTK26${week:2:4}0${seq}"
+			;;
+		"34107")
+			echo "TRTK27${week:2:4}0${seq}"
+			;;
+		"34108")
+			echo "TRTK28${week:2:4}0${seq}"
+			;;
+		"34109")
+			echo "TRTK29${week:2:4}0${seq}"
+			;;
+		"34110")
+			echo "TRTK40${week:2:4}0${seq}"
+			;;
+		"34111")
+			echo "TRTK41${week:2:4}0${seq}"
 			;;
 		*)
 			echo "$spsn"
@@ -95,6 +128,42 @@ product_sn_decode() {
 			;;
 		"TRTK02")
 			echo "2-32107-00${week}-${seq:1:5}"
+			;;
+		"TRTK20")
+			echo "2-34100-00${week}-${seq:1:5}"
+			;;
+		"TRTK21")
+			echo "2-34101-00${week}-${seq:1:5}"
+			;;
+		"TRTK22")
+			echo "2-34102-00${week}-${seq:1:5}"
+			;;
+		"TRTK23")
+			echo "2-34103-00${week}-${seq:1:5}"
+			;;
+		"TRTK24")
+			echo "2-34104-00${week}-${seq:1:5}"
+			;;
+		"TRTK25")
+			echo "2-34105-00${week}-${seq:1:5}"
+			;;
+		"TRTK26")
+			echo "2-34106-00${week}-${seq:1:5}"
+			;;
+		"TRTK27")
+			echo "2-34107-00${week}-${seq:1:5}"
+			;;
+		"TRTK28")
+			echo "2-34108-00${week}-${seq:1:5}"
+			;;
+		"TRTK29")
+			echo "2-34109-00${week}-${seq:1:5}"
+			;;
+		"TRTK40")
+			echo "2-34110-00${week}-${seq:1:5}"
+			;;
+		"TRTK41")
+			echo "2-34111-00${week}-${seq:1:5}"
 			;;
 		*)
 			echo "$psn"
