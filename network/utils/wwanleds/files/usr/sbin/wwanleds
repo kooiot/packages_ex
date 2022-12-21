@@ -158,17 +158,18 @@ local function repower_wwan_module(iface_name)
 
 	os.execute("ifdown "..iface_name)
 	if pcie_on_off then
-		echo_log(face_name..' module power off(soft)')
+		echo_log(iface_name..' module power off(soft)')
 		os.execute("echo 0 > "..pcie_on_off_path)
 		nixio.nanosleep(3) -- 3 seconds
 	end
 	if pcie_power then
-		echo_log(face_name..' module power off')
+		echo_log(iface_name..' module power off')
 		os.execute("echo 0 > "..pcie_power_path)
 	end
 	os.execute("killall -9 uqmi")
 	nixio.nanosleep(1)
 	if pcie_on_off then
+		echo_log(iface_name..' module power on(soft)')
 		os.execute("echo 1 > "..pcie_on_off_path)
 	end
 	if pcie_power then
