@@ -3,7 +3,7 @@
 local nixio = require 'nixio'
 local fs = require 'nixio.fs'
 local json = require 'luci.jsonc'
-local ss = require 'signalstrength'
+-- local ss = require 'signalstrength'
 local util = require 'luci.util'
 
 local function exec(cmd)
@@ -125,22 +125,38 @@ end
 
 local function echo_log(log)
 	os.execute('logger -t wwwanleds "'..log..'"')
+	os.execute('echo "wwanleds: '..log..'" > /dev/kmsg')
 	os.execute('echo "'..os.date()..': '..log..'" >> /mnt/data/wwanleds.log')
 	os.execute('/usr/sbin/log_roll_by_count 1000 /mnt/data/wwanleds.log')
 	os.execute("sync")
+end
+
+local function echo_debug(log)
+	os.execute('echo "wwanleds: '..log..'" > /dev/kmsg')
 end
 
 local function reset_wwan_module(iface_name)
 	echo_log(iface_name..' reset module')
 	local pcie_reset_path = '/sys/class/gpio/pcie_reset/value'
 	local pcie_reset = fs.access(pcie_reset_path)
+	local pcie_on_off_path = '/sys/class/gpio/pcie_on_off/value'
+	local pcie_on_off = fs.access(pcie_on_off_path)
 
 	os.execute("ifdown "..iface_name)
+	if pcie_on_off then
+		echo_log(iface_name..' module reset on(soft)')
+		os.execute("echo 0 > "..pcie_on_off_path)
+		nixio.nanosleep(3) -- 3 seconds
+	end
 	if pcie_reset then
 		os.execute("echo 1 > "..pcie_reset_path)
 	end
 	os.execute("killall -9 uqmi")
 	nixio.nanosleep(1)
+	if pcie_on_off then
+		echo_log(iface_name..' module reset off(soft)')
+		os.execute("echo 1 > "..pcie_on_off_path)
+	end
 	if pcie_reset then
 		os.execute("echo 0 > "..pcie_reset_path)
 	end
@@ -154,7 +170,7 @@ local function repower_wwan_module(iface_name)
 	local pcie_power_path = '/sys/class/gpio/pcie_power/value'
 	local pcie_power = fs.access(pcie_power_path)
 	local pcie_on_off_path = '/sys/class/gpio/pcie_on_off/value'
-	local pcie_on_off = fs.access(pcie_power_path)
+	local pcie_on_off = fs.access(pcie_on_off_path)
 
 	os.execute("ifdown "..iface_name)
 	if pcie_on_off then
@@ -181,6 +197,27 @@ local function repower_wwan_module(iface_name)
 end
 
 local cloud_last = os.time()
+local wwan0_not_exits = true
+local wwan0_ip_last_got = os.time()
+local wwan0_reset_times = 0
+
+local function check_and_reset(iface_name, time_lost)
+	if time_lost >  (wwan0_reset_times * 120 + 300) then
+		if wwan0_reset_times < 3 then
+			--- Next check will be two minutes later
+			wwan0_reset_times = wwan0_reset_times + 1
+			cloud_last = os.time()
+			--- Reset wwan module
+			reset_wwan_module(iface_name)
+		else
+			--- already reset wwan module for three times and network still missing
+			wwan0_ip_last_got = os.time()
+			wwan0_reset_times = 0
+			cloud_last = os.time()
+			repower_wwan_module(iface_name)
+		end
+	end
+end
 
 local function watch_cloud_status(iface_name)
 	local now = os.time()
@@ -196,9 +233,9 @@ local function watch_cloud_status(iface_name)
 		online_check_disable = true
 	end
 
-	local str, err = exec('cat /tmp/sysinfo/cloud_status')
-	if not online_check_disable and str and string.len(str) > 0 then
-		local status, last = string.match(str, '(%d+)%c+(%d+)')
+	local sts_str, err = exec('cat /tmp/sysinfo/cloud_status')
+	if not online_check_disable and sts_str and string.len(sts_str) > 0 then
+		local status, last = string.match(sts_str, '(%d+)%c+(%d+)')
 		if status and last then
 			if tonumber(status) == 1 then
 				--- Use now when status is online (as the timestamp will be updated untill offline)
@@ -216,28 +253,29 @@ local function watch_cloud_status(iface_name)
 		cloud_last = now
 	end
 
-	if now - cloud_last > 600 then
-		local str, err = exec('cat /tmp/sysinfo/online_check')
-		if str and string.len(str) > 0 then
+	if now - cloud_last > 60 then
+		local chk_str, err = exec('cat /tmp/sysinfo/online_check')
+		if not chk_str or string.len(chk_str) <= 0 then
+			-- Ping check the cloud host by default, avoid device been disabled in cloud
+			chk_str, err = exec('cat /tmp/sysinfo/cloud')
+		end
+		local ping_host = string.match(chk_str or '', '^(%S+)')
+		if ping_host then
 			-- lua5.1
-			local r, err = os.execute('ping -c 1 '..str)
+			local r, err = os.execute('ping -c 1 '..ping_host)
+			echo_debug('PING '..ping_host..' return '..r)
 			if r == 0 then
 				cloud_last = now
+			else
+				echo_debug('PING failed. last:'..cloud_last..' now:'..now)
 			end
+		else
+			echo_debug('cannot find host from '..chk_str)
 		end
 	end
 
-	--- If 20 minutes that gateway not connected
-	if now - cloud_last > 1200 then
-		cloud_last = now
-		echo_log('Cloud status out of date (20 min)')
-		repower_wwan_module(iface_name)
-	end
+	check_and_reset(iface_name, now - cloud_last)
 end
-
-local wwan0_not_exits = true
-local wwan0_ip_last_got = os.time()
-local wwan0_reset_times = 0
 
 local function check_wwan_status(iface_name, l3_dev)
 	local wwan0_has_ip = false
@@ -261,13 +299,13 @@ local function check_wwan_status(iface_name, l3_dev)
 	end
 
 	-- Get the 3g-<iface> inteface and check whether has got IP or not
-	local iface = util.ubus('network.interface', 'status', {interface=iface_name})
-	if iface and iface.l3_device == '3g-'..iface_name then
-		local ipv4_addr = iface['ipv4-address']
+	local iface_3g = util.ubus('network.interface', 'status', {interface=iface_name})
+	if iface_3g and iface_3g.l3_device == '3g-'..iface_name then
+		local ipv4_addr = iface_3g['ipv4-address']
 		if ipv4_addr and #ipv4_addr > 0 then
 			wwan0_has_ip = true
 		end
-		local ipv6_addr = iface['ipv6-address']
+		local ipv6_addr = iface_3g['ipv6-address']
 		if ipv6_addr and #ipv6_addr > 0 then
 			wwan0_has_ip = true
 		end
@@ -278,7 +316,7 @@ local function check_wwan_status(iface_name, l3_dev)
 		wwan0_not_exits = false
 		wwan0_ip_last_got = os.time()
 	end
-	
+
 	--- If 4G got ip connected, then return
 	if wwan0_has_ip then
 		--os.execute('echo "4G wan IP is ok!!!!" >> /dev/console')
@@ -293,22 +331,7 @@ local function check_wwan_status(iface_name, l3_dev)
 
 	--os.execute('echo "4G wan IP missing" >> /dev/console')
 
-	--- Three minutes ip lost
-	if (os.time() - wwan0_ip_last_got) >  (wwan0_reset_times * 120 + 300) then
-		if wwan0_reset_times < 3 then
-			--- Next check will be two minutes later
-			wwan0_reset_times = wwan0_reset_times + 1
-			cloud_last = os.time()
-			--- Reset wwan module
-			reset_wwan_module(iface_name)
-		else
-			--- already reset wwan module for three times and network still missing
-			wwan0_ip_last_got = os.time()
-			wwan0_reset_times = 0
-			cloud_last = os.time()
-			repower_wwan_module(iface_name)
-		end
-	end
+	check_and_reset(iface_name, os.time() - wwan0_ip_last_got)
 
 	--[[
 	if false then
@@ -330,10 +353,10 @@ local function watch_wwan_status()
 		return check_wwan_status('4g_wan', 'wwan0')
 	end
 
-	local wan_iface = util.ubus('network.interface', 'status', {interface='5g_wan'})
-	if wan_iface then
+	local wan_iface_5g = util.ubus('network.interface', 'status', {interface='5g_wan'})
+	if wan_iface_5g then
 		--- If 5g_wan iface is disabled
-		if (not wan_iface.autostart and not wan_iface.errors) then
+		if (not wan_iface_5g.autostart and not wan_iface_5g.errors) then
 			wwan0_not_exits = true
 			return
 		end
@@ -348,7 +371,7 @@ echo_log('Start wwanleds services...')
 while true do
 	local info, info_str = exec_json('3ginfo json')
 	info_export(info_str)
-	led_control(info)	
+	led_control(info)
 	if info.ccid and string.len(info.ccid) > 0 then
 		watch_wwan_status()
 	end
