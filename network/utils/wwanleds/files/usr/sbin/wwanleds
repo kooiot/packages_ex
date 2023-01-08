@@ -370,10 +370,19 @@ echo_log('Start wwanleds services...')
 
 while true do
 	local info, info_str = exec_json('3ginfo json')
-	info_export(info_str)
-	led_control(info)
-	if info.ccid and string.len(info.ccid) > 0 then
-		watch_wwan_status()
+	if info then
+		info_export(info_str)
+		led_control(info)
+		if info.ccid and string.len(info.ccid) > 0 then
+			watch_wwan_status()
+		end
+		--- sleep for 15 seconds
+		nixio.nanosleep(15)
+	else
+		echo_log('3ginfo failed, error:'..info_str)
+		-- clear the 3ginfo file
+		info_export('{}')
+		--- keep call 3ginfo after one second
+		nixio.nanosleep(1)
 	end
-	nixio.nanosleep(15)
 end
