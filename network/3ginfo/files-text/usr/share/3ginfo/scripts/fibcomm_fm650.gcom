@@ -11,63 +11,60 @@ opengt
  let $r="+CSQ"
  gosub readatcmd
 
- let $c="ATE1; +CGMI^m"
- gosub readatcmdnr
- let $v=$s
- print "\n+CGMI: ",$s
-
  let $c="AT+CCID^m"
  let $r="+CCID"
  gosub readatcmd
 
- let $c="AT+SGCELLINFOEX^m"
- let $r="+SGCELLINFOEX"
+ let $c="AT+CGSN^m"
+ gosub readatcmdnr
+ print "\n+CGSN: ",$s
+
+ let $c="AT+CGMI^m"
+ gosub readatcmdnr
+ let $v=$s
+ print "\n+CGMI: ",$s
+
+ let $c="AT+GTCCINFO?^m"
+ let $r="NR service cell"
+ gosub getresult
+ print "\n+GTCCINFO: ",$s
+
+ let $c="AT+PSRAT^m"
+ let $r="+PSRAT"
  gosub readatcmd
 
- let $c="AT\^SYSINFOEX^m"
- let $r="\^SYSINFOEX"
+ let $c="AT+GTACT?^m"
+ let $r="+GTACT"
  gosub readatcmd
 
- let $c="AT\^CSNR?^m"
- let $r="\^CSNR"
+ let $c="AT+CESQ^m"
+ let $r="+CESQ"
  gosub readatcmd
 
- let $c="AT\^LTERSRP?^m"
- let $r="\^LTERSRP"
- gosub readatcmd
-
- let $c="AT\^HCSQ?^m"
- let $r="\^HCSQ"
- gosub readatcmd
-
- let $c="AT\^SYSINFO^m"
- let $r="\^SYSINFO"
- gosub readatcmd
-
- let $c="AT+COPS=3,2;+COPS?^m"
+ let $c="AT+COPS=3,2;AT+COPS?^m"
  let $r="+COPS"
  gosub readatcmd
 
- let $c="AT+CREG=2;+CREG?^m"
+ let $c="AT+CREG=2;AT+CREG?^m"
  let $r="+CREG"
  gosub readatcmd
 
- let $c="AT+CGREG=2;+CGREG?^m"
+ let $c="AT+CGREG=2;AT+CGREG?^m"
  let $r="+CGREG"
  gosub readatcmd
 
- let $c="AT+CEREG=2;+CEREG?^m"
+ let $c="AT+CEREG=2;AT+CEREG?^m"
  let $r="+CEREG"
  gosub readatcmd
 
- let $c="AT+CGEQNEG=1^m"
- let $r="+CGEQNEG"
+ let $c="AT+C5GREG=2;AT+C5GREG?^m"
+ let $r="+C5GREG"
  gosub readatcmd
 
- let $c="ATE1; +CGMM^m"
+ let $c="ATE1; AT+CGMM?^m"
  let $r="+CGMM"
  gosub readatcmd
- print "\nDEVICE: MEIG ",$mid($s, 8, 32),"\n"
+ print "\nDEVICE: FIBCOMM ",$mid($s, 9, 8),"\n"
 
  exit 0
 
@@ -106,6 +103,27 @@ opengt
  let l=len($s)
  let $s=$mid($s,1,l)
  return
+
+:getresult
+ let t=time()+15
+ send $c
+:loop7
+ get 0.1 "^m" $s
+ let l=len($r)
+ if len($s) < l goto loop7
+ if $mid($s,1,l) <> $r goto loop7
+ let $s=""
+:loop6
+ get 0.1 "^m" $z
+ let x=len($z)
+ if x<2 return
+ else let $s=$s+$mid($z,1,x)
+ if $z="^jOK" return
+ if $mid($z,0,6)="^jERROR" return
+ if $mid($z,0,8)="^jCOMMAND" return
+ if $mid($z,0,11)="^j+CME ERROR" return
+ if time()>t return
+ goto loop6
 
 :loop4
  let $s=""

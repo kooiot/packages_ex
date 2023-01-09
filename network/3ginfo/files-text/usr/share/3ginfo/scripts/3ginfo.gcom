@@ -14,6 +14,7 @@ opengt
  let $c="ATE1; +CGMI^m"
  gosub readatcmdnr
  let $v=$s
+ print "\n+CGMI: ",$s
 
  let $c="AT+CGSN^m"
  gosub readatcmdnr

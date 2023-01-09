@@ -151,6 +151,9 @@ else
 		"2dee:4d52")
 			O=$(gcom -d $DEVICE -s $RES/scripts/meig_srm811.gcom 2>/dev/null)
 			;;
+		"2cb7:0a05")
+			O=$(gcom -d $DEVICE -s $RES/scripts/fibcomm_fm650.gcom 2>/dev/null)
+			;;
 		*)
 			O=$(gcom -d $DEVICE -s $RES/scripts/3ginfo.gcom 2>/dev/null)
 			;;
@@ -434,7 +437,8 @@ if [ "x$CGMI" = "xMEIG" ]; then
 
 	# Using 5G RSRP/RSRQ/SINR
 	WORK_MODE=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $4}' | sed 's/"//g')
-	CGMI="$WORK_MODE"
+	# CGMI="$WORK_MODE"
+	MODE="$WORK_MODE"
 	if [ "x$WORK_MODE" = "xNR5G" ]; then
 		NR5G_RSRQ=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $9}')
 		NR5G_RSRP=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $10}')
@@ -445,6 +449,39 @@ if [ "x$CGMI" = "xMEIG" ]; then
 			NR5G_RSRP=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $6}')
 			NR5G_SNR=$(echo "$O" | awk -F[,:] '/^\^HCSQ:/ {print $7}')
 		fi
+
+		RSRQ=$(awk 'BEGIN {print -43.5 + '$NR5G_RSRQ'/2}')
+		RSRP=$(awk 'BEGIN {print -157 + '$NR5G_RSRP'}')
+		SINR=$(awk 'BEGIN {print -23.5 + '$NR5G_SNR'/2}')
+
+		# If CSQ is invalid then using RSRP
+		if [ "x$CSQ" = "x-" ]; then
+			if [ $NR5G_RSRP -le 126 -a $NR5G_RSRP -ge 0 ]; then
+				CSQ=$(($NR5G_RSRP * 32/128))
+				CSQ=`awk -v a=$CSQ 'BEGIN {print(int(a)==(a))?int(a):int(a)+1}'`
+				CSQ_PER=$(($CSQ * 100/31))
+				CSQ_COL="red"
+				[ $CSQ -ge 10 ] && CSQ_COL="orange"
+				[ $CSQ -ge 15 ] && CSQ_COL="yellow"
+				[ $CSQ -ge 20 ] && CSQ_COL="green"
+				CSQ_RSSI=$((2 * CSQ - 113))
+			fi
+		fi
+	fi
+fi
+if [ "x$CGMI" = "xFibocom" ]; then
+	# Fixed CPSI
+	if [ "x$CPSI" = "x" ]; then
+		CPSI=$(echo "$O" | awk -F[:\ ] '/^\+GTCCINFO/ {print $3}')
+	fi
+
+	# Using RSRP/RSRQ/SINR
+	WORK_MODE=$(echo "$O" | awk -F[,\ ] '/^\+PSRAT/ {print $2}')
+	MODE="$WORK_MODE"
+	if [ "x$WORK_MODE" = "xNR5G" ]; then
+		NR5G_RSRQ=$(echo "$O" | awk -F[,:\ ] '/^\+CESQ/ {print $9}')
+		NR5G_RSRP=$(echo "$O" | awk -F[,:\ ] '/^\+CESQ/ {print $10}')
+		NR5G_SNR=$(echo "$O" | awk -F[,:\ ] '/^\+CESQ/ {print $11}')
 
 		RSRQ=$(awk 'BEGIN {print -43.5 + '$NR5G_RSRQ'/2}')
 		RSRP=$(awk 'BEGIN {print -157 + '$NR5G_RSRP'}')
@@ -620,7 +657,7 @@ if [ "x"$(uci -q get 3ginfo.@3ginfo[0].connect_button) = "x0" ]; then
 fi
 
 # Informacja o urzadzeniu
-DEVICE=$(echo "$O" | awk -F[:] '/DEVICE/ { print $2}')
+DEVICE=$(echo "$O" | awk -F[:\ ] '/DEVICE/ { print $2}')
 if [ "x$DEVICE" = "x" ]; then
 	DEVICE="-"
 fi
