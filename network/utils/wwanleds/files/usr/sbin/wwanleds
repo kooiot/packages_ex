@@ -382,6 +382,7 @@ while true do
 		echo_log('3ginfo failed, error:'..info_str)
 		-- clear the 3ginfo file
 		info_export('{}')
+		led_control({})
 		--- keep call 3ginfo after one second
 		nixio.nanosleep(1)
 	end
