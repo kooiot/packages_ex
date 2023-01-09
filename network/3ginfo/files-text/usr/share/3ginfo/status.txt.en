@@ -7,6 +7,7 @@ Signal strength: {CSQ_PER}%
 Device: {DEVICE}
 IMEI: {CCID}
 SIM: {CGSN}
+CPSI: {CPSI}
 MCC MNC: {COPS_MCC} {COPS_MNC}
 LAC: {LAC} ({LAC_NUM})
 CID: {CID} ({CID_NUM})

@@ -381,7 +381,7 @@ if [ "x$ECIx" != "x" ]; then
 fi
 
 RSCx=$(echo "$O" | awk -F[,\ ] '/^\+ZRSSI:/ {print $4}')
-	if [ "x$RSCx" != "x" ]; then
+if [ "x$RSCx" != "x" ]; then
 		RSCP=`expr $RSCx / 2`
 		RSCP="-"$RSCP
 fi
