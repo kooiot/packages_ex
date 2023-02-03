@@ -110,6 +110,7 @@ opengt
 :loop7
  get 0.1 "^m" $s
  let l=len($r)
+ if time()>t return
  if len($s) < l goto loop7
  if $mid($s,1,l) <> $r goto loop7
  let $s=""
