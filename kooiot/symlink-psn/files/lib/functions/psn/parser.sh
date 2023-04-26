@@ -88,6 +88,21 @@ product_sn_encode() {
 		"34111")
 			echo "TRTK41${week:2:4}0${seq}"
 			;;
+		"35100")
+			echo "TRTR40${week:2:4}0${seq}"
+			;;
+		"35101")
+			echo "TRTR41${week:2:4}0${seq}"
+			;;
+		"35200")
+			echo "TRTR42${week:2:4}0${seq}"
+			;;
+		"35201")
+			echo "TRTR43${week:2:4}0${seq}"
+			;;
+		"35300")
+			echo "TRTR70${week:2:4}0${seq}"
+			;;
 		*)
 			echo "$spsn"
 			;;
@@ -164,6 +179,21 @@ product_sn_decode() {
 			;;
 		"TRTK41")
 			echo "2-34111-00${week}-${seq:1:5}"
+			;;
+		"TRTK40")
+			echo "2-35100-00${week}-${seq:1:5}"
+			;;
+		"TRTK41")
+			echo "2-35101-00${week}-${seq:1:5}"
+			;;
+		"TRTK42")
+			echo "2-35200-00${week}-${seq:1:5}"
+			;;
+		"TRTK43")
+			echo "2-35201-00${week}-${seq:1:5}"
+			;;
+		"TRTK70")
+			echo "2-35300-00${week}-${seq:1:5}"
 			;;
 		*)
 			echo "$psn"
