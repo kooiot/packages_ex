@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=skynet
-PKG_VERSION:=2372
+PKG_VERSION:=2389
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
@@ -24,62 +24,11 @@ else
 SKYNET_VER_NUM=$(subst -SNAPSHOT,,$(VERSION_NUMBER))
 endif
 
-# ifeq ($(VERSION_NUMBER),19.07.7)
-### Fixed the version number for 19.07.7
-# SKYNET_VER_NUM=19.07
-# endif
-
-ifeq ($(PKG_ARCH),arm_cortex-a9_neon)
-ifeq ($(SKYNET_VER_NUM),17.01)
-SKYNET_MD5SUM:=be5c8db7eb9461651544cdf9af5771a5
-endif
-ifeq ($(SKYNET_VER_NUM),19.07)
-SKYNET_MD5SUM:=1896a80a02c10fb462c6bd58fb97921b
-endif
-endif
-
-ifeq ($(PKG_ARCH),x86_64)
-ifeq ($(SKYNET_VER_NUM),19.07)
-SKYNET_MD5SUM=0cb8a2b6987f14b58d68770ad8a2f016
-endif
-endif
-
-ifeq ($(PKG_ARCH),aarch64_cortex-a53)
-ifeq ($(SKYNET_VER_NUM),snapshot)
-SKYNET_MD5SUM=f51fb4937f0da15f15fe13820f75cd66
-endif
-endif
-
-ifeq ($(PKG_ARCH),aarch64_cortex-a72)
-SKYNET_MD5SUM=342c690b742cf9fb0cd5d79eefa1b66d
-endif
-
-ifeq ($(PKG_ARCH),mipsel_24kc)
-ifeq ($(SKYNET_VER_NUM),snapshot)
-SKYNET_MD5SUM=4c1d59481df50a5238106ac130ba4f3d
-endif
-endif
-
-ifeq ($(PKG_ARCH),arm_cortex-a7_neon-vfpv4)
-ifeq ($(SKYNET_VER_NUM),19.07)
-SKYNET_MD5SUM=c27269e51510ada0d8feae5b8c6f0bd7
-endif
-ifeq ($(SKYNET_VER_NUM),21.02)
-SKYNET_MD5SUM=65e9b780ea3a1da07c702e8c80880e0f
-endif
-ifeq ($(SKYNET_VER_NUM),snapshot)
-SKYNET_MD5SUM=65e9b780ea3a1da07c702e8c80880e0f
-endif
-endif
-
-ifeq ($(PKG_ARCH),aarch64_generic)
-SKYNET_MD5SUM=528c38bed883bce791a97d3b0f476a0f
-endif
-
 ifeq ($(PKG_ARCH),arm_arm926ej-s)
 SKYNET_VER_NUM=22.03
-SKYNET_MD5SUM=bd9d4bbe53f5254d0d74024f2dce368b
 endif
+
+SKYNET_MD5SUM = $(strip $(shell cat ./MD5SUM | grep $(SKYNET_VER_NUM) | grep $(PKG_ARCH) | awk '{print $$1}'))
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_ARCH)-$(SKYNET_VER_NUM)-$(PKG_VERSION).tar.gz
 

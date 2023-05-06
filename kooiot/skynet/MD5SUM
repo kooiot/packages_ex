@@ -1,0 +1,13 @@
+a059ca088da27939562d78d92044bedb 21.02 arm_cortex-a7_neon-vfpv4
+f31f15d9471475323206ae61c21ee84a snapshot arm_cortex-a7_neon-vfpv4
+7e94f53e44fec4b5ab3c2de8eebba170 snapshot mipsel_24kc
+6a95c36268c9c571bedae0b0ab259726 22.03 arm_arm926ej-s
+7fc68f954a3f0240a6ee1700526b2ba9 snapshot aarch64_generic
+45b0310c386f3b3025d122f508b054c6 17.01 arm_cortex-a9_neon
+5fd221f247a846a543dcf18ff29ce1cd x86_64 
+447cdd7f8837e614c827745a472450e9 21.02 mipsel_24kc
+5b0c7e72ef2bd46c0d5dc9cafbc99db8 22.03 aarch64_generic
+54549f3a9f766398a287cebdfe826e7b 19.07 arm_cortex-a7_neon-vfpv4
+12f98dff03906203556f336f024c8e14 19.07 x86_64
+75613a5bff9744f9596d289c52d45c8e 19.07 arm_cortex-a9_neon
+6b0af4c9c132e82fb85241589eae988b 21.02 aarch64_cortex-a72
