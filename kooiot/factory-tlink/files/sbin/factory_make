@@ -37,6 +37,37 @@ tlink_make_pre() {
 	ifconfig eth1 up
 }
 
+tlink_mkfs_storage() {
+	STORAGE_DISK="/dev/sda"
+	if [ -b ${STORAGE_DISK} ]; then
+		echo "Creating Storage Disk partitions" > /dev/kmsg
+		echo "Creating Storage Disk partitions" > /tmp/tlink_make.log
+
+		echo -e "n\np\n3\n2048\n\nw" | fdisk ${STORAGE_DISK} > /dev/null 2>&1
+		sync
+		sleep 2
+		partx -s ${STORAGE_DISK} > /dev/null 2>&1
+		if [ $? -ne 0 ]; then
+			echo "ERROR: Failed to create storage disk partition" > /dev/kmsg
+			echo "ERROR: Failed to create storage disk partition" > /tmp/tlink_make.log
+			exit 1
+		fi
+		sleep 1
+		if [ ! -b ${STORAGE_DISK}1 ]; then
+			echo "ERROR: Failed to find storage disk partition" > /dev/kmsg
+			echo "ERROR: Failed to find storage disk partition" > /tmp/tlink_make.log
+			exit 1
+		fi
+
+		mkfs.ext4 -L storage ${STORAGE_DISK}1 > /dev/null 2>&1
+		if [ $? -ne 0 ]; then
+			echo "ERROR: Failed to formate storage disk partition" > /dev/kmsg
+			echo "ERROR: Failed to formate storage disk partition" > /tmp/tlink_make.log
+			exit 1
+		fi
+	fi
+}
+
 tlink_make() {
 	echo "Starting to doing factory make for board: $1" > /dev/kmsg
 	echo "Starting to doing factory make for board: $1" > /tmp/tlink_make.log
@@ -84,12 +115,15 @@ case "$(board_name)" in
 "kooiot,tlink-k2x" | \
 "kooiot,tlink-m408" | \
 "kooiot,tlink-m416" | \
-"kooiot,tlink-r4x" | \
-"kooiot,tlink-r7" | \
 "kooiot,tlink-r1")
 	# tlink_make_pre ${board_name}
 	tlink_make ${board_name}
 	;;
+"kooiot,tlink-r4x" | \
+"kooiot,tlink-r1")
+	tlink_mkfs_storage
+	tlink_make ${board_name}
+	;;	
 *)
 	echo "UNKNOWN Board to do factory make!!!!" > /dev/kmsg
 	failure_show
