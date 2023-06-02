@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=factory-tlink
-PKG_VERSION:=2022-08-26
+PKG_VERSION:=2023-06-02
 PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
