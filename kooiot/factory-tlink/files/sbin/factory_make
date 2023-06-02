@@ -84,6 +84,8 @@ case "$(board_name)" in
 "kooiot,tlink-k2x" | \
 "kooiot,tlink-m408" | \
 "kooiot,tlink-m416" | \
+"kooiot,tlink-r4x" | \
+"kooiot,tlink-r7" | \
 "kooiot,tlink-r1")
 	# tlink_make_pre ${board_name}
 	tlink_make ${board_name}
