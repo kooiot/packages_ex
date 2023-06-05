@@ -180,19 +180,19 @@ product_sn_decode() {
 		"TRTK41")
 			echo "2-34111-00${week}-${seq:1:5}"
 			;;
-		"TRTK40")
+		"TRTR40")
 			echo "2-35100-00${week}-${seq:1:5}"
 			;;
-		"TRTK41")
+		"TRTR41")
 			echo "2-35101-00${week}-${seq:1:5}"
 			;;
-		"TRTK42")
+		"TRTR42")
 			echo "2-35200-00${week}-${seq:1:5}"
 			;;
-		"TRTK43")
+		"TRTR43")
 			echo "2-35201-00${week}-${seq:1:5}"
 			;;
-		"TRTK70")
+		"TRTR70")
 			echo "2-35300-00${week}-${seq:1:5}"
 			;;
 		*)
