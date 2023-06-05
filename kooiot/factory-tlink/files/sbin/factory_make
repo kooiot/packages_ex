@@ -38,10 +38,11 @@ tlink_make_pre() {
 }
 
 tlink_mkfs_storage() {
-	STORAGE_DISK="/dev/sda"
+	local BOARD_NAME=$1
+	local STORAGE_DISK="/dev/sda"
 	if [ -b ${STORAGE_DISK} ]; then
 		echo "Creating Storage Disk partitions" > /dev/kmsg
-		echo "Creating Storage Disk partitions" > /tmp/tlink_make.log
+		echo "Creating Storage Disk partitions" >> /tmp/tlink_make.log
 
 		echo -e "n\np\n3\n2048\n\nw" | fdisk ${STORAGE_DISK} > /dev/null 2>&1
 		sync
@@ -49,32 +50,36 @@ tlink_mkfs_storage() {
 		partx -s ${STORAGE_DISK} > /dev/null 2>&1
 		if [ $? -ne 0 ]; then
 			echo "ERROR: Failed to create storage disk partition" > /dev/kmsg
-			echo "ERROR: Failed to create storage disk partition" > /tmp/tlink_make.log
+			echo "ERROR: Failed to create storage disk partition" >> /tmp/tlink_make.log
 			exit 1
 		fi
 		sleep 1
 		if [ ! -b ${STORAGE_DISK}1 ]; then
 			echo "ERROR: Failed to find storage disk partition" > /dev/kmsg
-			echo "ERROR: Failed to find storage disk partition" > /tmp/tlink_make.log
+			echo "ERROR: Failed to find storage disk partition" >> /tmp/tlink_make.log
 			exit 1
 		fi
 
 		mkfs.ext4 -L storage ${STORAGE_DISK}1 > /dev/null 2>&1
 		if [ $? -ne 0 ]; then
 			echo "ERROR: Failed to formate storage disk partition" > /dev/kmsg
-			echo "ERROR: Failed to formate storage disk partition" > /tmp/tlink_make.log
+			echo "ERROR: Failed to formate storage disk partition" >> /tmp/tlink_make.log
 			exit 1
 		fi
+	else
+		echo "Board has no storage disk: ${BOARD_NAME}" > /dev/kmsg
+		echo "Board has no storage disk: ${BOARD_NAME}" >> /tmp/tlink_make.log
 	fi
 }
 
 tlink_make() {
-	echo "Starting to doing factory make for board: $1" > /dev/kmsg
-	echo "Starting to doing factory make for board: $1" > /tmp/tlink_make.log
+	local BOARD_NAME=$1
+	echo "Starting to doing factory make for board: ${BOARD_NAME}" > /dev/kmsg
+	echo "Starting to doing factory make for board: ${BOARD_NAME}" >> /tmp/tlink_make.log
 
 	install_show
 
-	/sbin/install_to_emmc -f
+	/sbin/install_to_emmc -f > /dev/kmsg 2>&1
 
 	if [ $? -ne 0 ]; then
 		echo "INSTALL FAILED!!!" > /dev/kmsg
@@ -117,12 +122,12 @@ case "$(board_name)" in
 "kooiot,tlink-m416" | \
 "kooiot,tlink-r1")
 	# tlink_make_pre ${board_name}
-	tlink_make ${board_name}
+	tlink_make $(board_name)
 	;;
 "kooiot,tlink-r4x" | \
 "kooiot,tlink-r1")
-	tlink_mkfs_storage
-	tlink_make ${board_name}
+	tlink_make $(board_name)
+	tlink_mkfs_storage $(board_name)
 	;;	
 *)
 	echo "UNKNOWN Board to do factory make!!!!" > /dev/kmsg
