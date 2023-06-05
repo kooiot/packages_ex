@@ -126,8 +126,8 @@ case "$(board_name)" in
 	;;
 "kooiot,tlink-r4x" | \
 "kooiot,tlink-r1")
-	tlink_make $(board_name)
 	tlink_mkfs_storage $(board_name)
+	tlink_make $(board_name)
 	;;	
 *)
 	echo "UNKNOWN Board to do factory make!!!!" > /dev/kmsg
