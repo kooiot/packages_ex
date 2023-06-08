@@ -44,7 +44,7 @@ tlink_mkfs_storage() {
 		echo "Creating Storage Disk partitions" > /dev/kmsg
 		echo "Creating Storage Disk partitions" >> /tmp/tlink_make.log
 
-		echo -e "n\np\n3\n2048\n\nw" | fdisk ${STORAGE_DISK} > /dev/null 2>&1
+		echo -e "n\np\n1\n2048\n\nw" | fdisk ${STORAGE_DISK} > /dev/null 2>&1
 		sync
 		sleep 2
 		partx -s ${STORAGE_DISK} > /dev/null 2>&1
