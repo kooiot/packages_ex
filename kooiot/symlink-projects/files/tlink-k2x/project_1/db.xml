@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="GBK"?> 
+<root binver="22" appver="260000" ver="26" GapUpdateOff="0" stn="" dbimgflg="0" runmode="0" etagsct="1000" maxvpign="0" iows="0" ioidle="10" iotcp_maxtry="256" exdbprd="3" prdrr="15" tmot="60" qsw_flg="0" qsw_chkp="60" qsw_nidx="0" qsw_ping="114.114.114.114" ysl_sln="0" ysl_tcpaddr="symgrid.com" ysl_tcpport="5190" ysl_dsch="" ysl_torst="30" els_flg="2048" yemb_valid="1" yemb_ipaddr="symgrid.com" yemb_ipport="5191" yemb_bind="" gbrgto_vd="0" gbrgto_nmid="" gbrgto_log="0" gbrgto_lnktype="0" gbrgto_ipaddr="" gbrgto_ipport="9000" gbrgto_flg="0" gbrgto_dbfmt="1" gbrgto_maxasdu="1024" gbrgto_rtspan="0" ctx_valid="0" ctx_addr="" ctx_hours="168" ctx_filecount="256" ctx_filesz="1024" perf1="0" evtfmt="0">
+<etag_lst>
+<tag tid="10" name="AlertL0" desc="0级告警输入数量" vvt="1" isemb="1"/>
+<tag tid="10" name="AlertL1" desc="1级告警输入数量" vvt="1" isemb="1"/>
+<tag tid="10" name="AlertL2" desc="2级告警输入数量" vvt="1" isemb="1"/>
+<tag tid="10" name="AlertL3x" desc="3级以上告警输入数量" vvt="1" isemb="1"/>
+<tag tid="10" name="AlmAIL1CTR" desc="模拟量一级报警计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="AlmAIL2CTR" desc="模拟量二级报警计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="AlmDICTR" desc="数字量报警计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="AlmXHCTR" desc="信号量报警计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="CpuScanCnt" desc="内核计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="CalRPFIDCnt" desc="RapidFID计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="CalFSDCnt" desc="FSD计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="CalFSBCnt" desc="FSB计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="CalSOECnt" desc="SOE计数器" vvt="1" isemb="1"/>
+<tag tid="10" name="RMClientCnt" desc="在线客户端数量" vvt="1" isemb="1"/>
+<tag tid="10" name="DeviceSN" desc="设备序列号" vvt="3" isemb="1"/>
+<tag tid="10" name="DbFileMD5" desc="数据库文件MD5" vvt="3" isemb="1"/>
+<tag tid="10" name="CpuLoad" desc="CPU使用率" vvt="2" isemb="1"/>
+<tag tid="10" name="CpuTemp" desc="CPU温度" vvt="2" isemb="1"/>
+<tag tid="10" name="DbImageSaveTrig" desc="镜像保存数据" vvt="1" isemb="1"/>
+<tag tid="10" name="SysUptime" desc="开机时间(秒)" vvt="1" isemb="1"/>
+<tag tid="10" name="KnUptime" desc="本次运行时间(秒)" vvt="1" isemb="1"/>
+<tag tid="10" name="BoxTimer" desc="时钟(Unix秒数)" vvt="1" isemb="1"/>
+<tag tid="10" name="Year" desc="年" vvt="1" isemb="1"/>
+<tag tid="10" name="Month" desc="月" vvt="1" isemb="1"/>
+<tag tid="10" name="Day" desc="日" vvt="1" isemb="1"/>
+<tag tid="10" name="Hour" desc="时" vvt="1" isemb="1"/>
+<tag tid="10" name="Minute" desc="分" vvt="1" isemb="1"/>
+<tag tid="10" name="Second" desc="秒" vvt="1" isemb="1"/>
+<tag tid="10" name="SysTotalRam" desc="系统内存总量" vvt="1" isemb="1"/>
+<tag tid="10" name="SysFreeRam" desc="系统剩余内存" vvt="1" isemb="1"/>
+<tag tid="10" name="SDCardFree" desc="SD卡剩余容量KB" vvt="1" isemb="1"/>
+<tag tid="10" name="CacheFree" desc="断缓剩余容量MB" vvt="2" isemb="1"/>
+<tag tid="10" name="SWRModule" desc="SWR状态通道" vvt="1" isemb="1"/>
+<tag tid="10" name="Config" desc="远程配置接口" vvt="4" isemb="1"/>
+<tag tid="10" name="LicInfo" desc="设备授权信息" vvt="3" isemb="1"/>
+<tag tid="10" name="LisDecode" desc="授权解码通道" vvt="3" isemb="1"/>
+<tag tid="10" name="pcid" desc="设备标识" vvt="3" isemb="1"/>
+<tag tid="10" name="RDDForbid" desc="热备冗余停运" vvt="1" isemb="1"/>
+<tag tid="10" name="RDDMode" desc="运行模式" vvt="1" isemb="1"/>
+<tag tid="10" name="AutoNet" desc="有线无线自动链路" vvt="1" isemb="1"/>
+<tag tid="10" name="BSPos" desc="基站定位" vvt="3" isemb="1"/>
+<tag tid="10" name="CSQ" desc="无线信号强度" vvt="2" isemb="1"/>
+<tag tid="10" name="IMEI" desc="无线串号" vvt="3" isemb="1"/>
+<tag tid="10" name="CCID" desc="SIM卡串号" vvt="3" isemb="1"/>
+<tag tid="10" name="WiFlowUp" desc="月无线流量(KB)上行" vvt="2" isemb="1"/>
+<tag tid="10" name="WiFlowDown" desc="月无线流量(KB)下行" vvt="2" isemb="1"/>
+<tag tid="10" name="WiFlowTotal" desc="月无线流量(KB)总" vvt="2" isemb="1"/>
+</etag_lst>
+<gapcfg mode="0" protfilter="0">
+<tcp/>
+</gapcfg>
+<tspch_lst/>
+<db>
+<channel name="Can0" desc="" kndsub="0" disable="0" fsubport="0" pspan="30" packtimeout="3000" linktimeout="180" faultcheck="0" faultcyc="30" faultsln="0" pt_rdd_sprt="0" pt_expar="0">
+<port_main typeid="7" pl_port="0" pl_baud="250" pl_par1="" pl_par2="" pl_fid="" pl_fmask=""/>
+<port_rdd typeid="1" s_port="1" s_baudrate="9600" s_datebit="8" s_parity="0" s_stopbit="0" s_ctrl="0"/>
+<protocal cate="旋思科技" fact="旋思科技" folder="XS_PRD_TEST"/>
+<ied name="B1" desc="" disable="0" flg="0" addr="1" scanperiod="0" ct="1.0000" ctv="" pt="1.0000" ptv="" packtimeout="3000" trycount="0" ftcheck="0" tryfail="5" fttimeout="300" ftsln="0" ftdeal="0" ftvs="" ftcyc="600">
+<protocal type_name="NULL" type_id="0" type_flag1="0" type_flag2="">
+<par name="WorkMode" val="问答主站"/>
+<par name="RecvConti" val="0"/>
+</protocal>
+<tag_list>
+<tag tid="1" name="PackSize" desc="发送包大小" rw="2" period="1000" n0="0" n1="0"/>
+<tag tid="1" name="PackPeriod" desc="发送周期-毫秒" rw="2" period="1000" n0="0" n1="1"/>
+<tag tid="1" name="PackLostCT" desc="丢包计数器" period="1000" n0="0" n1="10"/>
+<tag tid="1" name="PackSendCT" desc="发包计数器" period="1000" n0="0" n1="11"/>
+<tag tid="1" name="PackRecvCT" desc="收包计数器" period="1000" n0="0" n1="12"/>
+<tag tid="1" name="PackRecvDustBytes" desc="接收干扰字节数" period="1000" n0="0" n1="13"/>
+</tag_list>
+</ied>
+</channel>
+<channel name="C1" desc="" kndsub="0" disable="0" fsubport="0" pspan="30" packtimeout="3000" linktimeout="180" faultcheck="0" faultcyc="30" faultsln="0" pt_rdd_sprt="0" pt_expar="0">
+<port_main typeid="1" s_port="1" s_baudrate="9600" s_datebit="8" s_parity="0" s_stopbit="0" s_ctrl="0"/>
+<port_rdd typeid="1" s_port="1" s_baudrate="9600" s_datebit="8" s_parity="0" s_stopbit="0" s_ctrl="0"/>
+<protocal cate="旋思科技" fact="旋思科技" folder="XS_PRD_TEST"/>
+<ied name="B1" desc="" disable="0" flg="0" addr="1" scanperiod="0" ct="1.0000" ctv="" pt="1.0000" ptv="" packtimeout="3000" trycount="0" ftcheck="0" tryfail="5" fttimeout="300" ftsln="0" ftdeal="0" ftvs="" ftcyc="600">
+<protocal type_name="NULL" type_id="0" type_flag1="0" type_flag2="">
+<par name="WorkMode" val="问答主站"/>
+<par name="RecvConti" val="0"/>
+</protocal>
+<tag_list>
+<tag tid="1" name="PackSize" desc="发送包大小" rw="2" period="1000" n0="0" n1="0"/>
+<tag tid="1" name="PackPeriod" desc="发送周期-毫秒" rw="2" period="1000" n0="0" n1="1"/>
+<tag tid="1" name="PackLostCT" desc="丢包计数器" period="1000" n0="0" n1="10"/>
+<tag tid="1" name="PackSendCT" desc="发包计数器" period="1000" n0="0" n1="11"/>
+<tag tid="1" name="PackRecvCT" desc="收包计数器" period="1000" n0="0" n1="12"/>
+<tag tid="1" name="PackRecvDustBytes" desc="接收干扰字节数" period="1000" n0="0" n1="13"/>
+</tag_list>
+</ied>
+</channel>
+<channel name="C2" desc="" kndsub="0" disable="0" fsubport="0" pspan="30" packtimeout="3000" linktimeout="180" faultcheck="0" faultcyc="30" faultsln="0" pt_rdd_sprt="0" pt_expar="0">
+<port_main typeid="1" s_port="2" s_baudrate="9600" s_datebit="8" s_parity="0" s_stopbit="0" s_ctrl="0"/>
+<port_rdd typeid="1" s_port="1" s_baudrate="9600" s_datebit="8" s_parity="0" s_stopbit="0" s_ctrl="0"/>
+<protocal cate="旋思科技" fact="旋思科技" folder="XS_PRD_TEST"/>
+<ied name="B1" desc="" disable="0" flg="0" addr="1" scanperiod="0" ct="1.0000" ctv="" pt="1.0000" ptv="" packtimeout="3000" trycount="0" ftcheck="0" tryfail="5" fttimeout="300" ftsln="0" ftdeal="0" ftvs="" ftcyc="600">
+<protocal type_name="NULL" type_id="0" type_flag1="0" type_flag2="">
+<par name="WorkMode" val="问答从站"/>
+<par name="RecvConti" val="0"/>
+</protocal>
+<tag_list>
+<tag tid="1" name="PackSize" desc="发送包大小" rw="2" period="1000" n0="0" n1="0"/>
+<tag tid="1" name="PackPeriod" desc="发送周期-毫秒" rw="2" period="1000" n0="0" n1="1"/>
+<tag tid="1" name="PackLostCT" desc="丢包计数器" period="1000" n0="0" n1="10"/>
+<tag tid="1" name="PackSendCT" desc="发包计数器" period="1000" n0="0" n1="11"/>
+<tag tid="1" name="PackRecvCT" desc="收包计数器" period="1000" n0="0" n1="12"/>
+</tag_list>
+</ied>
+</channel>
+<channel name="C3" desc="" kndsub="0" disable="0" fsubport="0" pspan="30" packtimeout="3000" linktimeout="180" faultcheck="0" faultcyc="30" faultsln="0" pt_rdd_sprt="0" pt_expar="0">
+<port_main typeid="1" s_port="3" s_baudrate="9600" s_datebit="8" s_parity="0" s_stopbit="0" s_ctrl="0"/>
+<port_rdd typeid="1" s_port="1" s_baudrate="9600" s_datebit="8" s_parity="0" s_stopbit="0" s_ctrl="0"/>
+<protocal cate="旋思科技" fact="旋思科技" folder="XS_PRD_TEST"/>
+<ied name="B1" desc="" disable="0" flg="0" addr="1" scanperiod="0" ct="1.0000" ctv="" pt="1.0000" ptv="" packtimeout="3000" trycount="0" ftcheck="0" tryfail="5" fttimeout="300" ftsln="0" ftdeal="0" ftvs="" ftcyc="600">
+<protocal type_name="NULL" type_id="0" type_flag1="0" type_flag2="">
+<par name="WorkMode" val="问答主站"/>
+<par name="RecvConti" val="0"/>
+</protocal>
+<tag_list>
+<tag tid="1" name="PackSize" desc="发送包大小" rw="2" period="1000" n0="0" n1="0"/>
+<tag tid="1" name="PackPeriod" desc="发送周期-毫秒" rw="2" period="1000" n0="0" n1="1"/>
+<tag tid="1" name="PackLostCT" desc="丢包计数器" period="1000" n0="0" n1="10"/>
+<tag tid="1" name="PackSendCT" desc="发包计数器" period="1000" n0="0" n1="11"/>
+<tag tid="1" name="PackRecvCT" desc="收包计数器" period="1000" n0="0" n1="12"/>
+<tag tid="1" name="PackRecvDustBytes" desc="接收干扰字节数" period="1000" n0="0" n1="13"/>
+</tag_list>
+</ied>
+</channel>
+<channel name="C4" desc="" kndsub="0" disable="0" fsubport="0" pspan="30" packtimeout="3000" linktimeout="180" faultcheck="0" faultcyc="30" faultsln="0" pt_rdd_sprt="0" pt_expar="0">
+<port_main typeid="1" s_port="4" s_baudrate="9600" s_datebit="8" s_parity="0" s_stopbit="0" s_ctrl="0"/>
+<port_rdd typeid="1" s_port="1" s_baudrate="9600" s_datebit="8" s_parity="0" s_stopbit="0" s_ctrl="0"/>
+<protocal cate="旋思科技" fact="旋思科技" folder="XS_PRD_TEST"/>
+<ied name="B1" desc="" disable="0" flg="0" addr="1" scanperiod="0" ct="1.0000" ctv="" pt="1.0000" ptv="" packtimeout="3000" trycount="0" ftcheck="0" tryfail="5" fttimeout="300" ftsln="0" ftdeal="0" ftvs="" ftcyc="600">
+<protocal type_name="NULL" type_id="0" type_flag1="0" type_flag2="">
+<par name="WorkMode" val="问答从站"/>
+<par name="RecvConti" val="0"/>
+</protocal>
+<tag_list>
+<tag tid="1" name="PackSize" desc="发送包大小" rw="2" period="1000" n0="0" n1="0"/>
+<tag tid="1" name="PackPeriod" desc="发送周期-毫秒" rw="2" period="1000" n0="0" n1="1"/>
+<tag tid="1" name="PackLostCT" desc="丢包计数器" period="1000" n0="0" n1="10"/>
+<tag tid="1" name="PackSendCT" desc="发包计数器" period="1000" n0="0" n1="11"/>
+<tag tid="1" name="PackRecvCT" desc="收包计数器" period="1000" n0="0" n1="12"/>
+</tag_list>
+</ied>
+</channel>
+</db>
+<dstask name="ds" desc="转发服务" vd="1"/>
+<ytask name="y" desc="数据中心" vd="1"/>
+<deuser/>
+<aldb hsaveflg="0" libsz_delay="128" libsz_snd="256" libsz_his="512">
+<atag_mgr/>
+</aldb>
+<trigger>
+<altrig_mgr/>
+</trigger>
+<estlib>
+<elst/>
+</estlib>
+<stlib>
+<ilst/>
+</stlib>
+<cjlib>
+<jlst/>
+</cjlib>
+<eas_mgr/>
+<filecheck>
+<project simpleflag="1"/>
+</filecheck>
+</root>
