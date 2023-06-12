@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=symlink
-PKG_VERSION:=20230607
+PKG_VERSION:=20230612
 PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
@@ -24,11 +24,11 @@ SYMLINK_MD5SUM:=
 VERSION_NUMBER=17.01
 endif
 ifeq ($(PKG_ARCH),arm_cortex-a7_neon-vfpv4)
-SYMLINK_MD5SUM=249e3e63b8de837af1afaeef6357dc26
+SYMLINK_MD5SUM=beb2aff0e2ae012f69a47cdbf866aa2a
 VERSION_NUMBER=19.07
 endif
 ifeq ($(PKG_ARCH),aarch64_generic)
-SYMLINK_MD5SUM=51bbda505418ca389df1254f86eaef23
+SYMLINK_MD5SUM=5ceb0b848ffe94071a83eed80031090b
 VERSION_NUMBER=22.03
 endif
 
@@ -61,19 +61,6 @@ define Package/symlink/description
 	SymLink application is an IOT gateway solution
 endef
 
-define Package/symlink/config
-choice
-	prompt "Default project server domain"
-	default SYMLINK_PROJECT_NONE
-	config SYMLINK_PROJECT_NONE
-		bool "none"
-	config SYMLINK_PROJECT_SYMGRID
-		bool "symgrid.com"
-	config SYMLINK_PROJECT_SYMID_FL
-		bool "symid-fl.top"
-endchoice
-endef
-
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)/src
 	unzip -d $(PKG_BUILD_DIR)/src $(DL_DIR)/$(PKG_SOURCE)
@@ -86,18 +73,6 @@ define Build/Compile
 endef
 
 
-SYMLINK_RPOJECT_DIR:=none
-ifeq ($(CONFIG_SYMLINK_PROJECT_SYMGRID), y)
-SYMLINK_PROJECT_DIR:=symgrid.com
-CONFIGURE_ARGS += --symgrid_com
-else ifeq ($(CONFIG_SYMLINK_PROJECT_SYMID_FL), y)
-SYMLINK_PROJECT_DIR:=symid-fl.top
-CONFIGURE_ARGS += --symid_fl_top
-else
-SYMLINK_PROJECT_DIR:=none
-CONFIGURE_ARGS += --symgrid_none
-endif
-
 define Package/symlink/install
 	$(INSTALL_DIR) $(1)/mnt/sympad_pkg
 	$(CP) -rf $(PKG_BUILD_DIR)/src/sympad/* $(1)/mnt/sympad_pkg
@@ -107,11 +82,6 @@ define Package/symlink/install
 
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/symlink.init $(1)/etc/init.d/symlink
-
-	if [ -f ./files/$(SYMLINK_PROJECT_DIR)/db.xml ]; then \
-		$(INSTALL_DIR) $(1)/mnt/sympad_pkg/project; \
-		$(CP) ./files/$(SYMLINK_PROJECT_DIR)/* $(1)/mnt/sympad_pkg/project; \
-	fi
 endef
 
 define Package/symlink/postinst
