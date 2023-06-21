@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2018-2023 KooIoT.com
+# Copyright (C) 2018-2021 KooIoT.com
 #
 # This is free software, licensed under MIT
 # See /LICENSE for more information.
@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe
 PKG_VERSION:=1534
-PKG_RELEASE:=2
+PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -41,6 +41,10 @@ define Package/freeioe/description
 	FreeIOE is platform for internet of everythings running on embedded machine, built on top of Skynet.
 endef
 
+define Package/freeioe/config
+source "$(SOURCE)/Config.in"
+endef
+
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)/src
 	tar -C $(PKG_BUILD_DIR)/src -xzvf "$(DL_DIR)/$(PKG_SOURCE)"
@@ -67,11 +71,16 @@ define Package/freeioe/install
 	$(INSTALL_DIR) $(1)/usr/ioe/ipt
 	$(CP) $(DL_DIR)/$(PKG_SOURCE) $(1)/usr/ioe/ipt/freeioe.tar.gz
 
+	echo '[freeioe]' > $(PKG_BUILD_DIR)/freeioe.conf
+	echo 'IOE_CLOUD_HOST='$(if $(CONFIG_FREEIOE_CLOUD_HOST_ADDR),$(CONFIG_FREEIOE_CLOUD_HOST_ADDR),"ioe.thingsroot.com") >> $(PKG_BUILD_DIR)/freeioe.conf
+	echo 'IOE_PKG_URL='$(if $(CONFIG_FREEIOE_CLOUD_PKG_URL),$(CONFIG_FREEIOE_CLOUD_PKG_URL),"ioe.thingsroot.com") >> $(PKG_BUILD_DIR)/freeioe.conf
+
+	$(if $(CONFIG_FREEIOE_CLOUD_HOST),$(CP) $(PKG_BUILD_DIR)/freeioe.conf $(1)/etc/)
+
 ifeq ($(PKG_ARCH),x86_64)
 	$(INSTALL_DIR) $(1)/etc/profile.d
 	$(CP) ./files/echo_sn.sh $(1)/etc/profile.d/echo_sn.sh
 endif
-
 endef
 
 define Package/freeioe/preinst
