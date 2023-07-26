@@ -34,7 +34,7 @@ return view.extend({
 			_('PSN'),				info.hw_id ? info.hw_id + ' / ' + info.id : null,
 			_('Version'),			info.version ? info.version + ' ( ' + info.skynet_version + ' ) ' : null,
 			_('Firmware Version'),	info.firmware_version,
-			_('Beta Mode Enable'),	info.firmware_version,
+			_('Beta Mode Enable'),	info.beta ? 'true' : 'false',
 			_('Cloud Host'),		cloud.host,
 			_('Cloud Host'),		cloud.port ? cloud.port : null,
 			_('Cloud Status'),		cloud && cloud.mqtt ? cloud.mqtt.online === 1 ? 'ONLINE' : 'OFFLINE: ' + cloud.mqtt.msg : null,
