@@ -125,6 +125,7 @@ case "$(board_name)" in
 	tlink_make $(board_name)
 	;;
 "kooiot,tlink-r4x" | \
+"kooiot,tlink-r7" | \
 "kooiot,tlink-r1")
 	tlink_mkfs_storage $(board_name)
 	tlink_make $(board_name)
