@@ -103,6 +103,12 @@ product_sn_encode() {
 		"35300")
 			echo "TRTR70${week:2:4}0${seq}"
 			;;
+		"35301")
+			echo "TRTR71${week:2:4}0${seq}"
+			;;
+		"35302")
+			echo "TRTR72${week:2:4}0${seq}"
+			;;
 		*)
 			echo "$spsn"
 			;;
@@ -194,6 +200,12 @@ product_sn_decode() {
 			;;
 		"TRTR70")
 			echo "2-35300-00${week}-${seq:1:5}"
+			;;
+		"TRTR71")
+			echo "2-35301-00${week}-${seq:1:5}"
+			;;
+		"TRTR72")
+			echo "2-35302-00${week}-${seq:1:5}"
 			;;
 		*)
 			echo "$psn"
