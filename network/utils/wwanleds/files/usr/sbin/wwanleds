@@ -149,6 +149,7 @@ local function reset_wwan_module(iface_name)
 		nixio.nanosleep(3) -- 3 seconds
 	end
 	if pcie_reset then
+		echo_log(iface_name..' module reset on')
 		os.execute("echo 1 > "..pcie_reset_path)
 	end
 	os.execute("killall -9 uqmi")
@@ -158,6 +159,7 @@ local function reset_wwan_module(iface_name)
 		os.execute("echo 1 > "..pcie_on_off_path)
 	end
 	if pcie_reset then
+		echo_log(iface_name..' module reset off')
 		os.execute("echo 0 > "..pcie_reset_path)
 	end
 	nixio.nanosleep(10)
