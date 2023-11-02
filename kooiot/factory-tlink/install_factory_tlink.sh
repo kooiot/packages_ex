@@ -1,6 +1,7 @@
 #!/bin/sh
 
 sed -i 's/openwrt.freeioe.org:81/downloads.openwrt.org/g' /etc/opkg/distfeeds.conf
+sed -i 's/19.07-SNAPSHOT/19.07.10/g' /etc/opkg/distfeeds.conf
 sed -ie '/video/d' /etc/opkg/distfeeds.conf
 sed -ie '/kooiot/d' /etc/opkg/distfeeds.conf
 sed -ie '/kooiot/d' /etc/opkg/customfeeds.conf
