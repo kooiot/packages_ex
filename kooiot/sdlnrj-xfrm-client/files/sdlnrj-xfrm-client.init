@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2019 kooiot.com
+
+START=99
+USE_PROCD=1
+
+init_folders () {
+	echo "AAAA"
+}
+
+start_service () {
+	logger -t "SDLN-XFRM-SERVER" -p user.notice "Start!" 
+	init_folders
+	procd_open_instance
+	procd_set_param command "/usr/local/trustaccess/trustaccess-serverd"
+	procd_set_param respawn 60
+	procd_close_instance
+}
+
