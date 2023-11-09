@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sdlnrj-xfrm-client
 PKG_VERSION:=20231103165507
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -70,6 +70,9 @@ define Package/sdlnrj-xfrm-client/install
 
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/sdlnrj-xfrm-client.init $(1)/etc/init.d/sdlnrj-xfrm-client
+
+	$(INSTALL_DIR) $(1)/etc/uci-defaults
+	$(INSTALL_BIN) ./files/sdlnrj-xfrm-client.uci_defaults $(1)/etc/uci-defaults/99_sdlnrj-xfrm-client
 endef
 
 define Package/sdlnrj-xfrm-client/postinst

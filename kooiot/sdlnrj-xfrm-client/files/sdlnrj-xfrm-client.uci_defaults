@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+
+. /lib/functions.sh
+
+tlink_mount_disk() {
+	data_blk_p="/dev/mmcblk0p0"
+
+	rule_name=$(uci add fstab mount)
+	uci batch <<EOF
+set fstab.$rule_name.target='/mnt/disk'
+set fstab.$rule_name.device='$data_blk_p'
+set fstab.$rule_name.fstype='ext4'
+set fstab.$rule_name.options='rw,async'
+set fstab.$rule_name.enabled='1'
+set fstab.$rule_name.enabled_fsck='1'
+EOF
+	uci commit fstab
+}
+
+tlink_default() {
+	# tf mount point
+	if ( grep -qs '/mnt/disk' /etc/config/fstab || \
+		tlink_mount_disk )
+	then
+		echo "Disk parition mount point added" > /dev/kmsg
+	fi
+}
+
+tlink_default
+
