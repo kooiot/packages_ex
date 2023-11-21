@@ -13,7 +13,8 @@ local function exec(cmd)
 end
 
 local function echo_log(log)
-	os.execute('echo "'..log..'" >> /dev/kmsg')
+	os.execute('logger -t cloud_watch "'..log..'"')
+	os.execute('echo "cloud_watch: '..log..'" > /dev/kmsg')
 	os.execute('echo "'..os.date()..': '..log..'" >> /root/cloud_watch.log')
 	os.execute('/usr/sbin/log_roll_by_count 1000 /root/cloud_watch.log')
 	os.execute("sync")

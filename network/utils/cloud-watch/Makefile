@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cloud-watch
-PKG_VERSION:=1.3
+PKG_VERSION:=1.4
 PKG_RELEASE:=1
 PKG_LICNESE:=MIT
 
@@ -17,7 +17,7 @@ define Package/cloud-watch
   CATEGORY:=KooIoT
   SUBMENU:=Network Utilities
   TITLE:=WWAN restart by watching cloud connnection status
-  DEPENDS:=+freeioe
+  DEPENDS:=+freeioe +tlink-utility
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef
 

@@ -124,7 +124,7 @@ local function led_control(info)
 end
 
 local function echo_log(log)
-	os.execute('logger -t wwwanleds "'..log..'"')
+	os.execute('logger -t wwanleds "'..log..'"')
 	os.execute('echo "wwanleds: '..log..'" > /dev/kmsg')
 	os.execute('echo "'..os.date()..': '..log..'" >> /mnt/data/wwanleds.log')
 	os.execute('/usr/sbin/log_roll_by_count 1000 /mnt/data/wwanleds.log')

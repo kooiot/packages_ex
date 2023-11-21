@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2022 KooIoT.com
+# Copyright (C) 2022-2023 KooIoT.com
 #
 # This is free software, licensed under MIT
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tlink-utility
-PKG_VERSION:=2022-04-02
+PKG_VERSION:=2023-11-21
 PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk

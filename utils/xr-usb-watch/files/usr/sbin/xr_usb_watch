@@ -1,0 +1,89 @@
+#!/usr/bin/lua
+
+local nixio = require 'nixio'
+local fs = require 'nixio.fs'
+local json = require 'luci.jsonc'
+-- local ss = require 'signalstrength'
+local util = require 'luci.util'
+
+local function exec(cmd)
+	local f, err = io.popen(cmd)
+	if not f then
+		return nil, err
+	end
+	local s = f:read('*a')
+	f:close()
+	return s
+end
+
+local sys_base_path = '/sys/class/tty/ttyXRUSB'
+local function _detect_xr_tty(index)
+	local path = sys_base_path .. index
+	local dev_path = path .. '/dev'
+	if fs.access(path) and fs.access(dev_path) then
+		return true
+	end
+	return false
+end
+
+local reset_gpio_path = '/sys/class/gpio/usb_reset/value'
+local function _reset_xr_usb()
+	if fs.access(reset_gpio_path) then
+		os.execute("echo 1 > "..reset_gpio_path)
+		nixio.nanosleep(1)
+		os.execute("echo 0 > "..reset_gpio_path)
+	end
+end
+
+local function echo_log(log)
+	-- print(log)
+	os.execute('logger -t xr_usb_watch "'..log..'"')
+	os.execute('echo "xr_usb_watch: '..log..'" > /dev/kmsg')
+	os.execute('echo "'..os.date()..': '..log..'" >> /mnt/data/xr_usb_watch.log')
+	os.execute('/usr/sbin/log_roll_by_count 1000 /mnt/data/xr_usb_watch.log')
+	os.execute("sync")
+end
+
+local function echo_debug(log)
+	-- print(log)
+	os.execute('echo "xr_usb_watch: '..log..'" > /dev/kmsg')
+end
+
+local function watch_xr_usb_status(model)
+	local mf, m = string.match(model, '^([^,]+),([%w-]+)')
+	if m == 'tlink-m416' then
+		local has_err = false
+		local i = 5
+		while i < 12 do
+			if not _detect_xr_tty(i) then
+				has_err = true
+				break
+			end
+			i = i + 1
+		end
+		if has_err then
+			echo_log('ttyXRUSB'..i..' not exists')
+			_reset_xr_usb()
+		else
+			-- print('All ok')
+		end
+	elseif m == 'tlink-m408' then
+	else
+		echo_debug('Model not support for '..m)
+	end
+end
+
+echo_log('Start xr-usb-watch services...')
+
+local f, err = io.open('/tmp/sysinfo/board_name', 'r')
+if not f then
+	echo_log('Open board_name file failed'..err)
+	nixio.nanosleep(10)
+	os.exit(-1)
+end
+local model = f:read('*a')
+
+while true do
+	watch_xr_usb_status(model)
+	nixio.nanosleep(10)
+end

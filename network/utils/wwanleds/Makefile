@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wwanleds
-PKG_VERSION:=3.1
+PKG_VERSION:=3.2
 PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 
@@ -17,7 +17,7 @@ define Package/wwanleds
   CATEGORY:=KooIoT
   SUBMENU:=Network Utilities
   TITLE:=WWAN network LED indicator
-  DEPENDS:=+3ginfo-text
+  DEPENDS:=+3ginfo-text +tlink-utility
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef
 
