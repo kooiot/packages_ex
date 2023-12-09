@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=symlink
+PKG_NAME:=symlink-openssl-v1
 PKG_VERSION:=20230612
 PKG_RELEASE:=1
 
@@ -37,28 +37,26 @@ STRIP:=:
 
 SYMLINK_URL:=http://openwrt.kooiot.com/download/bin/openwrt/$(VERSION_NUMBER)
 
-define Download/symlink
+define Download/symlink-openssl-v1
 	FILE:=$(PKG_SOURCE)
-	URL:=$(SYMLINK_URL)/$(PKG_ARCH)/$(PKG_NAME)/
+	URL:=$(SYMLINK_URL)/$(PKG_ARCH)/symlink/
 	URL_FILE:=$(PKG_VERSION).zip
 	HASH:=$(SYMLINK_MD5SUM)
 endef
-$(eval $(call Download,symlink))
+$(eval $(call Download,symlink-openssl-v1))
 
-define Package/symlink
+define Package/symlink-openssl-v1
   SECTION:=kooiot
   CATEGORY:=KooIoT
   TITLE:=SymLink
   URL:=http://www.symid.com
   PROVIDES:=symlink-app
-  DEPENDS:=+libstdcpp +luci +libopenssl \
-		+@OPENSSL_WITH_NPN \
-		+@OPENSSL_WITH_SM234 +@OPENSSL_ENGINE_BUILTIN \
+  DEPENDS:=+libstdcpp +luci +libopenssl-v1 \
 		+libcurl +zip +unzip +zlib +symlink-psn \
 		+tlink-utility
 endef
 
-define Package/symlink/description
+define Package/symlink-openssl-v1/description
 	SymLink application is an IOT gateway solution
 endef
 
@@ -74,7 +72,7 @@ define Build/Compile
 endef
 
 
-define Package/symlink/install
+define Package/symlink-openssl-v1/install
 	$(INSTALL_DIR) $(1)/mnt/sympad_pkg
 	$(CP) -rf $(PKG_BUILD_DIR)/src/sympad/* $(1)/mnt/sympad_pkg
 	chmod a+x $(1)/mnt/sympad_pkg/LDog.ex
@@ -85,7 +83,7 @@ define Package/symlink/install
 	$(INSTALL_BIN) ./files/symlink.init $(1)/etc/init.d/symlink
 endef
 
-define Package/symlink/postinst
+define Package/symlink-openssl-v1/postinst
 	#!/bin/sh
 	[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
 
@@ -95,7 +93,7 @@ define Package/symlink/postinst
 	exit 0
 endef
 
-define Package/symlink/prerm
+define Package/symlink-openssl-v1/prerm
 	#!/bin/sh
 	[ -n "$${IPKG_INSTROOT}" ] && exit 0	# if run within buildroot exit
 
@@ -105,4 +103,4 @@ define Package/symlink/prerm
 	exit 0
 endef
 
-$(eval $(call BuildPackage,symlink))
+$(eval $(call BuildPackage,symlink-openssl-v1))
