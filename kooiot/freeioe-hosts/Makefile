@@ -27,7 +27,7 @@ define Package/freeioe-hosts/template
     CATEGORY:=KooIoT
     SUBMENU:=FreeIOE Cloud Hosts
     TITLE:=$(1) Cloud for FreeIOE
-    DEPENDS:=+freeioe
+    DEPENDS:=@freeioe
   endef
 
   define Package/freeioe-hosts-$(1)/description
