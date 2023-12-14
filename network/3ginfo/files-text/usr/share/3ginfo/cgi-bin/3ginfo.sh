@@ -469,7 +469,7 @@ if [ "x$CGMI" = "xMEIG" ]; then
 		fi
 	fi
 fi
-if [ "x$CGMI" = "xFibocom" ]; then
+if [ "x$CGMI" = "xFibocom" -o "x$CGMI" = "xUnicom" ]; then
 	# Fixed CPSI
 	if [ "x$CPSI" = "x" ]; then
 		CPSI=$(echo "$O" | awk -F[:\ ] '/^\+GTCCINFO/ {print $3}')
