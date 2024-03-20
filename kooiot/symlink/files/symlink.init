@@ -10,12 +10,12 @@ init_folders () {
 		mount -a # Make sure all fs mounted
 		if [ ! -e /mnt/sympad ]
 		then
-			echo "MKDIR /mnt/sympad" > /dev/console
+			echo "MKDIR /mnt/sympad" > /dev/kmsg
 			mkdir -p /mnt/data/_sympad
 			ln -s /mnt/data/_sympad /mnt/sympad
 			if [ ! -e /mnt/sympad/LDog.ex ]
 			then
-				echo "CP SymLink files..." > /dev/console
+				echo "CP SymLink files..." > /dev/kmsg
 				cp -r -u /mnt/sympad_pkg/* /mnt/sympad/
 				if [ -e /mnt/data/_sympad_pre ]
 				then
@@ -25,7 +25,7 @@ init_folders () {
 		fi
 		if [ ! -e /mnt/symbackup ]
 		then
-			echo "MKDIR /mnt/symbackup" > /dev/console
+			echo "MKDIR /mnt/symbackup" > /dev/kmsg
 			mkdir -p /mnt/data/_symbackup
 			ln -s /mnt/data/_symbackup /mnt/symbackup
 		fi

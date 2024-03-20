@@ -17,6 +17,7 @@ define Package/rk_io
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Rockchip io utility program
+  DEPENDS:=+@KERNEL_DEVMEM
   MAINTAINER:=Dirk Chang<dirk@kooiot.com>
 endef
 

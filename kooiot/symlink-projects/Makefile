@@ -27,7 +27,7 @@ define Package/symlink-projects/template
     CATEGORY:=KooIoT
     SUBMENU:=SymLink Projects
     TITLE:=SymLink projects for ThingsLink $(1)
-    DEPENDS:=@symlink-app
+    DEPENDS:=@symlink-app +libstdcpp
   endef
 
   define Package/symlink-projects-$(1)/description
