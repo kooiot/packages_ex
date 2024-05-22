@@ -76,6 +76,11 @@ define U-Boot/kooiot_tlink_c3_32m
   BUILD_DEVICES:=kooiot_tlink-c3-32m
 endef
 
+define U-Boot/kooiot_tlink_c4_16m
+  NAME:=ThingsLink C4 (16M)
+  BUILD_DEVICES:=kooiot_tlink-c4-16m
+endef
+
 define U-Boot/kooiot_tlink_c4_32m
   NAME:=ThingsLink C4 (32M)
   BUILD_DEVICES:=kooiot_tlink-c4-32m
@@ -120,6 +125,7 @@ UBOOT_TARGETS := \
 	kooiot_tlink_c3 \
 	kooiot_tlink_c3_16m \
 	kooiot_tlink_c3_32m \
+	kooiot_tlink_c4_16m \
 	kooiot_tlink_c4_32m \
 	widora_neo_32m
 
