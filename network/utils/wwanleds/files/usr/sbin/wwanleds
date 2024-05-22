@@ -293,7 +293,7 @@ local function check_wwan_status(iface_name, l3_dev)
 
 	--- Get the <iface>_6 interface and check whether has got IP or not
 	local iface6 = util.ubus('network.interface', 'status', {interface=iface_name..'_6'})
-	if iface6 and iface.l3_device == l3_dev then
+	if iface6 and iface6.l3_device == l3_dev then
 		local ipv6_addr = iface['ipv6-address']
 		if ipv6_addr and #ipv6_addr > 0 then
 			wwan0_has_ip = true
