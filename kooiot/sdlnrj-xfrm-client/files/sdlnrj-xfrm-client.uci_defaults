@@ -4,14 +4,12 @@
 . /lib/functions.sh
 
 tlink_mount_disk() {
-	data_blk_p="/dev/mmcblk0p0"
+	data_blk_p="/dev/mmcblk0p1"
 
 	rule_name=$(uci add fstab mount)
 	uci batch <<EOF
 set fstab.$rule_name.target='/mnt/disk'
 set fstab.$rule_name.device='$data_blk_p'
-set fstab.$rule_name.fstype='ext4'
-set fstab.$rule_name.options='rw,async'
 set fstab.$rule_name.enabled='1'
 set fstab.$rule_name.enabled_fsck='1'
 EOF

@@ -5,11 +5,15 @@ START=99
 USE_PROCD=1
 
 init_folders () {
-	echo "AAAA"
+	echo "#!/bin/sh" > /tmp/trustaccess.sh
+	echo "sleep 30" >> /tmp/trustaccess.sh
+	echo "logger -t \"TrustAccess\" -p user.notice \"Client login start....\"" >> /tmp/trustaccess.sh
+	echo "/usr/local/trustaccess/bin/trustaccess-cmdclient --login" >> /tmp/trustaccess.sh
+	sh /tmp/trustaccess.sh &
 }
 
 start_service () {
-	logger -t "SDLN-XFRM-SERVER" -p user.notice "Start!" 
+	logger -t "TrustAccess" -p user.notice "Serverd start!" 
 	init_folders
 	procd_open_instance
 	procd_set_param command "/usr/local/trustaccess/trustaccess-serverd"

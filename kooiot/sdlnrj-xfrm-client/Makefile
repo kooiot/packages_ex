@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sdlnrj-xfrm-client
 PKG_VERSION:=20231103165507
-PKG_RELEASE:=2
+PKG_RELEASE:=7
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
