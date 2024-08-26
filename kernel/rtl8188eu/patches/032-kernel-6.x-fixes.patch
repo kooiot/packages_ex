@@ -1,0 +1,14 @@
+--- a/os_dep/linux/ioctl_cfg80211.c	2024-08-07 11:16:10.321526580 +0800
++++ b/os_dep/linux/ioctl_cfg80211.c	2024-08-07 11:17:32.707900236 +0800
+@@ -4889,7 +4889,11 @@
+ }
+ 
+ static int cfg80211_rtw_change_beacon(struct wiphy *wiphy, struct net_device *ndev,
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 7, 0)
++		struct cfg80211_ap_update *params)
++#else
+ 		struct cfg80211_beacon_data *info)
++#endif
+ {
+ 	int ret = 0;
+ 	_adapter *adapter = (_adapter *)rtw_netdev_priv(ndev);

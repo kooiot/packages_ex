@@ -1,0 +1,136 @@
+From 188e6890961f5a922b2cfbf742d9452d8f6b4be3 Mon Sep 17 00:00:00 2001
+From: Dirk Neukirchen <gh2020@plntyk.name>
+Date: Tue, 1 Jun 2021 14:34:55 +0200
+Subject: [PATCH 02/12] OpenWrt patch 002-vendor_command_policy.patch
+
+---
+ os_dep/linux/rtw_cfgvendor.c | 99 ++++++++++++++++++++++++------------
+ 1 file changed, 66 insertions(+), 33 deletions(-)
+
+diff --git a/os_dep/linux/rtw_cfgvendor.c b/os_dep/linux/rtw_cfgvendor.c
+index 8781d231..977006a6 100644
+--- a/os_dep/linux/rtw_cfgvendor.c
++++ b/os_dep/linux/rtw_cfgvendor.c
+@@ -1783,6 +1783,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = GSCAN_SUBCMD_GET_CAPABILITIES
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_gscan_get_capabilities
+ 	},
+ 	{
+@@ -1791,6 +1794,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = GSCAN_SUBCMD_SET_CONFIG
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_set_scan_cfg
+ 	},
+ 	{
+@@ -1799,6 +1805,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = GSCAN_SUBCMD_SET_SCAN_CONFIG
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_set_batch_scan_cfg
+ 	},
+ 	{
+@@ -1807,6 +1816,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = GSCAN_SUBCMD_ENABLE_GSCAN
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_initiate_gscan
+ 	},
+ 	{
+@@ -1815,6 +1827,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = GSCAN_SUBCMD_ENABLE_FULL_SCAN_RESULTS
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_enable_full_scan_result
+ 	},
+ 	{
+@@ -1823,6 +1838,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = GSCAN_SUBCMD_SET_HOTLIST
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_hotlist_cfg
+ 	},
+ 	{
+@@ -1831,6 +1849,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = GSCAN_SUBCMD_SET_SIGNIFICANT_CHANGE_CONFIG
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_significant_change_cfg
+ 	},
+ 	{
+@@ -1839,6 +1860,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = GSCAN_SUBCMD_GET_SCAN_RESULTS
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_gscan_get_batch_results
+ 	},
+ 	{
+@@ -1847,6 +1871,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = GSCAN_SUBCMD_GET_CHANNEL_LIST
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_gscan_get_channel_list
+ 	},
+ #endif /* GSCAN_SUPPORT */
+@@ -1857,6 +1884,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = RTT_SUBCMD_SET_CONFIG
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_rtt_set_config
+ 	},
+ 	{
+@@ -1865,6 +1895,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = RTT_SUBCMD_CANCEL_CONFIG
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_rtt_cancel_config
+ 	},
+ 	{
+@@ -1873,6 +1906,9 @@ static const struct wiphy_vendor_command
+ 			.subcmd = RTT_SUBCMD_GETCAPABILITY
+ 		},
+ 		.flags = WIPHY_VENDOR_CMD_NEED_WDEV | WIPHY_VENDOR_CMD_NEED_NETDEV,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 3, 0))
++		.policy = VENDOR_CMD_RAW_DATA,
++#endif
+ 		.doit = rtw_cfgvendor_rtt_get_capability
+ 	},
+ #endif /* RTT_SUPPORT */
+-- 
+2.31.1
+

@@ -1,0 +1,13 @@
+--- a/os_dep/osdep_service.c	2024-08-07 10:51:20.971593455 +0800
++++ b/os_dep/osdep_service.c	2024-08-07 10:51:37.796296139 +0800
+@@ -2574,8 +2574,8 @@
+ inline u32 rtw_random32(void)
+ {
+ #ifdef PLATFORM_LINUX
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+-        return get_random_u32();
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)) || defined(BUILD_OPENWRT)
++	return get_random_u32();
+ #elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
+ 	return prandom_u32();
+ #elif (LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 18))

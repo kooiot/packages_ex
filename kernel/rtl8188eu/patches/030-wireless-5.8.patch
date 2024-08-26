@@ -1,0 +1,127 @@
+--- a/include/ieee80211.h
++++ b/include/ieee80211.h
+@@ -1529,7 +1529,7 @@ enum ieee80211_state {
+ 	(((Addr[2]) & 0xff) == 0xff) && (((Addr[3]) & 0xff) == 0xff) && (((Addr[4]) & 0xff) == 0xff) && \
+ 				     (((Addr[5]) & 0xff) == 0xff))
+ #else
+-#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 00))
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 18, 00) && !defined(BUILD_OPENWRT))
+ extern __inline int is_multicast_mac_addr(const u8 *addr)
+ {
+ 	return (addr[0] != 0xff) && (0x01 & addr[0]);
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -417,9 +417,9 @@
+ 	if (ret != _SUCCESS)
+ 		goto exit;
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0))
+-        cfg80211_ch_switch_notify(adapter->pnetdev, &chdef, 0, 0);
+-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0)) || defined(BUILD_OPENWRT)
++    cfg80211_ch_switch_notify(adapter->pnetdev, &chdef, 0, 0);
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0)) || defined(BUILD_OPENWRT)
+ 	cfg80211_ch_switch_notify(adapter->pnetdev, &chdef, 0);
+ #else
+ 	cfg80211_ch_switch_notify(adapter->pnetdev, &chdef);
+@@ -1105,7 +1105,7 @@
+ 		#endif
+ 
+ 		#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0) || defined(RHEL79))
+-		#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0))
++		#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 0, 0)) || defined(BUILD_OPENWRT)
+                 roam_info.links[0].channel = notify_channel;
+ 		roam_info.links[0].bssid = cur_network->network.MacAddress;
+ 		#else
+@@ -1667,7 +1667,7 @@
+ }
+ 
+ static int cfg80211_rtw_add_key(struct wiphy *wiphy, struct net_device *ndev
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)) || defined(BUILD_OPENWRT)
+         , int link_id
+ #endif
+ 	, u8 key_index
+@@ -1814,7 +1814,7 @@
+ }
+ 
+ static int cfg80211_rtw_get_key(struct wiphy *wiphy, struct net_device *ndev
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)) || defined(BUILD_OPENWRT)
+         , int link_id
+ #endif
+ 	, u8 keyid
+@@ -1982,7 +1982,7 @@
+ }
+ 
+ static int cfg80211_rtw_del_key(struct wiphy *wiphy, struct net_device *ndev,
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)) || defined(BUILD_OPENWRT)
+         int link_id,
+ #endif
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
+@@ -2006,7 +2006,7 @@
+ 
+ static int cfg80211_rtw_set_default_key(struct wiphy *wiphy,
+ 	struct net_device *ndev,
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)) || defined(BUILD_OPENWRT)
+         int link_id,
+ #endif
+         u8 key_index
+@@ -2058,7 +2058,7 @@
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 30))
+ int cfg80211_rtw_set_default_mgmt_key(struct wiphy *wiphy,
+ 	struct net_device *ndev,
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)) || defined(BUILD_OPENWRT)
+         int link_id,
+ #endif
+         u8 key_index)
+@@ -4908,7 +4908,7 @@
+ 	return ret;
+ }
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0) || defined(BUILD_OPENWRT))
+ static int cfg80211_rtw_stop_ap(struct wiphy *wiphy, struct net_device *ndev, unsigned int link_id)
+ #else
+ static int cfg80211_rtw_stop_ap(struct wiphy *wiphy, struct net_device *ndev)
+@@ -7130,7 +7130,7 @@
+ 	return ret;
+ }
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)) || defined(BUILD_OPENWRT)
+ static void cfg80211_rtw_update_mgmt_frame_register(struct wiphy *wiphy,
+                                              struct wireless_dev *wdev,
+                                              struct mgmt_frame_regs *upd)
+@@ -9466,7 +9466,7 @@
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
+ 	.mgmt_tx = cfg80211_rtw_mgmt_tx,
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0)) || defined(BUILD_OPENWRT)
+ 	.update_mgmt_frame_registrations = cfg80211_rtw_update_mgmt_frame_register,
+ #else
+ 	.mgmt_frame_register = cfg80211_rtw_mgmt_frame_register,
+@@ -9670,7 +9670,7 @@
+ 	rtw_cfg80211_indicate_scan_done(adapter, _TRUE);
+ 
+ 	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 11, 0)) || defined(COMPAT_KERNEL_RELEASE)
+-	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0))
++	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 0) || defined(BUILD_OPENWRT))
+ 	if (wdev->connected) {
+ 	#else
+ 	if (wdev->current_bss) {
+--- a/os_dep/linux/os_intfs.c
++++ b/os_dep/linux/os_intfs.c
+@@ -1618,7 +1618,7 @@
+ 	u8 rtnl_lock_needed = rtw_rtnl_lock_needed(dvobj);
+ 
+ #ifdef CONFIG_RTW_NAPI
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)) || defined(BUILD_OPENWRT)
+         netif_napi_add_weight(ndev, &adapter->napi, rtw_recv_napi_poll, RTL_NAPI_WEIGHT);
+ #else
+         netif_napi_add(ndev, &adapter->napi, rtw_recv_napi_poll, RTL_NAPI_WEIGHT);
