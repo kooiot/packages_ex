@@ -56,49 +56,49 @@ product_sn_encode() {
 			echo "TRTK02${week:2:4}0${seq}"
 			;;
 		"34100")
-			echo "TRTK20${week:2:4}1${seq}"
+			echo "TRTK2X${week:2:4}1${seq}"
 			;;
 		"34101")
-			echo "TRTK20${week:2:4}2${seq}"
+			echo "TRTK2X${week:2:4}2${seq}"
 			;;
 		"34102")
-			echo "TRTK20${week:2:4}3${seq}"
+			echo "TRTK2X${week:2:4}3${seq}"
 			;;
 		"34103")
-			echo "TRTK20${week:2:4}4${seq}"
+			echo "TRTK2X${week:2:4}4${seq}"
 			;;
 		"34104")
-			echo "TRTK20${week:2:4}5${seq}"
+			echo "TRTK2X${week:2:4}5${seq}"
 			;;
 		"34105")
-			echo "TRTK20${week:2:4}6${seq}"
+			echo "TRTK2X${week:2:4}6${seq}"
 			;;
 		"34106")
-			echo "TRTK20${week:2:4}7${seq}"
+			echo "TRTK2X${week:2:4}7${seq}"
 			;;
 		"34107")
-			echo "TRTK20${week:2:4}8${seq}"
+			echo "TRTK2X${week:2:4}8${seq}"
 			;;
 		"34108")
-			echo "TRTK20${week:2:4}9${seq}"
+			echo "TRTK2X${week:2:4}9${seq}"
 			;;
 		"34109")
-			echo "TRTK40${week:2:4}1${seq}"
+			echo "TRTK4A${week:2:4}1${seq}"
 			;;
 		"34110")
-			echo "TRTK40${week:2:4}2${seq}"
+			echo "TRTK4A${week:2:4}2${seq}"
 			;;
 		"34111")
-			echo "TRTK40${week:2:4}3${seq}"
+			echo "TRTK4A${week:2:4}3${seq}"
 			;;
 		"34112")
-			echo "TRTK40${week:2:4}4${seq}"
+			echo "TRTK4G${week:2:4}4${seq}"
 			;;
 		"34113")
-			echo "TRTK40${week:2:4}5${seq}"
+			echo "TRTK4G${week:2:4}5${seq}"
 			;;
 		"34114")
-			echo "TRTK40${week:2:4}6${seq}"
+			echo "TRTK4G${week:2:4}6${seq}"
 			;;
 		"34201") # CT102
 			echo "TRTE01${week:2:4}1${seq}"
@@ -113,16 +113,16 @@ product_sn_encode() {
 			echo "TRTE01${week:2:4}4${seq}"
 			;;
 		"35100")
-			echo "TRTR40${week:2:4}1${seq}"
+			echo "TRTR4X${week:2:4}1${seq}"
 			;;
 		"35101")
-			echo "TRTR40${week:2:4}2${seq}"
+			echo "TRTR4X${week:2:4}2${seq}"
 			;;
 		"35200")
-			echo "TRTR40${week:2:4}3${seq}"
+			echo "TRTR4X${week:2:4}3${seq}"
 			;;
 		"35201")
-			echo "TRTR40${week:2:4}4${seq}"
+			echo "TRTR4X${week:2:4}4${seq}"
 			;;
 		"35300")
 			echo "TRTR70${week:2:4}1${seq}"
@@ -277,10 +277,14 @@ product_sn_decode_sub() {
 		"TRTK20")
 			symlink_type="$((34200+sub_type-1))"
 			;;
-		"TRTK40")
+		"TRTK4A")
 			symlink_type="$((34109+sub_type-1))"
 			;;
-		"TRTR40")
+		"TRTK4G")
+			symlink_type="$((34112+sub_type-1))"
+			;;
+		"TRTR40"|\
+		"TRTR4X")
 			if [ "${sub_type}"x == "1"x ] || [ "${sub_type}"x == "2"x ]; then 
 				symlink_type="$((35100+sub_type-1))"
 			else
