@@ -92,13 +92,13 @@ product_sn_encode() {
 			echo "TRTK4A${week:2:4}3${seq}"
 			;;
 		"34112")
-			echo "TRTK4G${week:2:4}4${seq}"
+			echo "TRTK4G${week:2:4}1${seq}"
 			;;
 		"34113")
-			echo "TRTK4G${week:2:4}5${seq}"
+			echo "TRTK4G${week:2:4}2${seq}"
 			;;
 		"34114")
-			echo "TRTK4G${week:2:4}6${seq}"
+			echo "TRTK4G${week:2:4}3${seq}"
 			;;
 		"34201") # CT102
 			echo "TRTE01${week:2:4}1${seq}"
