@@ -1,0 +1,11 @@
+--- a/include/configs/cv180x-asic.h
++++ b/include/configs/cv180x-asic.h
+@@ -213,7 +213,7 @@
+ 			#define ROOTARGS "ubi.mtd=ROOTFS ubi.block=0,0"
+ 		#endif /* CONFIG_SKIP_RAMDISK */
+ 	#elif defined(CONFIG_SD_BOOT)
+-		#define ROOTARGS "rootfstype=ext4 root=" ROOTFS_DEV " rootwait rw"
++		#define ROOTARGS "root=" ROOTFS_DEV " rootwait rw"
+ 	#else
+ 		#define ROOTARGS "rootfstype=squashfs rootwait ro root=" ROOTFS_DEV
+ 	#endif
