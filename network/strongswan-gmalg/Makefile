@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strongswangmalg
-PKG_VERSION:=5.9.14
-PKG_RELEASE:=2
+# PKG_VERSION:=5.9.14
+PKG_RELEASE:=3
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/srdgame/strongswan-gmalg-merge
 
-PKG_SOURCE_DATE:=2024-11-22
-PKG_SOURCE_VERSION:=c67825602226de84544de055e1574c4af8896007
+PKG_SOURCE_DATE:=2024-12-10
+PKG_SOURCE_VERSION:=ed967516cc29c8e5f1e18bf73fc5fc164f24575a
 PKG_MIRROR_HASH:=skip
 
 PKG_LICENSE:=GPL-2.0-or-later
@@ -477,6 +477,8 @@ CONFIGURE_ARGS+= \
 	--enable-mgf1 \
 	--enable-mediation \
 	--with-systemdsystemunitdir=no \
+	--enable-cmd \
+	--enable-pki \
 	$(if $(CONFIG_PACKAGE_strongswangmalg-charon-cmd),--enable-cmd,--disable-cmd) \
 	$(if $(CONFIG_PACKAGE_strongswangmalg-pki),--enable-pki,--disable-pki) \
 	--with-random-device=/dev/random \

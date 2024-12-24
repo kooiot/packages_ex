@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=jw-package-1
-PKG_VERSION:=2022-04-24
+PKG_VERSION:=2022.04.24
 PKG_RELEASE:=1
 PKG_LICNESE:=MIT
 

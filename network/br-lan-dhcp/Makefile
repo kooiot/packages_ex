@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=br-lan-dhcp
-PKG_VERSION:=2021-10-13
+PKG_VERSION:=2021.10.13
 PKG_RELEASE:=1
 PKG_LICNESE:=MIT
 

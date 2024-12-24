@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinc-freeioe-tunnel
-PKG_VERSION:=2021-06-10
+PKG_VERSION:=2021.06.10
 PKG_RELEASE:=1
 PKG_LICNESE:=MIT
 

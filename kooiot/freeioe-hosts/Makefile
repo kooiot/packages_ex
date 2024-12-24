@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe-hosts
-PKG_VERSION:=2023-06-15
+PKG_VERSION:=2023.06.15
 PKG_RELEASE:=1
 
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>

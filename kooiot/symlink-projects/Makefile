@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=symlink-projects
-PKG_VERSION:=2023-06-12
+PKG_VERSION:=2023.06.12
 PKG_RELEASE:=2
 
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
