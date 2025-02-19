@@ -6,7 +6,7 @@ PKG_RELEASE:=1
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/srdgame/yt6801.git
 PKG_SOURCE_DATE:=2024-10-26
-PKG_SOURCE_VERSION:=yt6801
+PKG_SOURCE_VERSION:=main
 PKG_MIRROR_HASH:=skip
 
 PKG_BUILD_PARALLEL:=1
@@ -22,7 +22,7 @@ define KernelPackage/yt6801
   DEPENDS:=@PCI_SUPPORT +kmod-libphy
   FILES:=$(PKG_BUILD_DIR)/src/yt6801.ko
   AUTOLOAD:=$(call AutoProbe,yt6801)
-  PROVIDES:=kmod-r8169
+  PROVIDES:=kmod-yt6801
 endef
 
 define Build/Compile

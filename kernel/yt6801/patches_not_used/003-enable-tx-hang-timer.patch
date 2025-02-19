@@ -1,0 +1,20 @@
+--- a/src/fuxi-os.h
++++ b/src/fuxi-os.h
+@@ -140,7 +140,7 @@ struct fxgmac_channel;
+ #define RSS_Q_COUNT                         4
+ 
+ /* #define FXGMAC_TX_INTERRUPT_ENABLED		1 */
+-#define FXGMAC_TX_HANG_TIMER_ENABLED             0
++#define FXGMAC_TX_HANG_TIMER_ENABLED             1
+ /* 1 to trigger(write reg 0x1000) for sniffer stop */
+ #define FXGMAC_TRIGGER_TX_HANG		0
+ 
+@@ -197,7 +197,7 @@ struct fxgmac_channel;
+ #define FXGMAC_TXRX_EN_AFTER_PHY_RELEASE	1 /* 1:release ephy before mac tx/rx bits are set. */
+ 
+ /*  power management features */
+-#define FXGMAC_PM_FEATURE_ENABLED	1 /* 1:enable PM ; 0: PM not included. */
++#define FXGMAC_PM_FEATURE_ENABLED	0 /* 1:enable PM ; 0: PM not included. */
+ 
+ /* sanity check */
+ #define FXGMAC_SANITY_CHECK_ENABLED	0 /* 1:enable health checking ; */

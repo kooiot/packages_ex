@@ -1,0 +1,11 @@
+--- a/src/fuxi-os.h
++++ b/src/fuxi-os.h
+@@ -96,7 +96,7 @@ struct fxgmac_channel;
+ 
+ #ifdef CONFIG_PCI_MSI
+ /* undefined for legacy interrupt mode */
+-/* #undef CONFIG_PCI_MSI */
++#undef CONFIG_PCI_MSI
+ #endif
+ 
+ #define FXGMAC_INT_MODERATION_ENABLED   1

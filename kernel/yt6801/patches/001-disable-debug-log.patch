@@ -1,0 +1,11 @@
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -16,7 +16,7 @@ CROSS_COMPILE ?=
+ #CONFIG_MODULE_SIG=n
+ PWD :=$(shell pwd)
+ EXTRA_CFLAGS = -Wall -g -I$(CURDIR) -I$(subst fuxi-linux-release-package/module_fuxi/src,common,$(PWD)) -I$(PWD)
+-EXTRA_CFLAGS += -DFXGMAC_DEBUG
++#EXTRA_CFLAGS += -DFXGMAC_DEBUG
+ 
+ KSRC_BASE = /lib/modules/$(shell uname -r)
+ KSRC =  $(KSRC_BASE)/build
