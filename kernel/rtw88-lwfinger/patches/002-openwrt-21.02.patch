@@ -1,0 +1,28 @@
+--- a/main.h
++++ b/main.h
+@@ -6,6 +6,15 @@
+ #define __RTK_MAIN_H_
+ 
+ #include <linux/version.h>
++#if BUILD_OPENWRT >= 2102
++#undef LINUX_VERSION_CODE
++#define LINUX_VERSION_CODE KERNEL_VERSION(5, 10, 168)
++#endif
++#if BUILD_OPENWRT >= 2410
++#undef LINUX_VERSION_CODE
++#define LINUX_VERSION_CODE KERNEL_VERSION(6, 12, 6)
++#endif
++
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 11, 0)
+ #include "compiler.h"
+ #endif
+--- a/rtw8822c.c
++++ b/rtw8822c.c
+@@ -3,6 +3,7 @@
+  */
+ 
+ #include <linux/module.h>
++#include <linux/delay.h>
+ #include "main.h"
+ #include "coex.h"
+ #include "fw.h"

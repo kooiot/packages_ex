@@ -1,0 +1,28 @@
+diff --git a/SDIO/driver_fw/driver/aic8800/aic8800_bsp/aic_bsp_main.c b/SDIO/driver_fw/driver/aic8800/aic8800_bsp/aic_bsp_main.c
+index 7666a1f..941ceb3 100644
+--- a/SDIO/driver_fw/driver/aic8800/aic8800_bsp/aic_bsp_main.c
++++ b/SDIO/driver_fw/driver/aic8800/aic8800_bsp/aic_bsp_main.c
+@@ -15,7 +15,8 @@
+ #define DRV_AUTHOR            "AICSemi"
+ #define DRV_VERS_MOD          "1.0"
+ 
+-int aicwf_dbg_level_bsp = LOGERROR|LOGINFO|LOGDEBUG|LOGTRACE;
++//int aicwf_dbg_level_bsp = LOGERROR|LOGINFO|LOGDEBUG|LOGTRACE;
++int aicwf_dbg_level_bsp = LOGERROR;
+ 
+ static struct platform_device *aicbsp_pdev;
+ 
+diff --git a/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c b/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c
+index 86567f9..4784b36 100644
+--- a/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c
++++ b/SDIO/driver_fw/driver/aic8800/aic8800_fdrv/rwnx_main.c
+@@ -510,7 +510,8 @@ static const int rwnx_hwq2uapsd[NL80211_NUM_ACS] = {
+ 
+ 
+ extern uint8_t scanning;
+-int aicwf_dbg_level = LOGERROR|LOGINFO|LOGDEBUG|LOGTRACE;
++//int aicwf_dbg_level = LOGERROR|LOGINFO|LOGDEBUG|LOGTRACE;
++int aicwf_dbg_level = LOGERROR;
+ module_param(aicwf_dbg_level, int, 0660);
+ int testmode = 0;
+ char aic_fw_path[200];

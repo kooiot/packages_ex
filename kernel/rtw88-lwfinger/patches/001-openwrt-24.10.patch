@@ -1,0 +1,31 @@
+--- a/mac80211.c	2025-03-05 15:40:22.495048902 +0800
++++ b/mac80211.c	2025-03-05 15:40:08.686730654 +0800
+@@ -64,7 +64,7 @@ static int rtw_ops_start(struct ieee8021
+ 	return ret;
+ }
+ 
+-#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0))
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0)) && (BUILD_OPENWRT > 2410)
+ static void rtw_ops_stop(struct ieee80211_hw *hw)
+ #else
+ static void rtw_ops_stop(struct ieee80211_hw *hw, bool suspend)
+@@ -1008,7 +1008,7 @@ static void rtw_ops_sta_rc_update(struct
+ }
+ 
+ const struct ieee80211_ops rtw_ops = {
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 9, 0)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 9, 0) || (BUILD_OPENWRT >= 2410)
+ 	.add_chanctx = ieee80211_emulate_add_chanctx,
+ 	.remove_chanctx = ieee80211_emulate_remove_chanctx,
+ 	.change_chanctx = ieee80211_emulate_change_chanctx,
+--- a/main.h	2025-03-05 15:39:33.981930723 +0800
++++ b/main.h	2025-03-05 15:39:24.929722056 +0800
+@@ -57,7 +57,7 @@
+ })
+ #endif
+ 
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 8, 0)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 8, 0) && (BUILD_OPENWRT < 2410)
+ /**
+  * cfg80211_ssid_eq - compare two SSIDs
+  * @a: first SSID

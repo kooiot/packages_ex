@@ -1,0 +1,14 @@
+diff --git a/SDIO/driver_fw/driver/aic8800/aic8800_bsp/Makefile b/SDIO/driver_fw/driver/aic8800/aic8800_bsp/Makefile
+index 8701cdc..71685f0 100644
+--- a/SDIO/driver_fw/driver/aic8800/aic8800_bsp/Makefile
++++ b/SDIO/driver_fw/driver/aic8800/aic8800_bsp/Makefile
+@@ -1,7 +1,7 @@
+ CONFIG_SDIO_SUPPORT := y
+ CONFIG_SDIO_PWRCTRL := y
+-CONFIG_AIC_FW_PATH = "/vendor/etc/firmware"
+-#CONFIG_AIC_FW_PATH = "/lib/firmware/aic8800"
++#CONFIG_AIC_FW_PATH = "/vendor/etc/firmware"
++CONFIG_AIC_FW_PATH = "/lib/firmware/aic8800_fw/SDIO/aic8800"
+ export CONFIG_AIC_FW_PATH
+ ccflags-y += -DCONFIG_AIC_FW_PATH=\"$(CONFIG_AIC_FW_PATH)\"
+ 
