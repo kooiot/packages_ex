@@ -1,0 +1,47 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+board=$(board_name)
+
+# logger -t hotplug $(env)
+
+tlink_iphone_gen_conf() {
+	#logger -t hotplug $(env)
+	IPHONE_PID="05ac:12a8"
+	if [ ! -f /sys$DEVPATH/../../../idVendor ]; then
+		return
+	fi
+
+	vid=$(cat /sys$DEVPATH/../../../idVendor)
+	pid=$(cat /sys$DEVPATH/../../../idProduct)
+
+	echo "iPhone Check: ""${vid}:${pid}" > /dev/kmsg
+
+	if [ "${vid}:${pid}" = "${IPHONE_PID}" ]; then
+		logger -t hotplug "iPhone USB Ethernet found! Name: ${DEVICE_NAME} Interface: ${INTERFACE}"
+		uci set network.iphone_usb='interface'
+		uci set network.iphone_usb.proto='dhcp'
+		uci set network.iphone_usb.device=${INTERFACE}
+		uci commit network
+
+		# firewall
+		# wan_network=`uci get firewall.@zone[1].network`
+		# uci set firewall.@zone[1].network="$wan_network iphone_usb"
+		# uci commit firewall
+
+		sh -c "sleep 3 && ifdown iphone_usb && sleep 1 && ifup iphone_usb" &
+	fi
+}
+
+[ "$ACTION" = add ] && {
+	tlink_iphone_gen_conf
+}
+
+[ "$ACTION" = remove ] && {
+	if [ "$(uci get network.iphone_usb.device)" = "${INTERFACE}" ]; then
+		logger -t hotplug "iPhone USB Ethernet removed found! Name: ${DEVICE_NAME} Interface: ${INTERFACE}"
+		uci del network.iphone_usb
+		uci commit network
+	fi
+}
