@@ -36,6 +36,7 @@ define KernelPackage/rtl8821cs
 	+@DRIVER_11AC_SUPPORT +@DRIVER_11N_SUPPORT
   FILES:=$(PKG_BUILD_DIR)/8821cs.ko
   AUTOLOAD:=$(call AutoProbe,8821cs)
+  PROVIDES:=kmod-rtl8821cs
 endef
 
 NOSTDINC_FLAGS = \

@@ -1,6 +1,6 @@
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-EXTRA_CFLAGS += -O1
-#EXTRA_CFLAGS += -O3
+#EXTRA_CFLAGS += -O1
+EXTRA_CFLAGS += -Os
 #EXTRA_CFLAGS += -Wall
 #EXTRA_CFLAGS += -Wextra
 #EXTRA_CFLAGS += -Werror
@@ -37,6 +37,9 @@ EXTRA_CFLAGS += -Wno-date-time	# Fix compile error && warning on gcc 4.9 and lat
 endif
 
 EXTRA_CFLAGS += -I$(src)/include
+EXTRA_CFLAGS += -I$(src)/hal/phydm
+EXTRA_CFLAGS += -I$(src)/hal/btc
+EXTRA_CFLAGS += -I$(src)/platform
 
 EXTRA_LDFLAGS += --strip-debug
 
@@ -129,7 +132,7 @@ CONFIG_ICMP_VOQ = n
 CONFIG_IP_R_MONITOR = n #arp VOQ and high rate
 # user priority mapping rule : tos, dscp
 CONFIG_RTW_UP_MAPPING_RULE = tos
-CONFIG_RTW_MBO = y
+CONFIG_RTW_MBO = n
 CONFIG_WAKE_ON_BT = n
 CONFIG_HIGH_PRIORITY_CMD_THREAD = n
 CONFIG_RTW_DISABLE_HW_PDN = n
@@ -142,7 +145,7 @@ EXTRA_CFLAGS += -DCONFIG_RTW_ANDROID=$(CONFIG_RTW_ANDROID)
 endif
 
 ########################## Debug ###########################
-CONFIG_RTW_DEBUG = y
+CONFIG_RTW_DEBUG = n
 # default log level is _DRV_INFO_ = 4,
 # please refer to "How_to_set_driver_debug_log_level.doc" to set the available level.
 CONFIG_RTW_LOG_LEVEL = 4
