@@ -1,0 +1,114 @@
+{
+	"admin/services/bacserver": {
+		"title": "BACNet Server",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "bacserver"
+		}
+	},
+	"admin/services/bacserver/dev": {
+		"title": "BACNet Server",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "bacserver"
+		}
+	},
+	"admin/services/bacserver/ao": {
+		"title": "Analog Ouput",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "bac_ao"
+		}
+	},
+	"admin/services/bacserver/av": {
+		"title": "Analog Value",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "bac_av"
+		}
+	},
+	"admin/services/bacserver/ai": {
+		"title": "Analog Input",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "bac_ai"
+		}
+	},
+	"admin/services/bacserver/bo": {
+		"title": "Binary Output",
+		"order": 5,
+		"action": {
+			"type": "view",
+			"path": "bac_bo"
+		}
+	},
+	"admin/services/bacserver/bv": {
+		"title": "Binary Value",
+		"order": 6,
+		"action": {
+			"type": "view",
+			"path": "bac_bv"
+		}
+	},
+	"admin/services/bacserver/bi": {
+		"title": "Binary Input",
+		"order": 6,
+		"action": {
+			"type": "view",
+			"path": "bac_bi"
+		}
+	},
+	"admin/services/bacserver/mo": {
+		"title": "Multistate Output",
+		"order": 7,
+		"action": {
+			"type": "view",
+			"path": "bac_mo"
+		}
+	},
+	"admin/services/bacserver/mv": {
+		"title": "Multistate Value",
+		"order": 8,
+		"action": {
+			"type": "view",
+			"path": "bac_mv"
+		}
+	},
+	"admin/services/bacserver/mi": {
+		"title": "Multistate Input",
+		"order": 9,
+		"action": {
+			"type": "view",
+			"path": "bac_mi"
+		}
+	},
+	"admin/services/bacserver/nc": {
+		"title": "Notification Class",
+		"order": 11,
+		"action": {
+			"type": "view",
+			"path": "bac_nc"
+		}
+	},
+	"admin/services/bacserver/sc": {
+		"title": "Schedule",
+		"order": 12,
+		"action": {
+			"type": "view",
+			"path": "bac_sc"
+		}
+	},
+	"admin/services/bacserver/tl": {
+		"title": "Trendlog",
+		"order": 13,
+		"action": {
+			"type": "view",
+			"path": "bac_tl"
+		}
+	}
+}
