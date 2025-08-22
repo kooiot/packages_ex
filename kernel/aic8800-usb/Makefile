@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=aic8800-usb-new
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 PKG_LICENSE:=GPLv2
@@ -40,6 +40,12 @@ define KernelPackage/aic8800-usb-new
   AUTOLOAD:=$(call AutoProbe,aic8800_fdrv)
 endef
 
+define Package/aic8800-usb-firmware
+  SECTION:=firmware
+  CATEGORY:=Firmware
+  TITLE:=AIC8800-USB firmware files
+endef
+
 NOSTDINC_FLAGS = \
 	$(KERNEL_NOSTDINC_FLAGS) \
 	-I$(PKG_BUILD_DIR) \
@@ -68,4 +74,11 @@ define Build/Compile/kmod-aic8800-usb-new
 		modules
 endef
 
+define Package/aic8800-usb-firmware/install
+	$(INSTALL_DIR) $(1)/lib/firmware
+	$(INSTALL_DIR) $(1)/lib/firmware/aic8800_fw/USB
+	$(CP) $(PKG_BUILD_DIR)/fw/* $(1)/lib/firmware/aic8800_fw/USB/
+endef
+
 $(eval $(call KernelPackage,aic8800-usb-new))
+$(eval $(call BuildPackage,aic8800-usb-firmware))

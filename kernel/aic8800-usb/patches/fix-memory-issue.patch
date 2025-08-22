@@ -1,0 +1,11 @@
+--- a/aic8800_fdrv/Makefile
++++ b/aic8800_fdrv/Makefile
+@@ -103,7 +103,7 @@ CONFIG_5M10M = n
+ # Need to set fw path in BOARD_KERNEL_CMDLINE
+ CONFIG_USE_FW_REQUEST ?= n
+ CONFIG_USE_P2P0 = n
+-CONFIG_ONE_TXQ = n
++CONFIG_ONE_TXQ ?= y
+ CONFIG_PER_STA_FC = n
+ CONFIG_PREALLOC_RX_SKB ?= n
+ CONFIG_PREALLOC_TXQ ?= 

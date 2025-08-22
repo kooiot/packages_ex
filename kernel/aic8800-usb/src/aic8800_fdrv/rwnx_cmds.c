@@ -139,9 +139,13 @@ static int cmd_mgr_queue(struct rwnx_cmd_mgr *cmd_mgr, struct rwnx_cmd *cmd)
 #endif
     if(cmd->e2a_msg != NULL) {
         do {
-            if(cmd_mgr->state == RWNX_CMD_MGR_STATE_CRASHED)
-                break;
-            spin_lock_bh(&cmd_mgr->lock);
+			spin_lock_bh(&cmd_mgr->lock);
+			if(cmd_mgr->state == RWNX_CMD_MGR_STATE_CRASHED) {
+				AICWFDBG(LOGERROR, "cmd queue crashed\n");
+				cmd->result = -EPIPE;
+				spin_unlock_bh(&cmd_mgr->lock);
+				return -EPIPE;
+			}
             empty = list_empty(&cmd_mgr->cmds);
             if(!empty) {
                 spin_unlock_bh(&cmd_mgr->lock);
@@ -155,16 +159,14 @@ static int cmd_mgr_queue(struct rwnx_cmd_mgr *cmd_mgr, struct rwnx_cmd *cmd)
             }
         } while(!empty);//wait for cmd queue empty
     } else {
-            spin_lock_bh(&cmd_mgr->lock);
-    }
-
-
-    if (cmd_mgr->state == RWNX_CMD_MGR_STATE_CRASHED) {
-        printk(KERN_CRIT"cmd queue crashed\n");
-        cmd->result = -EPIPE;
-        spin_unlock_bh(&cmd_mgr->lock);
-        return -EPIPE;
-    }
+			spin_lock_bh(&cmd_mgr->lock);
+			if (cmd_mgr->state == RWNX_CMD_MGR_STATE_CRASHED) {
+				printk(KERN_CRIT"cmd queue crashed\n");
+				cmd->result = -EPIPE;
+				spin_unlock_bh(&cmd_mgr->lock);
+				return -EPIPE;
+		}
+	}
 
     #ifndef CONFIG_RWNX_FHOST
     if (!list_empty(&cmd_mgr->cmds)) {
@@ -221,8 +223,9 @@ static int cmd_mgr_queue(struct rwnx_cmd_mgr *cmd_mgr, struct rwnx_cmd *cmd)
 		//printk("defer push: tkn=%d\r\n", cmd->tkn);
 	}
 
-    spin_unlock_bh(&cmd_mgr->lock);
+	//spin_unlock_bh(&cmd_mgr->lock);
     if (!defer_push) {
+		spin_unlock_bh(&cmd_mgr->lock);
 		AICWFDBG(LOGTRACE, "queue:id=%x, param_len=%u\n",cmd->a2e_msg->id, cmd->a2e_msg->param_len);
 
         #ifdef AICWF_SDIO_SUPPORT
@@ -234,9 +237,12 @@ static int cmd_mgr_queue(struct rwnx_cmd_mgr *cmd_mgr, struct rwnx_cmd *cmd)
 
 		kfree(cmd->a2e_msg);
     } else {
-        if(cmd_mgr->queue_sz <= 1){
-		    WAKE_CMD_WORK(cmd_mgr);
-        }
+		if(cmd_mgr->queue_sz <= 1) {
+			spin_unlock_bh(&cmd_mgr->lock);
+			WAKE_CMD_WORK(cmd_mgr);
+		} else {
+			spin_unlock_bh(&cmd_mgr->lock);
+		}
 		return 0;
 	}
 
@@ -275,6 +281,9 @@ static int cmd_mgr_queue(struct rwnx_cmd_mgr *cmd_mgr, struct rwnx_cmd *cmd)
 			spin_lock_bh(&cmd_mgr->lock);
 			list_del(&cmd->list);
 			cmd_mgr->queue_sz--;
+			if(cmd_mgr->queue_sz == 0){
+                rwnx_wakeup_unlock(usbdev->rwnx_hw->ws_tx);
+            }
 			spin_unlock_bh(&cmd_mgr->lock);
 			rwnx_cmd_free(cmd);//kfree(cmd);AIDEN
             if(!list_empty(&cmd_mgr->cmds) && usbdev->state == USB_UP_ST)
@@ -390,6 +399,9 @@ void cmd_mgr_task_process(struct work_struct *work)
 				spin_lock_bh(&cmd_mgr->lock);
 				list_del(&next->list);
 				cmd_mgr->queue_sz--;
+				if(cmd_mgr->queue_sz == 0){
+                    rwnx_wakeup_unlock(usbdev->rwnx_hw->ws_tx);
+                }
 				spin_unlock_bh(&cmd_mgr->lock);
 				rwnx_cmd_free(next);//kfree(next);AIDEN
 			}
@@ -501,15 +513,16 @@ static void cmd_mgr_drain(struct rwnx_cmd_mgr *cmd_mgr)
     spin_lock_bh(&cmd_mgr->lock);
     list_for_each_entry_safe(cur, nxt, &cmd_mgr->cmds, list) {
         list_del(&cur->list);
-        cmd_mgr->queue_sz--;
+        //cmd_mgr->queue_sz--;
         if (!(cur->flags & RWNX_CMD_FLAG_NONBLOCK))
             complete(&cur->complete);
     }
     spin_unlock_bh(&cmd_mgr->lock);
-    
+    #if 0
     if(cmd_mgr->queue_sz == 0){
         rwnx_wakeup_unlock(g_rwnx_plat->usbdev->rwnx_hw->ws_tx);
     }
+	#endif
 
 }
 

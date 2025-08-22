@@ -14,7 +14,7 @@ int aic_rxbuff_num_max = 1000;
 #ifdef CONFIG_PLATFORM_HI
 int aic_rxbuff_size = (4 * 512) * 1;
 #else
-int aic_rxbuff_size = (4 * 512) * 1;
+int aic_rxbuff_size = (4 * 512) * 10;
 #endif
 
 int rx_buff_list_ava = 0;

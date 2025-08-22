@@ -46,9 +46,9 @@ enum AICWF_IC{
 };
 
 
-#define AICWF_USB_RX_URBS               (4)//(200)
+#define AICWF_USB_RX_URBS               (20)//(200)
 #ifdef CONFIG_USB_MSG_IN_EP
-#define AICWF_USB_MSG_RX_URBS           (30)
+#define AICWF_USB_MSG_RX_URBS           (100)
 #endif
 #ifdef CONFIG_USB_TX_AGGR
 #define TXQLEN                          (2048*4)
@@ -61,7 +61,7 @@ enum AICWF_IC{
 #ifdef CONFIG_PLATFORM_HI
 #define AICWF_USB_AGGR_MAX_PKT_SIZE     (2048*1)
 #else
-#define AICWF_USB_AGGR_MAX_PKT_SIZE     (2048*1)
+#define AICWF_USB_AGGR_MAX_PKT_SIZE     (2048*10)
 #endif
 #define AICWF_USB_MSG_MAX_PKT_SIZE      (2048)
 #define AICWF_USB_MAX_PKT_SIZE          (2048)
