@@ -1,0 +1,12 @@
+diff --git a/apps/server-basic/main.c b/apps/server-basic/main.c
+index d4e5699f..2b3a5151 100644
+--- a/apps/server-basic/main.c
++++ b/apps/server-basic/main.c
+@@ -170,6 +170,7 @@ int main(int argc, char *argv[])
+     bacnet_basic_init_callback_set(BACnet_Object_Table_Init, NULL);
+     bacnet_basic_task_callback_set(BACnet_Object_Task, NULL);
+     bacnet_basic_store_callback_set(BACnet_Basic_Store);
++    address_init();
+     bacnet_basic_init();
+     if (bacnet_port_init()) {
+         /* OS based apps use DLENV for environment variables */

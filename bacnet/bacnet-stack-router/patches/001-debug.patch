@@ -1,0 +1,20 @@
+diff --git a/apps/router/main.c b/apps/router/main.c
+index b697156a..c7a4419e 100644
+--- a/apps/router/main.c
++++ b/apps/router/main.c
+@@ -23,6 +23,7 @@
+ #include <libconfig.h> /* read config files */
+ #include <unistd.h> /* for getopt */
+ #include <termios.h> /* used in kbhit() */
++#include <errno.h>
+ #include <getopt.h>
+ #include <sys/ioctl.h>
+ #include <net/if.h>
+@@ -661,6 +662,7 @@ bool init_router(void)
+ 
+     msgboxid = create_msgbox();
+     if (msgboxid == INVALID_MSGBOX_ID) {
++		PRINT(ERROR, "Error: Failed to initialize msg_box! %d", errno);
+         return false;
+     }
+ 

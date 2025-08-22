@@ -15,7 +15,6 @@ include $(INCLUDE_DIR)/cmake.mk
 define Package/bacnet-stack-sc-hub
   SECTION:=net
   CATEGORY:=Network
-  DEFAULT:=m
   TITLE:=BACnet Protocol Stack (BSC Hub sevice)
   URL:=https://github.com/bacnet-stack
   DEPENDS:=+libpthread +librt +libwebsockets-full

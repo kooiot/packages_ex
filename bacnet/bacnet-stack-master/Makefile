@@ -1,44 +1,42 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=bacnet-stack
-PKG_VERSION:=1.3.8
+PKG_NAME:=bacnet-stack-master
 PKG_RELEASE:=1
-#PKG_SOURCE_URL:=https://github.com/bacnet-stack/bacnet-stack.git
-PKG_SOURCE_URL:=https://github.com/stargieg/bacnet-stack-upstream.git
+PKG_SOURCE_URL:=https://github.com/bacnet-stack/bacnet-stack.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_DATE:=2024-11-03
-PKG_SOURCE_VERSION:=server-uci
+PKG_SOURCE_DATE:=2025-03-19
+PKG_SOURCE_VERSION:=8028d7b79abf831561558893d4760786bff75d7d
 PKG_MIRROR_HASH:=skip
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
-define Package/bacnet-stack/Default
+define Package/bacnet-stack-master/Default
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=BACnet Protocol Stack
-  URL:=https://github.com/bacnet-stack
+  TITLE:=BACnet Protocol Stack (Master Branch)
+  URL:=https://github.com/bacnet-stack-master
   DEPENDS:=+libpthread +librt
 endef
 
-define Package/bacnet-stack/Default/description
+define Package/bacnet-stack-master/Default/description
   Data Communication Protocol for Building Automation and Control Networks
 endef
 
-define Package/bacnet-stack-utils-base
-$(call Package/bacnet-stack/Default)
+define Package/bacnet-stack-master-utils-base
+$(call Package/bacnet-stack-master/Default)
   TITLE+= (Utils Basic)
 endef
-define Package/bacnet-stack-utils-base/description
+define Package/bacnet-stack-master-utils-base/description
   This package is a BACnet utils bacrp,bacepics.
 endef
 
-define Package/bacnet-stack-utils-full
-$(call Package/bacnet-stack/Default)
+define Package/bacnet-stack-master-utils-full
+$(call Package/bacnet-stack-master/Default)
   TITLE+= (Utils Full)
-  DEPENDS:=bacnet-stack-utils-base
+  DEPENDS:=bacnet-stack-master-utils-base
 endef
-define Package/bacnet-stack-utils-full/description
+define Package/bacnet-stack-master-utils-full/description
   This package is a BACnet utils bacpoll,bacmstpcap.
 endef
 
@@ -74,7 +72,7 @@ UTILS_BASE+=writegroup
 UTILS_BASE+=writeprop
 UTILS_BASE+=writepropm
 
-define Package/bacnet-stack-utils-base/install
+define Package/bacnet-stack-master-utils-base/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(foreach bacfile,$(UTILS_BASE),$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(bacfile) $(1)/usr/bin/bac$(bacfile) ;)
 	$(LN) /usr/bin/bacgetevent $(1)/usr/bin/bacge
@@ -109,15 +107,16 @@ UTILS_FILES+=uptransfer
 UTILS_FILES+=whatisnetnum
 UTILS_FILES+=whohas
 
-define Package/bacnet-stack-utils-full/install
+define Package/bacnet-stack-master-utils-full/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(foreach bacfile,$(UTILS_FILES),$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(bacfile) $(1)/usr/bin/bac$(bacfile) ;)
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/server $(1)/usr/sbin/bacserver
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bacdiscover $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bacbasic $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bacpoll $(1)/usr/sbin/
 endef
 
 
-$(eval $(call BuildPackage,bacnet-stack-utils-base))
-$(eval $(call BuildPackage,bacnet-stack-utils-full))
+$(eval $(call BuildPackage,bacnet-stack-master-utils-base))
+$(eval $(call BuildPackage,bacnet-stack-master-utils-full))

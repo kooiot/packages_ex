@@ -15,7 +15,6 @@ include $(INCLUDE_DIR)/cmake.mk
 define Package/bacnet-stack-router
   SECTION:=net
   CATEGORY:=Network
-  DEFAULT:=m
   TITLE:=BACnet Protocol Stack (ROUTER BIP MSTP)
   URL:=https://github.com/bacnet-stack
   DEPENDS:=+libpthread +librt +libconfig
@@ -29,7 +28,7 @@ endef
 CMAKE_OPTIONS+= \
 	-DBACDL_ARCNET:BOOL=OFF \
 	-DBACDL_BIP:BOOL=ON \
-	-DBACDL_BIP6:BOOL=OFF \
+	-DBACDL_BIP6:BOOL=ON \
 	-DBACDL_BSC:BOOL=OFF \
 	-DBACDL_ETHERNET:BOOL=OFF \
 	-DBACDL_MSTP:BOOL=ON \

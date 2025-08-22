@@ -15,7 +15,6 @@ include $(INCLUDE_DIR)/cmake.mk
 define Package/bacnet-stack-router-ipv6
   SECTION:=net
   CATEGORY:=Network
-  DEFAULT:=m
   TITLE:=BACnet Protocol Stack (ROUTER BIP BIP6)
   URL:=https://github.com/bacnet-stack
   DEPENDS:=+libpthread +librt

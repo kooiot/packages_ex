@@ -12,7 +12,7 @@ define Package/luci-app-bacnet-client
   CATEGORY:=LuCI
   SUBMENU:=3. Applications
   TITLE:=Bacnet Device
-  EXTRA_DEPENDS:=luci-mod-admin-full, msmtp, luci-app-statistics, collectd-mod-unixsock, socat, bacnet-stack-utils-base
+  DEPENDS:=+luci-mod-admin-full +msmtp +luci-app-statistics +collectd-mod-unixsock +socat +bacnet-stack-utils-base
 endef
 
 define Build/Prepare

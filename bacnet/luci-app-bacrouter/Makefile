@@ -12,7 +12,7 @@ define Package/luci-app-bacrouter
   CATEGORY:=LuCI
   SUBMENU:=3. Applications
   TITLE:=Bacnet Device
-  EXTRA_DEPENDS:=bacnet-stack-router, luci-mod-admin-full
+  DEPENDS:=+bacnet-stack-router +luci-mod-admin-full
 endef
 
 define Build/Prepare
