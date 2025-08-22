@@ -103,7 +103,7 @@ product_sn_encode() {
 		"34201") # CT102
 			echo "TRTE01${week:2:4}1${seq}"
 			;;
-		"34202") # CT102
+		"34202") # CT102H
 			echo "TRTE01${week:2:4}2${seq}"
 			;;
 		"34203") # CTx2
