@@ -274,8 +274,8 @@ product_sn_decode_sub() {
 		"TRTE01")
 			symlink_type="3420${sub_type}"
 			;;
-		"TRTK20")
-			symlink_type="$((34200+sub_type-1))"
+		"TRTK2X")
+			symlink_type="$((34100+sub_type-1))"
 			;;
 		"TRTK4A")
 			symlink_type="$((34109+sub_type-1))"
