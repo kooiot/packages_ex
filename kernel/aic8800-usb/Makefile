@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=aic8800-usb-new
+PKG_NAME:=aic8800-usb
 PKG_RELEASE:=2
 
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -27,7 +27,7 @@ include $(INCLUDE_DIR)/kernel.mk
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/version.mk
 
-define KernelPackage/aic8800-usb-new
+define KernelPackage/aic8800-usb
   SUBMENU:=Wireless Drivers
   TITLE:=AIC8800 USB wifi-drivers support
   DEPENDS:=+kmod-mac80211 +kmod-cfg80211 \
@@ -67,7 +67,7 @@ define Build/Compile
 	$(Build/Compile/$(1))
 endef
 
-define Build/Compile/kmod-aic8800-usb-new
+define Build/Compile/kmod-aic8800-usb
 	+$(KERNEL_MAKE) $(AIC_MAKEDEFS) $(PKG_JOBS) \
 		M="$(PKG_BUILD_DIR)" \
 		NOSTDINC_FLAGS="$(NOSTDINC_FLAGS)" \
@@ -80,5 +80,5 @@ define Package/aic8800-usb-firmware/install
 	$(CP) $(PKG_BUILD_DIR)/fw/* $(1)/lib/firmware/aic8800_fw/USB/
 endef
 
-$(eval $(call KernelPackage,aic8800-usb-new))
+$(eval $(call KernelPackage,aic8800-usb))
 $(eval $(call BuildPackage,aic8800-usb-firmware))
