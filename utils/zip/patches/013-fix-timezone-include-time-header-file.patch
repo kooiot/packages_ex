@@ -1,0 +1,10 @@
+--- a/timezone.c
++++ b/timezone.c
+@@ -37,6 +37,7 @@
+ #define __timezone_c
+ 
+ 
++#include <time.h>
+ #include "zip.h"
+ #include "timezone.h"
+ #include <ctype.h>

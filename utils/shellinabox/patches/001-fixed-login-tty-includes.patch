@@ -1,0 +1,13 @@
+--- a/shellinabox/launcher.c
++++ b/shellinabox/launcher.c
+@@ -90,6 +90,10 @@
+ #include <utmp.h>
+ #endif
+ 
++#ifdef HAVE_LOGIN_TTY
++#include <utmp.h>
++#endif
++
+ #ifdef HAVE_UTMPX_H
+ #include <utmpx.h>
+ #endif
