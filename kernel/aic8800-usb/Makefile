@@ -34,7 +34,8 @@ define KernelPackage/aic8800-usb
 	+@DRIVER_11AC_SUPPORT +@DRIVER_11N_SUPPORT \
   	+kmod-usb-core 
   KCONFIG:=CONFIG_AIC_LOADFW_SUPPORT=m \
-  	CONFIG_AIC8800_WLAN_SUPPORT=m
+  	CONFIG_AIC8800_WLAN_SUPPORT=m \
+	CONFIG_SIGNAL_DISPLAY_DBM=y
   FILES:=$(PKG_BUILD_DIR)/aic_load_fw/aic_load_fw.ko \
 	$(PKG_BUILD_DIR)/aic8800_fdrv/aic8800_fdrv.ko
   AUTOLOAD:=$(call AutoProbe,aic8800_fdrv)
