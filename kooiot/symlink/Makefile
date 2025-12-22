@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=symlink
-PKG_VERSION:=20230612
-PKG_RELEASE:=2
+PKG_VERSION:=20251222
+PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
