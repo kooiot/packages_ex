@@ -11,9 +11,9 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=rtl8812au
 PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=https://github.com/morrownr/8812au-20210629.git
+PKG_SOURCE_URL:=https://github.com/morrownr/8812au-20210820.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_DATE:=2022-06-02
+PKG_SOURCE_DATE:=2022-08-20
 PKG_SOURCE_VERSION:=main
 PKG_MIRROR_HASH:=skip
 
