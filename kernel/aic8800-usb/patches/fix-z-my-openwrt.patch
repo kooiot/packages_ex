@@ -49,41 +49,16 @@ diff -rup aic8800_orig/aic8800_fdrv/rwnx_main.c aic8800/aic8800_fdrv/rwnx_main.c
      buf = rwnx_build_bcn(bcn, &info->beacon);
  #else
      buf = rwnx_build_bcn(bcn, info);
-@@ -4171,6 +4171,9 @@ static int rwnx_cfg80211_set_monitor_cha
+@@ -4166,7 +4166,7 @@ cfg80211_chandef_identical(const struct
+ }
+ #endif
+
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0)) || (BUILD_OPENWRT >= 2410)
+ static int rwnx_cfg80211_set_monitor_channel(struct wiphy *wiphy, struct net_device *dev,
                                               struct cfg80211_chan_def *chandef)
  #else
- static int rwnx_cfg80211_set_monitor_channel(struct wiphy *wiphy,
-+#if (BUILD_OPENWRT >= 2410)
-+											struct net_device *,
-+#endif
-                                              struct cfg80211_chan_def *chandef)
- #endif
- {
-@@ -4909,7 +4912,10 @@ static
- int rwnx_cfg80211_start_radar_detection(struct wiphy *wiphy,
-                                         struct net_device *dev,
-                                         struct cfg80211_chan_def *chandef
--                                    #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0))
-+									#if (BUILD_OPENWRT >= 2410)
-+										, u32 cac_time_ms
-+										, int link_id
-+                                    #elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0))
-                                         , u32 cac_time_ms
-                                     #endif
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0))
-@@ -5066,7 +5072,7 @@ int rwnx_cfg80211_channel_switch(struct
-         goto end;
-     } else {
-         INIT_WORK(&csa->work, rwnx_csa_finish);
--#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 9, 0)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 9, 0)) || (BUILD_OPENWRT >= 2410)
- 	cfg80211_ch_switch_started_notify(dev, &csa->chandef, 0, params->count, false);
- #elif LINUX_VERSION_CODE >= HIGH_KERNEL_VERSION4
- 	cfg80211_ch_switch_started_notify(dev, &csa->chandef, 0, params->count, false, 0);
-diff -rup aic8800_orig/aic8800_fdrv/rwnx_main.c aic8800/aic8800_fdrv/rwnx_main.c
---- aic8800_orig/aic8800_fdrv/rwnx_main.c	2025-02-27 16:23:10.358193938 +0800
-+++ aic8800/aic8800_fdrv/rwnx_main.c	2025-02-27 16:24:06.665715638 +0800
-@@ -4240,7 +4240,11 @@ int rwnx_cfg80211_set_monitor_channel_(s
+@@ -4237,7 +4237,11 @@ int rwnx_cfg80211_set_monitor_channel_(s
  int rwnx_cfg80211_set_monitor_channel_(struct wiphy *wiphy,
                                               struct cfg80211_chan_def *chandef)
  {
@@ -95,7 +70,29 @@ diff -rup aic8800_orig/aic8800_fdrv/rwnx_main.c aic8800/aic8800_fdrv/rwnx_main.c
  }
  #endif
 
-@@ -4721,7 +4721,7 @@ static int rwnx_cfg80211_get_channel(str
+@@ -4299,7 +4303,11 @@ void rwnx_cfg80211_mgmt_frame_register(s
+  *	have changed. The actual parameter values are available in
+  *	struct wiphy. If returning an error, no value should be changed.
+  */
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0)) || (BUILD_OPENWRT >= 2512)
++static int rwnx_cfg80211_set_wiphy_params(struct wiphy *wiphy, int radio_idx, u32 changed)
++#else
+ static int rwnx_cfg80211_set_wiphy_params(struct wiphy *wiphy, u32 changed)
++#endif
+ {
+     return 0;
+ }
+@@ -4316,6 +4324,9 @@ static int rwnx_cfg80211_set_tx_power(st
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0)
+  struct wireless_dev *wdev,
+ #endif
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0)) || (BUILD_OPENWRT >= 2512)
++ int radio_idx,
++#endif
+                                       enum nl80211_tx_power_setting type, int mbm)
+ {
+     #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 8, 0)
+@@ -4714,7 +4725,7 @@ static int rwnx_cfg80211_get_channel(str
      if (rwnx_vif->vif_index == rwnx_hw->monitor_vif)
      {
          //retrieve channel from firmware
@@ -104,3 +101,49 @@ diff -rup aic8800_orig/aic8800_fdrv/rwnx_main.c aic8800/aic8800_fdrv/rwnx_main.c
          rwnx_cfg80211_set_monitor_channel(wiphy, wdev->netdev, NULL);
  #else
          rwnx_cfg80211_set_monitor_channel(wiphy, NULL);
+@@ -4912,7 +4923,7 @@ int rwnx_cfg80211_start_radar_detection(
+                                     #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0))
+                                         , u32 cac_time_ms
+                                     #endif
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0)) || (BUILD_OPENWRT >= 2410)
+                                         , int link_id
+ #endif
+                                         )
+@@ -5066,7 +5077,7 @@ int rwnx_cfg80211_channel_switch(struct
+         goto end;
+     } else {
+         INIT_WORK(&csa->work, rwnx_csa_finish);
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 9, 0)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 9, 0)) || (BUILD_OPENWRT >= 2410)
+ 	cfg80211_ch_switch_started_notify(dev, &csa->chandef, 0, params->count, false);
+ #elif LINUX_VERSION_CODE >= HIGH_KERNEL_VERSION4
+ 	cfg80211_ch_switch_started_notify(dev, &csa->chandef, 0, params->count, false, 0);
+--- aic8800_orig/aic8800_fdrv/rwnx_rx.c	2025-02-27 16:23:10.358193938 +0800
++++ aic8800/aic8800_fdrv/rwnx_rx.c	2025-02-27 16:24:06.665715638 +0800
+@@ -2357,7 +2357,11 @@ check_len_update:
+         hdr = (struct ieee80211_hdr *)(skb->data + msdu_offset);
+         rwnx_vif = rwnx_rx_get_vif(rwnx_hw, hw_rxhdr->flags_vif_idx);
+         if (rwnx_vif) {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0) || (BUILD_OPENWRT >= 2512)
++            cfg80211_rx_spurious_frame(rwnx_vif->ndev, hdr->addr2, -1, GFP_ATOMIC);
++#else
+             cfg80211_rx_spurious_frame(rwnx_vif->ndev, hdr->addr2, GFP_ATOMIC);
++#endif
+         }
+         goto end;
+     }
+@@ -2630,8 +2634,13 @@ check_len_update:
+                 }
+
+                 if (hw_rxhdr->flags_is_4addr && !rwnx_vif->use_4addr) {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0) || (BUILD_OPENWRT >= 2512)
++                    cfg80211_rx_unexpected_4addr_frame(rwnx_vif->ndev,
++                                                       sta->mac_addr, -1, GFP_ATOMIC);
++#else
+                     cfg80211_rx_unexpected_4addr_frame(rwnx_vif->ndev,
+                                                        sta->mac_addr, GFP_ATOMIC);
++#endif
+                 }
+             }
+
