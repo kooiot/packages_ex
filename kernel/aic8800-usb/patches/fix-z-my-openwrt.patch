@@ -147,3 +147,36 @@ diff -rup aic8800_orig/aic8800_fdrv/rwnx_main.c aic8800/aic8800_fdrv/rwnx_main.c
                  }
              }
 
+--- aic8800_orig/aic8800_fdrv/rwnx_msg_rx.c	2026-01-09 18:32:15.132786062 +0800
++++ aic8800/aic8800_fdrv/rwnx_msg_rx.c	2026-01-09 18:32:10.775542528 +0800
+@@ -821,7 +821,9 @@ static inline int rwnx_rx_scanu_result_i
+ #endif
+
+     }
++#ifdef CONFIG_USE_WIRELESS_EXT
+ putbss:
++#endif
+     if (bss != NULL)
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 9, 0)
+ 	cfg80211_put_bss(bss);
+--- aic8800_orig/aic8800_fdrv/rwnx_radar.c	2026-01-09 18:41:51.565564167 +0800
++++ aic8800/aic8800_fdrv/rwnx_radar.c.new	2026-01-09 18:41:48.503017645 +0800
+@@ -1409,7 +1409,7 @@ static void rwnx_radar_process_pulse(str
+ 
+ 			if(rm->cnt == 1)
+ 			{
+-				struct radar_detector_specs *spc;
++				const struct radar_detector_specs *spc;
+ 				int k;
+ 				AICWFDBG(LOGINFO, "dpd: en = %d, region = %d, ntype = %d", dpd->enabled, dpd->region, dpd->num_radar_types);
+ 				AICWFDBG(LOGINFO, "id  wid.{min, max}  pri.{min, max, num}, ppb, thd, tlrn, type");
+--- aic8800_orig/aic8800_fdrv/rwnx_rx.c	2026-01-09 18:57:17.303244608 +0800
++++ aic8800/aic8800_fdrv/rwnx_rx.c	2026-01-09 18:57:14.891973872 +0800
+@@ -7,6 +7,7 @@
+  *
+  ******************************************************************************
+  */
++#pragma GCC diagnostic ignored "-Wattribute-warning"
+ #include <linux/dma-mapping.h>
+ #include <linux/ieee80211.h>
+ #include <linux/etherdevice.h>
