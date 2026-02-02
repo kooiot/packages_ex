@@ -2204,6 +2204,141 @@ uint32_t wifi_txgain_table_24g_1_8800dcdw_femkct[32] = {
 };
 #endif
 
+#ifdef CONFIG_5M10M
+u32 wifi_rxgain_table_24g_dcdw_5m[64] = {
+    0x82f282d1,//index 0
+    0x9591a200,
+    0x80808419,
+    0x000000f0,
+    0x42f282d1,//index 1
+    0x95923400,
+    0x80808419,
+    0x000000f0,
+    0x22f282d1,//index 2
+    0x9592c600,
+    0x80808419,
+    0x000000f0,
+    0x02f282d1,//index 3
+    0x9591a200,
+    0x80808419,
+    0x000000f0,
+    0x06f282d1,//index 4
+    0x9591a200,
+    0x80808419,
+    0x000000f0,
+    0x0ef282d1,//index 5
+    0x9591a200,
+    0x80808419,
+    0x000000f0,
+    0x0ef282d3,//index 6
+    0x95923400,
+    0x80808419,
+    0x000000f0,
+    0x0ef282d7,//index 7
+    0x9595a200,
+    0x80808419,
+    0x000000f0,
+    0x02f282d2,//index 8
+    0x95951000,
+    0x80808419,
+    0x000000f0,
+    0x02f282f4,//index 9
+    0x95951000,
+    0x80808419,
+    0x000000f0,
+    0x02f282e6,//index 10
+    0x9595a200,
+    0x80808419,
+    0x000000f0,
+    0x02f282e6,//index 11
+    0x9599a200,
+    0x80808419,
+    0x000000f0,
+    0x02f282e6,//index 12
+    0x959da200,
+    0x80808419,
+    0x000000f0,
+    0x02f282e6,//index 13
+    0x959f5800,
+    0x80808419,
+    0x000000f0,
+    0x06f282e6,//index 14
+    0x959f5800,
+    0x80808419,
+    0x000000f0,
+    0x0ef282e6,//index 15
+    0x959f5800,
+    0x80808419,
+    0x000000f0
+};
+
+u32 wifi_rxgain_table_24g_dcdw_10m[64] = {
+    0x82f282d1,//index 0
+    0x9591a320,
+    0x80808419,
+    0x000000f0,
+    0x42f282d1,//index 1
+    0x95923520,
+    0x80808419,
+    0x000000f0,
+    0x22f282d1,//index 2
+    0x9592c720,
+    0x80808419,
+    0x000000f0,
+    0x02f282d1,//index 3
+    0x9591a320,
+    0x80808419,
+    0x000000f0,
+    0x06f282d1,//index 4
+    0x9591a320,
+    0x80808419,
+    0x000000f0,
+    0x0ef282d1,//index 5
+    0x9591a320,
+    0x80808419,
+    0x000000f0,
+    0x0ef282d3,//index 6
+    0x95923520,
+    0x80808419,
+    0x000000f0,
+    0x0ef282d7,//index 7
+    0x9595a320,
+    0x80808419,
+    0x000000f0,
+    0x02f282d2,//index 8
+    0x95951120,
+    0x80808419,
+    0x000000f0,
+    0x02f282f4,//index 9
+    0x95951120,
+    0x80808419,
+    0x000000f0,
+    0x02f282e6,//index 10
+    0x9595a320,
+    0x80808419,
+    0x000000f0,
+    0x02f282e6,//index 11
+    0x9599a320,
+    0x80808419,
+    0x000000f0,
+    0x02f282e6,//index 12
+    0x959da320,
+    0x80808419,
+    0x000000f0,
+    0x02f282e6,//index 13
+    0x959f5920,
+    0x80808419,
+    0x000000f0,
+    0x06f282e6,//index 14
+    0x959f5920,
+    0x80808419,
+    0x000000f0,
+    0x0ef282e6,//index 15
+    0x959f5920,
+    0x80808419,
+    0x000000f0
+};
+#endif
 u32 wifi_rxgain_table_24g_20m_8800dcdw[64] = {
     0x82f282d1,//index 0
     0x9591a324,
@@ -2922,7 +3057,13 @@ int aicwf_set_rf_config_8800dc(struct rwnx_hw *rwnx_hw, struct mm_set_rf_calib_c
 
 		if ((ret = rwnx_send_rf_config_req(rwnx_hw, 32,  0, (u8_l *)wifi_rxgain_table_24g_40m_8800dcdw, 256)))
 			return -1;
+#ifdef CONFIG_5M10M
+		if ((ret = rwnx_send_rf_config_req(rwnx_hw, 16, 0, (u8_l *)wifi_rxgain_table_24g_dcdw_5m, 256)))
+			return -1;
 
+		if ((ret = rwnx_send_rf_config_req(rwnx_hw, 48, 0, (u8_l *)wifi_rxgain_table_24g_dcdw_10m, 256)))
+			return -1;
+#endif
 		if ((ret = rwnx_send_rf_calib_req(rwnx_hw, cfm))) {
 			return -1;
 		}
@@ -3543,7 +3684,7 @@ int rwnx_plat_powerlimit_load_8800dcdw(struct rwnx_hw *rwnx_hw, uint16_t chip_id
     /* Copy the file on the Embedded side */
     AICWFDBG(LOGINFO, "### Load file done: %s, size=%d\n", filename, size);
 
-    rwnx_plat_powerlimit_parsing((char *)dst, size, country_code);
+    rwnx_plat_powerlimit_parsing((char *)dst, size);
 
     rwnx_release_firmware_common(&dst);
 

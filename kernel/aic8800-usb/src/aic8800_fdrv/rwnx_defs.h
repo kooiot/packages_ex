@@ -382,6 +382,18 @@ enum rwnx_ap_flags {
     RWNX_AP_ISOLATE = BIT(0),
 };
 
+#ifdef CONFIG_DYNAMIC_PERPWR
+struct sta_pwrthd {
+	s8_l rssi_thd_0;      //rssi 0 (dBm)
+	s8_l rssi_thd_1;      //rssi 1 (dBm)
+	s8_l rssi_thd_2;      //rssi 2 (dBm)
+	s8_l pwr_loss_lvl_0;  //RSSI > RSSI_THD_0
+	s8_l pwr_loss_lvl_1;  //RSSI_THD_1 < RSSI <= RSSI_THD_0
+	s8_l pwr_loss_lvl_2;  //RSSI_THD_2 < RSSI <= RSSI_THD_1
+	s8_l pwr_loss_lvl_3;  //RSSI <= RSSI_THD_2
+};
+#endif
+
 /*
  * Structure used to save information relative to the managed interfaces.
  * This is also linked within the rwnx_hw vifs list.
@@ -396,6 +408,7 @@ struct rwnx_vif {
     struct rwnx_key key[6];
     unsigned long drv_flags;
     atomic_t drv_conn_state;
+	spinlock_t conn_state_lock;
     u8 drv_vif_index;           /* Identifier of the VIF in driver */
     u8 vif_index;               /* Identifier of the station in FW */
     u8 ch_index;                /* Channel context identifier */
@@ -452,6 +465,7 @@ struct rwnx_vif {
 			u32_l freq;
 			bool start;
 #endif
+			u32_l ap_freq;
             enum nl80211_mesh_power_mode mesh_pm; /* mesh power save mode currently set in firmware */
             enum nl80211_mesh_power_mode next_mesh_pm; /* mesh power save mode for next peer */
         } ap;
@@ -720,7 +734,7 @@ struct amsdu_subframe_hdr {
 };
 
 /* rwnx driver status */
-void rwnx_set_conn_state(atomic_t *drv_conn_state, int state);
+void rwnx_set_conn_state(struct rwnx_vif *vif, atomic_t *drv_conn_state, int state);
 
 enum rwnx_drv_connect_status { 
 	RWNX_DRV_STATUS_DISCONNECTED = 0,
@@ -881,6 +895,7 @@ struct rwnx_hw {
 	char wext_essid[33];
 	int support_freqs[SCAN_CHANNEL_MAX];
 	int support_freqs_number;
+#endif
 #ifdef CONFIG_DYNAMIC_PWR
 	struct timer_list pwrloss_timer;
 	struct work_struct pwrloss_work;
@@ -888,11 +903,22 @@ struct rwnx_hw {
 	s8 pwrloss_lvl;
 	u8 sta_rssi_idx;
 #endif
+#ifdef CONFIG_TEMP_CONTROL
+	struct timer_list tc_timer;
+	struct work_struct tc_work;
+	s8 tc_range;
 #endif
 #ifdef CONFIG_BAND_STEERING
 	u8_l iface_idx;
 	struct tmp_feature_sta feature_table[NX_REMOTE_STA_MAX + NX_VIRT_DEV_MAX];
 #endif
+#ifdef CONFIG_DYNAMIC_PERPWR
+	struct sta_pwrthd pwrth;
+#endif
+
+	ktime_t last_time;
+	char last_alpha2[3];
+
 };
 
 u8 *rwnx_build_bcn(struct rwnx_bcn *bcn, struct cfg80211_beacon_data *new);

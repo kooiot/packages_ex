@@ -218,33 +218,6 @@ static const struct radar_types *dfs_domains[] = {
     &jp_radar_types,
 };
 
-
-/**
- * struct pri_sequence - sequence of pulses matching one PRI
- * @head: list_head
- * @pri: pulse repetition interval (PRI) in usecs
- * @dur: duration of sequence in usecs
- * @count: number of pulses in this sequence
- * @count_falses: number of not matching pulses in this sequence
- * @first_ts: time stamp of first pulse in usecs
- * @last_ts: time stamp of last pulse in usecs
- * @deadline_ts: deadline when this sequence becomes invalid (first_ts + dur)
- * @ppb_thresh: Number of pulses to validate detection
- *              (need for weather radar whose value depends of pri)
- */
-struct pri_sequence {
-    struct list_head head;
-    u32 pri;
-    u32 dur;
-    u32 count;
-    u32 count_falses;
-    u64 first_ts;
-    u64 last_ts;
-    u64 deadline_ts;
-    u8 ppb_thresh;
-};
-
-
 /**
  * struct pulse_elem - elements in pulse queue
  * @ts: time stamp in usecs
@@ -1415,7 +1388,7 @@ static void rwnx_radar_process_pulse(struct work_struct *ws)
 				AICWFDBG(LOGINFO, "id  wid.{min, max}  pri.{min, max, num}, ppb, thd, tlrn, type");
 				for (k = 0; k < dpd->num_radar_types; k++)
 				{
-				spc = &dpd->radar_spec[k];
+				spc =(struct radar_detector_specs *)&dpd->radar_spec[k];
 				AICWFDBG(LOGINFO, "%d       %3d, %3d        %4d  %4d  %d    %2d   %2d    %d     %d", 
 				spc->type_id,
 				spc->width_min,
@@ -1737,8 +1710,8 @@ int rwnx_radar_dump_pattern_detector(char *buf, size_t len,
             }
             size_needed += sizeof(info);
 
-        return size_needed;
         }
+		return size_needed;
     }
 
     /* */

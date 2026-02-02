@@ -1426,6 +1426,12 @@ typedef struct
     s8_l pwrlvl_adj_tbl_5g[6];
 } txpwr_lvl_adj_conf_t;
 
+typedef struct
+{
+    u8_l enable;
+    s8_l pwrlvl_adj_tbl_2g4[3];
+} txpwr_lvl_adj_conf_v2_t;
+
 struct mm_set_txpwr_lvl_req
 {
   union {
@@ -1438,7 +1444,10 @@ struct mm_set_txpwr_lvl_req
 
 struct mm_set_txpwr_lvl_adj_req
 {
+  union {
     txpwr_lvl_adj_conf_t txpwr_lvl_adj;
+    txpwr_lvl_adj_conf_v2_t txpwr_lvl_adj_v2;
+  };
 };
 
 typedef struct
@@ -1552,12 +1561,33 @@ typedef struct
     s8_l pwrofst2x_tbl_6g_ant1[15];
 } txpwr_ofst2x_conf_v2_t;
 
+/*
+ * pwrofst2x_tbl_2g4[3][3]:
+ * +---------------+----------+----------+----------+
+ * | RateTyp\ChGrp |  CH_1_4  |  CH_5_9  | CH_10_13 |
+ * +---------------+----------+----------+----------+
+ * | DSSS          |  [0][0]  |  [0][1]  |  [0][2]  |
+ * +---------------+----------+----------+----------+
+ * | OFDM_HIGHRATE |  [1][0]  |  [1][1]  |  [1][2]  |
+ * +---------------+----------+----------+----------+
+ * | OFDM_LOWRATE  |  [2][0]  |  [2][1]  |  [2][2]  |
+ * +---------------+----------+----------+----------+
+ */
+
+typedef struct
+{
+    u8_l enable;
+    s8_l pwrofst2x_tbl_2g4[3][3];
+    u8_l RESERVED[2];
+} txpwr_ofst2x_conf_v3_t;
+
 struct mm_set_txpwr_ofst_req
 {
   union {
     txpwr_ofst_conf_t txpwr_ofst;
     txpwr_ofst2x_conf_t txpwr_ofst2x;
     txpwr_ofst2x_conf_v2_t txpwr_ofst2x_v2;
+    txpwr_ofst2x_conf_v3_t txpwr_ofst2x_v3;
   };
 };
 

@@ -28,6 +28,8 @@
 #ifdef CONFIG_USE_WIRELESS_EXT
 #include "aicwf_wext_linux.h"
 #endif
+#include "rwnx_msg_rx.h"
+
 void rwnx_cfg80211_unlink_bss(struct rwnx_hw *rwnx_hw, struct rwnx_vif *rwnx_vif);
 
 static int rwnx_freq_to_idx(struct rwnx_hw *rwnx_hw, int freq)
@@ -789,12 +791,13 @@ static inline int rwnx_rx_scanu_result_ind(struct rwnx_hw *rwnx_hw,
 #endif
 
 #ifdef CONFIG_USE_WIRELESS_EXT
-		if (!bss || !bss->bssid) {
+	if(rwnx_hw->wext_scan){
+		if (!bss ) {
 			AICWFDBG(LOGERROR, "%s: Invalid BSS structure\n", __func__);
 			goto putbss;
 		}
 		list_for_each_entry(scan_re_wext, &rwnx_hw->wext_scanre_list, scanu_re_list) {
-			if (!scan_re_wext || !scan_re_wext->bss || !scan_re_wext->bss->bssid) {
+			if (!scan_re_wext || !scan_re_wext->bss ) {
 				AICWFDBG(LOGDEBUG, "%s: Corrupted list entry detected\n", __func__);
 				continue;
 			}
@@ -818,6 +821,7 @@ static inline int rwnx_rx_scanu_result_ind(struct rwnx_hw *rwnx_hw,
 			INIT_LIST_HEAD(&scan_re_wext->scanu_re_list);
 			list_add_tail(&scan_re_wext->scanu_re_list, &rwnx_hw->wext_scanre_list);
 			return 0;
+	}
 #endif
 
     }
@@ -1049,9 +1053,9 @@ static inline int rwnx_rx_sm_connect_ind(struct rwnx_hw *rwnx_hw,
             rwnx_vif->wep_auth_err = true;
             AICWFDBG(LOGINFO, "con ind wep_auth_err %d\n", rwnx_vif->wep_auth_err);
         }
-		rwnx_set_conn_state(&rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_DISCONNECTED);
+		rwnx_set_conn_state(rwnx_vif, &rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_DISCONNECTED);
     }else{
-		rwnx_set_conn_state(&rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_DISCONNECTED);
+		rwnx_set_conn_state(rwnx_vif, &rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_DISCONNECTED);
 	}
 
 
@@ -1073,9 +1077,13 @@ static inline int rwnx_rx_sm_connect_ind(struct rwnx_hw *rwnx_hw,
                                 ind->assoc_rsp_ie_len, ind->status_code,
                                 GFP_ATOMIC);
 		if (ind->status_code == 0) {
-			rwnx_set_conn_state(&rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_CONNECTED);
+			rwnx_set_conn_state(rwnx_vif, &rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_CONNECTED);
 		} else {
-			rwnx_set_conn_state(&rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_DISCONNECTED);
+			if(atomic_read(&rwnx_vif->drv_conn_state) == (int)RWNX_DRV_STATUS_CONNECTED) {
+				AICWFDBG(LOGINFO, "%s roaming fail no roamed ind \r\n", __func__);
+				cfg80211_disconnected(dev, 0, NULL, 0, 1, GFP_ATOMIC);
+			}
+			rwnx_set_conn_state(rwnx_vif, &rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_DISCONNECTED);
 			rwnx_external_auth_disable(rwnx_vif);
 		}
 		AICWFDBG(LOGINFO, "%s cfg80211_connect_result pass, rwnx_vif->drv_conn_state:%d\r\n", __func__, (int)atomic_read(&rwnx_vif->drv_conn_state));
@@ -1084,7 +1092,7 @@ static inline int rwnx_rx_sm_connect_ind(struct rwnx_hw *rwnx_hw,
         if(ind->status_code != 0){
             AICWFDBG(LOGINFO, "%s roaming fail to notify disconnect \r\n", __func__);
 			cfg80211_disconnected(dev, 0, NULL, 0,1, GFP_ATOMIC);
-			rwnx_set_conn_state(&rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_DISCONNECTED);
+			rwnx_set_conn_state(rwnx_vif, &rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_DISCONNECTED);
 			rwnx_external_auth_disable(rwnx_vif);
         }else{
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
@@ -1122,7 +1130,7 @@ static inline int rwnx_rx_sm_connect_ind(struct rwnx_hw *rwnx_hw,
                 , ind->assoc_rsp_ie_len
                 , GFP_ATOMIC);
 #endif /*LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)*/
-			rwnx_set_conn_state(&rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_CONNECTED);
+			rwnx_set_conn_state(rwnx_vif, &rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_CONNECTED);
 		}
         rwnx_vif->sta.is_roam = false;
     }
@@ -1269,7 +1277,7 @@ static inline int rwnx_rx_sm_disconnect_ind(struct rwnx_hw *rwnx_hw,
 
 	//msleep(200);
     if (rwnx_vif->sta.is_roam == false) {
-	    rwnx_set_conn_state(&rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_DISCONNECTED);
+	    rwnx_set_conn_state(rwnx_vif, &rwnx_vif->drv_conn_state, (int)RWNX_DRV_STATUS_DISCONNECTED);
     }
 
     return 0;
@@ -1739,12 +1747,14 @@ void rwnx_rx_handle_print(struct rwnx_hw *rwnx_hw, u8 *msg, u32 len)
     u8 *data_end = NULL;
     (void)data_end;
 
+    msg[len-1] = '\0';
+
     if (!rwnx_hw || !rwnx_hw->fwlog_en) {
         pr_err("FWLOG-OVFL: %s", msg);
         return;
     }
 
-    printk("FWLOG: %s", msg);
+	AICWFDBG(LOGFW, "%s", msg);
 
 #ifdef CONFIG_RWNX_DEBUGFS
     data_end = rwnx_hw->debugfs.fw_log.buf.dataend;

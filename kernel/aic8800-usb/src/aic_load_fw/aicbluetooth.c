@@ -20,20 +20,6 @@ extern int flash_erase_len;
 int flash_write_size = 0;
 u32 flash_write_bin_crc = 0;
 
-typedef struct
-{
-    int8_t enable;
-    int8_t dsss;
-    int8_t ofdmlowrate_2g4;
-    int8_t ofdm64qam_2g4;
-    int8_t ofdm256qam_2g4;
-    int8_t ofdm1024qam_2g4;
-    int8_t ofdmlowrate_5g;
-    int8_t ofdm64qam_5g;
-    int8_t ofdm256qam_5g;
-    int8_t ofdm1024qam_5g;
-} txpwr_idx_conf_t;
-
 
 txpwr_idx_conf_t userconfig_txpwr_idx = {
 	.enable 		  = 1,
@@ -49,17 +35,6 @@ txpwr_idx_conf_t userconfig_txpwr_idx = {
 
 };
 
-typedef struct
-{
-    int8_t enable;
-    int8_t chan_1_4;
-    int8_t chan_5_9;
-    int8_t chan_10_13;
-    int8_t chan_36_64;
-    int8_t chan_100_120;
-    int8_t chan_122_140;
-    int8_t chan_142_165;
-} txpwr_ofst_conf_t;
 
 txpwr_ofst_conf_t userconfig_txpwr_ofst = {
 	.enable = 1,
@@ -71,13 +46,6 @@ txpwr_ofst_conf_t userconfig_txpwr_ofst = {
 	.chan_122_140 = 0,
 	.chan_142_165 = 0
 };
-
-typedef struct
-{
-    int8_t enable;
-    int8_t xtal_cap;
-    int8_t xtal_cap_fine;
-} xtal_cap_conf_t;
 
 
 xtal_cap_conf_t userconfig_xtal_cap = {
@@ -757,7 +725,7 @@ int rwnx_plat_flash_bin_upload_android(struct aic_usb_dev *usbdev, u32 fw_addr,
     int err=0;
     const u32 mem_addr = fw_addr;
     struct dbg_mem_read_cfm rd_mem_addr_cfm;
-    u32 crc = ~0UL;
+    u32 crc = (u32)~0UL;
 
     /* load aic firmware */
     size = aic_load_firmware(&dst, filename, dev);
@@ -1470,7 +1438,8 @@ int aicbt_patch_table_load(struct aic_usb_dev *usbdev, struct aicbt_patch_table 
 			data += 2;
 		}
 		if (p->type == AICBT_PT_PWRON)
-			udelay(500);
+			mdelay(100);
+		//	udelay(500);
 	}
 	aicbt_patch_table_free(head);
 	return 0;
