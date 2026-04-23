@@ -5,29 +5,36 @@ START=99
 USE_PROCD=1
 
 init_folders () {
-	if [ -e /dev/mmcblk1p3 ]
-	then
+	if [ -e /dev/mmcblk1p3 ]; then
 		mount -a # Make sure all fs mounted
-		if [ ! -e /mnt/sympad ]
-		then
+		if [ ! -e /mnt/sympad ]; then
 			echo "MKDIR /mnt/sympad" > /dev/kmsg
 			mkdir -p /mnt/data/_sympad
 			ln -s /mnt/data/_sympad /mnt/sympad
-			if [ ! -e /mnt/sympad/LDog.ex ]
-			then
+			if [ ! -e /mnt/sympad/LDog.ex ]; then
 				echo "CP SymLink files..." > /dev/kmsg
 				cp -r -u /mnt/sympad_pkg/* /mnt/sympad/
-				if [ -e /mnt/data/_sympad_pre ]
-				then
+				if [ -e /mnt/data/_sympad_pre ]; then
 					cp -rf /mnt/data/_sympad_pre/* /mnt/sympad/
 				fi
 			fi
 		fi
-		if [ ! -e /mnt/symbackup ]
-		then
+		if [ ! -e /mnt/symbackup ]; then
 			echo "MKDIR /mnt/symbackup" > /dev/kmsg
 			mkdir -p /mnt/data/_symbackup
 			ln -s /mnt/data/_symbackup /mnt/symbackup
+		fi
+	else
+		if [ ! -e /dev/mmcblk1 -a -e /dev/mtdblock1 ]; then
+			# Check folder link
+			if [ ! -L /mnt/sympad -a ! -e /mnt/sympad ]; then
+				# Create link
+				ln -s /mnt/sympad_pkg /mnt/sympad
+
+				if [ -e /mnt/storage/_sympad_pre ]; then
+					cp -rf /mnt/storage/_sympad_pre/* /mnt/sympad/
+				fi
+			fi
 		fi
 	fi
 }
