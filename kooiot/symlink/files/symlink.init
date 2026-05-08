@@ -14,8 +14,13 @@ init_folders () {
 			if [ ! -e /mnt/sympad/LDog.ex ]; then
 				echo "CP SymLink files..." > /dev/kmsg
 				cp -r -u /mnt/sympad_pkg/* /mnt/sympad/
+
+				# copy pre-set files
 				if [ -e /mnt/data/_sympad_pre ]; then
 					cp -rf /mnt/data/_sympad_pre/* /mnt/sympad/
+				fi
+				if [ -e /mnt/storage/_sympad_pre ]; then
+					cp -rf /mnt/storage/_sympad_pre/* /mnt/sympad/
 				fi
 			fi
 		fi
@@ -31,6 +36,10 @@ init_folders () {
 				# Create link
 				ln -s /mnt/sympad_pkg /mnt/sympad
 
+				# copy pre-set files
+				if [ -e /mnt/data/_sympad_pre ]; then
+					cp -rf /mnt/data/_sympad_pre/* /mnt/sympad/
+				fi
 				if [ -e /mnt/storage/_sympad_pre ]; then
 					cp -rf /mnt/storage/_sympad_pre/* /mnt/sympad/
 				fi

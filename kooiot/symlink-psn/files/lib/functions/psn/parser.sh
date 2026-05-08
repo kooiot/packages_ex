@@ -32,6 +32,14 @@ product_sn_encode() {
 		typ="KEEP_TRT_WAY"
 	fi
 
+	case "$(board_name)" in
+		"kooiot,tlink-e2"|\
+		"kooiot,tlink-e2-spinand")
+			product_sn_encode_e2 $spsn
+			return
+			;;
+	esac
+
 	case "${typ}" in
 		"32101")
 			# product_sn_x01_x03 "${week:2:4}0${seq}"
@@ -139,6 +147,47 @@ product_sn_encode() {
 	esac
 }
 
+product_sn_encode_e2() {
+	local spsn="$1"
+	local ver="${spsn:0:1}"
+	local typ="${spsn:2:5}"
+	local week="${spsn:8:6}"
+	local seq="${spsn:15:5}"
+
+	case "${typ}" in
+		"34100")
+			echo "TRTE02${week:2:4}1${seq}"
+			;;
+		"34101")
+			echo "TRTE02${week:2:4}2${seq}"
+			;;
+		"34102")
+			echo "TRTE02${week:2:4}3${seq}"
+			;;
+		"34103")
+			echo "TRTE02${week:2:4}4${seq}"
+			;;
+		"34104")
+			echo "TRTE02${week:2:4}5${seq}"
+			;;
+		"34105")
+			echo "TRTE02${week:2:4}6${seq}"
+			;;
+		"34106")
+			echo "TRTE02${week:2:4}7${seq}"
+			;;
+		"34107")
+			echo "TRTE02${week:2:4}8${seq}"
+			;;
+		"34108")
+			echo "TRTE02${week:2:4}9${seq}"
+			;;
+		*)
+			echo "$spsn"
+			;;
+	esac
+}
+
 product_sn_decode() {
 	local psn="$1"
 	local typ="${psn:0:6}"
@@ -147,10 +196,10 @@ product_sn_decode() {
 	local sub_type="${seq:0:1}"
 
 	case "$(board_name)" in
-	"kooiot,tlink-x1"|\
-	"kooiot,tlink-x1s")
-		typ="KEEP_TRT_WAY"
-		;;
+		"kooiot,tlink-x1"|\
+		"kooiot,tlink-x1s")
+			typ="KEEP_TRT_WAY"
+			;;
 	esac
 
 	if [ "${typ}"x != "KEEP_TRT_WAY"x ] && [ "${sub_type}"x != "0"x ]; then
@@ -275,6 +324,9 @@ product_sn_decode_sub() {
 			symlink_type="3420${sub_type}"
 			;;
 		"TRTK2X")
+			symlink_type="$((34100+sub_type-1))"
+			;;
+		"TRTE02") # E02 boards
 			symlink_type="$((34100+sub_type-1))"
 			;;
 		"TRTK4A")
