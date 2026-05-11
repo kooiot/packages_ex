@@ -46,7 +46,14 @@ product_sn_encode() {
 			echo "TRTX01${week:2:4}0${seq}"
 			;;
 		"32102")
-			echo "TRTS01${week:2:4}0${seq}"
+			case "$(board_name)" in
+				"kooiot,tlink-e1")
+					echo "TRTE01${week:2:4}9${seq}"
+					;;
+				*)
+					echo "TRTS01${week:2:4}0${seq}"
+					;;
+			esac
 			;;
 		"32103")
 			echo "TRTK01${week:2:4}0${seq}"
@@ -321,7 +328,11 @@ product_sn_decode_sub() {
 	local symlink_type=""
 	case "${typ}" in
 		"TRTE01")
-			symlink_type="3420${sub_type}"
+			if [ "${sub_type}"x == "9"x ]; then
+				symlink_type="32102"
+			else
+				symlink_type="3420${sub_type}"
+			fi
 			;;
 		"TRTK2X")
 			symlink_type="$((34100+sub_type-1))"
