@@ -45,6 +45,10 @@ init_folders () {
 				fi
 			fi
 		fi
+
+		if [ ! -e /mnt/symbackup -a -e /mnt/backup ]; then
+			ln -s /mnt/backup /mnt/symbackup
+		fi
 	fi
 }
 
