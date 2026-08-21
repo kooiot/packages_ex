@@ -3,8 +3,9 @@
 local nixio = require 'nixio'
 local fs = require 'nixio.fs'
 local json = require 'luci.jsonc'
--- local ss = require 'signalstrength'
+-- local ss = require 'tlink.signalstrength'
 local util = require 'luci.util'
+local wwan = require 'tlink.wwan'
 
 local function exec(cmd)
 	local f, err = io.popen(cmd)
@@ -31,13 +32,42 @@ local function exec_json(cmd)
 end
 
 local function info_export(info)
-	local f, err = io.open('/tmp/sysinfo/3ginfo', "w+")
+	local f, err = io.open('/tmp/sysinfo/wwan_info', "w+")
 	if not f then
 		return nil, err
 	end
 	f:write(info)
 	f:close()
 end
+
+local function info_find(info, key)
+	if info.res ~= nil and #info.res >= 1 then	
+		local data = info.res[1]
+		local find_val = function(key)
+			for _, v in ipairs(data) do
+				if v[key] ~= nil then
+					return v[key]
+				end
+			end
+		end
+
+		if key == 'ccid' then
+			return find_val('iccid')
+		end
+		if key == 'cgsn' then
+			return find_val('imei')
+		end
+
+		if key == 'device' then
+			return find_val('vendor')..' '..find_val('product')
+		end
+
+		return find_val(key)
+	else
+		return info[v]
+	end
+end
+
 
 local led_base_path = "/sys/class/leds/kooiot:"
 local led_base_path_s = "/sys/class/leds/"
@@ -78,16 +108,25 @@ local function led_control(info)
 	]]--
 
 	local show = true
-	if not info.ccid or string.len(info.ccid) == 0 then
+	local ccid = info_find(info, 'iccid')
+	if not ccid or string.len(ccid) == 0 then
 		show = false
 	end
-	local csq = tonumber(info.csq) or 0
+	local csq = tonumber(info_find(info, 'csq') or 0) or 0
+	local signal = tonumber(info_find(info, 'signal') or 0) or 0
+	local is_good = function() return signal == nil and csq > 26 or signal >= 83 end
+	local is_ok = function() return signal == nil and csq >= 17 or signal >= 54 end
+	local is_maybe = function() return signal == nil and csq >= 10 or signal >= 32 end
 
 	if fs.access("/lib/functions/tlink_csq_leds.sh") then
+		local params = csq
+		if signal ~= nil then
+			params = params..' '..signal
+		end
 		if show then
-			os.execute("sh /lib/functions/tlink_csq_leds.sh 1 "..csq)
+			os.execute("sh /lib/functions/tlink_csq_leds.sh 1 "..params)
 		else
-			os.execute("sh /lib/functions/tlink_csq_leds.sh 0 "..csq)
+			os.execute("sh /lib/functions/tlink_csq_leds.sh 0 "..params)
 		end
 		return
 	end
@@ -100,12 +139,12 @@ local function led_control(info)
 		return
 	end
 
-	if csq >= 17 then
+	if is_ok() then
 		_led_control("green:bbs", 1)
 		_led_control("green:bs", 1)
 
 		_led_control("green:gs", 1)
-		if csq > 25 then
+		if is_good() then
 			_led_control("green:ggs", 1)
 		else
 			_led_control("green:ggs", 0)
@@ -115,7 +154,7 @@ local function led_control(info)
 		_led_control("green:gs", 0)
 
 		_led_control("green:bbs", 1)
-		if csq >= 10  then
+		if is_maybe()  then
 			_led_control("green:bs", 1)
 		else
 			_led_control("green:bs", 0)
@@ -123,16 +162,27 @@ local function led_control(info)
 	end
 end
 
+local log_path = nil
+local log_path_find_str = [[
+if grep -qs '/mnt/data' /etc/config/fstab 2>/dev/null; then
+    echo "/mnt/data/wwan_watch.log"
+else
+    echo "/root/wwan_watch.log"
+fi
+]]
 local function echo_log(log)
-	os.execute('logger -t wwanleds "'..log..'"')
-	os.execute('echo "wwanleds: '..log..'" > /dev/kmsg')
-	os.execute('echo "'..os.date()..': '..log..'" >> /mnt/data/wwanleds.log')
-	os.execute('/usr/sbin/log_roll_by_count 1000 /mnt/data/wwanleds.log')
+	if not log_path then
+		log_path = exec(log_path_find_str)
+	end
+	os.execute('logger -t wwan_watch "'..log..'"')
+	os.execute('echo "wwan_watch: '..log..'" > /dev/kmsg')
+	os.execute('echo "'..os.date()..': '..log..'" >> '..log_path)
+	os.execute('/usr/sbin/log_roll_by_count 1000 '..log_path)
 	os.execute("sync")
 end
 
 local function echo_debug(log)
-	os.execute('echo "wwanleds: '..log..'" > /dev/kmsg')
+	os.execute('echo "wwan_watch: '..log..'" > /dev/kmsg')
 end
 
 local function reset_wwan_module(iface_name)
@@ -199,22 +249,22 @@ local function repower_wwan_module(iface_name)
 end
 
 local cloud_last = os.time()
-local wwan0_not_exits = true
-local wwan0_ip_last_got = os.time()
-local wwan0_reset_times = 0
+local wwan_not_exits = true
+local wwan_ip_last_got = os.time()
+local wwan_reset_times = 0
 
 local function check_and_reset(iface_name, time_lost)
-	if time_lost >  (wwan0_reset_times * 120 + 300) then
-		if wwan0_reset_times < 3 then
+	if time_lost >  (wwan_reset_times * 120 + 300) then
+		if wwan_reset_times < 3 then
 			--- Next check will be two minutes later
-			wwan0_reset_times = wwan0_reset_times + 1
+			wwan_reset_times = wwan_reset_times + 1
 			cloud_last = os.time()
 			--- Reset wwan module
 			reset_wwan_module(iface_name)
 		else
 			--- already reset wwan module for three times and network still missing
-			wwan0_ip_last_got = os.time()
-			wwan0_reset_times = 0
+			wwan_ip_last_got = os.time()
+			wwan_reset_times = 0
 			cloud_last = os.time()
 			repower_wwan_module(iface_name)
 		end
@@ -279,51 +329,32 @@ local function watch_cloud_status(iface_name)
 	check_and_reset(iface_name, now - cloud_last)
 end
 
-local function check_wwan_status(iface_name, l3_dev)
-	local wwan0_has_ip = false
+local function check_wwan_status(iface_name)
+	local wwan_has_ip = false
 
-	--- Get the <iface>_4 interface and check whether has got IP or not
-	local iface = util.ubus('network.interface', 'status', {interface=iface_name..'_4'})
-	if iface and iface.l3_device == l3_dev then
-		local ipv4_addr = iface['ipv4-address']
+	local status, err = wwan.get_wwan_status()
+	if status then 
+		local ipv4_addr = status['ipv4-address']
 		if ipv4_addr and #ipv4_addr > 0 then
-			wwan0_has_ip = true
+			wwan_has_ip = true
 		end
-	end
-
-	--- Get the <iface>_6 interface and check whether has got IP or not
-	local iface6 = util.ubus('network.interface', 'status', {interface=iface_name..'_6'})
-	if iface6 and iface6.l3_device == l3_dev then
-		local ipv6_addr = iface['ipv6-address']
+		local ipv6_addr = status['ipv6-address']
 		if ipv6_addr and #ipv6_addr > 0 then
-			wwan0_has_ip = true
-		end
-	end
-
-	-- Get the 3g-<iface> inteface and check whether has got IP or not
-	local iface_3g = util.ubus('network.interface', 'status', {interface=iface_name})
-	if iface_3g and iface_3g.l3_device == '3g-'..iface_name then
-		local ipv4_addr = iface_3g['ipv4-address']
-		if ipv4_addr and #ipv4_addr > 0 then
-			wwan0_has_ip = true
-		end
-		local ipv6_addr = iface_3g['ipv6-address']
-		if ipv6_addr and #ipv6_addr > 0 then
-			wwan0_has_ip = true
+			wwan_has_ip = true
 		end
 	end
 
 	--- If previously there is no wwan then just update the last ip got
-	if wwan0_not_exits then
-		wwan0_not_exits = false
-		wwan0_ip_last_got = os.time()
+	if wwan_not_exits then
+		wwan_not_exits = false
+		wwan_ip_last_got = os.time()
 	end
 
 	--- If 4G got ip connected, then return
-	if wwan0_has_ip then
-		--os.execute('echo "4G wan IP is ok!!!!" >> /dev/console')
-		wwan0_ip_last_got = os.time()
-		wwan0_reset_times = 0
+	if wwan_has_ip then
+		--echo_debug(iface_name.." IP is ok!!!!")
+		wwan_ip_last_got = os.time()
+		wwan_reset_times = 0
 
 		-- Only watch cloud status if the wwan has ip
 		watch_cloud_status(iface_name)
@@ -331,51 +362,41 @@ local function check_wwan_status(iface_name, l3_dev)
 		return
 	end
 
-	--os.execute('echo "4G wan IP missing" >> /dev/console')
+	echo_debug(iface_name.." IP missing")
 
-	check_and_reset(iface_name, os.time() - wwan0_ip_last_got)
-
-	--[[
-	if false then
-		os.execute('echo "'..os.date()..' 4G Wan reset reboot" >> /mnt/data/wwanleds.log')
-		os.execute("sync")
-		os.execute("reboot")
-	end
-	]]--
+	check_and_reset(iface_name, os.time() - wwan_ip_last_got)
 end
 
 local function watch_wwan_status()
-	local wan_iface = util.ubus('network.interface', 'status', {interface='4g_wan'})
-	if wan_iface then
-		--- If 4g_wan iface is disabled
-		if (not wan_iface.autostart and not wan_iface.errors) then
-			wwan0_not_exits = true
-			return
-		end
-		return check_wwan_status('4g_wan', 'wwan0')
+	local iface = wwan.get_wwan_iface()
+	if not iface then
+		wwan_not_exits = true
+		return
 	end
 
-	local wan_iface_5g = util.ubus('network.interface', 'status', {interface='5g_wan'})
-	if wan_iface_5g then
-		--- If 5g_wan iface is disabled
-		if (not wan_iface_5g.autostart and not wan_iface_5g.errors) then
-			wwan0_not_exits = true
+	local wan_iface = util.ubus('network.interface', 'status', {interface=iface})
+	if wan_iface then
+		if (not wan_iface.autostart and not wan_iface.errors) then
+			-- if wwan interface disabled
+			echo_debug("Netowrk interface "..iface.." disabled!!!")
+			wwan_not_exits = true
 			return
 		end
-		return check_wwan_status('5g_wan', 'usb0')
+		return check_wwan_status(iface)
 	end
 end
 
 info_export('{}')
 os.execute('touch /tmp/sysinfo/cloud_status') --- make sure the file is there
-echo_log('Start wwanleds services...')
+echo_log('Start wwan_watch services...')
 
 while true do
 	local info, info_str = exec_json('3ginfo json')
 	if info then
 		info_export(info_str)
 		led_control(info)
-		if info.ccid and string.len(info.ccid) > 0 then
+		local ccid = info_find(info, 'iccid')
+		if ccid and string.len(ccid) > 0 then
 			watch_wwan_status()
 		end
 		--- sleep for 15 seconds

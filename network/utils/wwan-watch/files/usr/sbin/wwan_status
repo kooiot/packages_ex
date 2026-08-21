@@ -1,0 +1,50 @@
+#!/usr/bin/lua
+
+local json = require 'luci.jsonc'
+local wwan = require 'tlink.wwan'
+
+
+local app_version = 1
+
+local args = {...}
+
+local help = [[
+usage: wwan_status <command>
+	config - network configuration interface name
+	iface - real network running interface (e.g. wwan0 wwan_4 3g-wwan)
+	device - real network ethernet name (e.g. usb0)
+	status - wwan network status (json)
+]]
+if #args == 0 then
+	print(help)
+	return
+end
+
+if args[1] == '--version' then
+	print(app_version)
+	return
+end
+
+local val = nil
+if args[1] == 'config' then
+	val = wwan.get_wwan_iface()
+elseif args[1] == 'iface' then
+	local status, err = wwan.get_wwan_status()
+	if status then
+		val = status.interface
+	end
+elseif args[1] == 'device' then
+	local status = wwan.get_wwan_status()
+	if status then
+		val = status.l3_device
+	end
+else
+	local status = wwan.get_wwan_status()
+	if status then
+		val = json.stringify(status)
+	end
+end
+
+if val then
+	print(val)
+end
