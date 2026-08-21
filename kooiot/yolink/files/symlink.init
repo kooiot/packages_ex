@@ -1,0 +1,63 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2019 kooiot.com
+
+START=99
+USE_PROCD=1
+
+init_folders () {
+	if [ -e /dev/mmcblk1p3 ]; then
+		mount -a # Make sure all fs mounted
+		if [ ! -e /mnt/yolink ]; then
+			echo "MKDIR /mnt/yolink" > /dev/kmsg
+			mkdir -p /mnt/data/_yolink
+			ln -s /mnt/data/_yolink /mnt/yolink
+			if [ ! -e /mnt/yolink/yodog.ex ]; then
+				echo "CP YoLink files..." > /dev/kmsg
+				cp -r -u /mnt/yolink_pkg/* /mnt/yolink/
+
+				# copy pre-set files
+				if [ -e /mnt/data/_yolink_pre ]; then
+					cp -rf /mnt/data/_yolink_pre/* /mnt/yolink/
+				fi
+				if [ -e /mnt/storage/_yolink_pre ]; then
+					cp -rf /mnt/storage/_yolink_pre/* /mnt/yolink/
+				fi
+			fi
+		fi
+		if [ ! -e /mnt/symbackup ]; then
+			echo "MKDIR /mnt/symbackup" > /dev/kmsg
+			mkdir -p /mnt/data/_symbackup
+			ln -s /mnt/data/_symbackup /mnt/symbackup
+		fi
+	else
+		if [ ! -e /dev/mmcblk1 -a -e /dev/mtdblock1 ]; then
+			# Check folder link
+			if [ ! -L /mnt/yolink -a ! -e /mnt/yolink ]; then
+				# Create link
+				ln -s /mnt/yolink_pkg /mnt/yolink
+
+				# copy pre-set files
+				if [ -e /mnt/data/_yolink_pre ]; then
+					cp -rf /mnt/data/_yolink_pre/* /mnt/yolink/
+				fi
+				if [ -e /mnt/storage/_yolink_pre ]; then
+					cp -rf /mnt/storage/_yolink_pre/* /mnt/yolink/
+				fi
+			fi
+		fi
+
+		if [ ! -e /mnt/symbackup -a -e /mnt/backup ]; then
+			ln -s /mnt/backup /mnt/symbackup
+		fi
+	fi
+}
+
+start_service () {
+	logger -t "Symlink" -p user.notice "Start!" 
+	init_folders
+	procd_open_instance
+	procd_set_param command "/mnt/yolink/yodog.ex"
+	procd_set_param respawn 60
+	procd_close_instance
+}
+
