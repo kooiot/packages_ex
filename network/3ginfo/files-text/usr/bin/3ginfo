@@ -15,6 +15,7 @@ RES="/usr/share/modemdata"
 
 format_conn_time() {
 	CT=$1
+	[ -z "$CT" ] && return
 	D=$(expr $CT / 60 / 60 / 24)
 	H=$(expr $CT / 60 / 60 % 24)
 	M=$(expr $CT / 60 % 60)
@@ -26,22 +27,43 @@ SEPARATOR=""
 parse_section() {
 	[ -n "$SEPARATOR" ] && echo "$SEPARATOR"
 	local section="$1"
-	config_get device "$section" device ""
-	config_get network "$section" network ""
 	config_get force_plmn "$section" force_plmn "0"
+	local device=$(uci_get_state 3ginfo "$section" device)
+	local network=$(uci_get_state 3ginfo "$section" network)
 
 	if echo "x$device" | grep -q "192.168."; then
 		ECM="$RES/addon/ecm/huawei.sh $device"
 	else
 		ECM=""
-		if [ ! -e /var/state/3ginfo-detected ]; then
-			[ -z "$device" ] && device=$(/usr/share/3ginfo/detectdevice.sh)
-			[ -z "$network" ] && network=$(/usr/share/3ginfo/detectsection.sh "$section")
-		fi
+		[ -z "$device" ] && [ -z "$network" ] && {
+			device=$(/usr/share/3ginfo/detect_wwan.sh "$section")
+			network=$(uci_get_state 3ginfo "$section" network)
+		}
+		[ -z "$device" ] && {
+			device=$(/usr/share/3ginfo/detectdevice.sh "$section")
+		}
+		[ -z "$network" ] && {
+			network=$(/usr/share/3ginfo/detectsection.sh "$section")
+		}
+
 		config_get pincode "$section" pincode ""
 		if [ -n "$pincode" ] && [ ! -e /var/state/3ginfo-pincode ]; then
-			[ -n "$device" ] && sms_tool -d "$device" at "at+cpin=\"$pincode\""
+			[ -n "$device" ] && {
+				sms_tool -d "$device" at "at+cpin=\"$pincode\""
+				touch /var/state/3ginfo-pincode
+			}
 		fi
+	fi
+
+	# If device is not set thus return
+	[ -z "$device" ] && return
+	# Test device usgin check.gcom before using it
+	gcom -d $device -s /usr/share/3ginfo/check.gcom >/dev/null 2>&1
+	if [ $? != 0 ]; then
+		# Revert the 3ginfo uci state, thus this will be fetched again
+		uci_revert_state 3ginfo "$section" device
+		uci_revert_state 3ginfo "$section" network
+		return
 	fi
 
 	if [ "$FORMAT" = "1" ]; then
@@ -132,7 +154,5 @@ config_load 3ginfo
 [ "$FORMAT" = "2" ] && echo '{"res":['
 config_foreach parse_section 3ginfo
 [ "$FORMAT" = "2" ] && echo ']}'
-touch /var/state/3ginfo-detected
-touch /var/state/3ginfo-pincode
 
 exit 0
