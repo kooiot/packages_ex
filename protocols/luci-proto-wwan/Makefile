@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for WWAN
-LUCI_DEPENDS:=+luci-proto-ncm +luci-proto-qmi +luci-proto-3g +wwan
+LUCI_DEPENDS:=+comgt +uqmi +wwan
 
 include ../../kooiot.mk
 

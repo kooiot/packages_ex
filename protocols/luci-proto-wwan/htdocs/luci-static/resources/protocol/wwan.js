@@ -39,6 +39,10 @@ return network.registerProtocol('wwan', {
 		return this._ubus('l3_device') || 'wan';
 	},
 
+	getOpkgPackage: function() {
+		return 'wwan';
+	},
+
 	getPackageName: function() {
 		return 'wwan';
 	},
@@ -64,7 +68,7 @@ return network.registerProtocol('wwan', {
 
 		o = s.taboption('general', form.Value, 'bus', _('USB Bus'));
 		o.ucioption = 'device';
-		o.rmempty = false;
+		/* o.rmempty = false; */
 		o.load = function(section_id) {
 			return callFileList('/sys/bus/usb/devices/').then(L.bind(function(devices) {
 				for (var i = 0; i < devices.length; i++)
