@@ -184,7 +184,26 @@ FORCE_PLMN=$2
 
 RES="/usr/share/modemdata"
 
-O=$(sms_tool -D -d $DEVICE at "AT+CSQ;+COPS=3,0;+COPS?;+COPS=3,2;+COPS?;+CREG=2;+CREG?;+CPIN?" | tr -d '\r')
+. $RES/libs/getdevicevendorproduct
+VIDPID=$(getdevicevendorproduct $DEVICE)
+
+# Fibcom FM650-CN has issue with squential at commands
+[ "${VIDPID}" = "usb/2cb70a05" ] && NO_SQUENTIAL_AT=1
+
+if [ "$NO_SQUENTIAL_AT" != "1" ]; then
+	O=$(sms_tool -D -d $DEVICE at "AT+CSQ;+COPS=3,0;+COPS?;+COPS=3,2;+COPS?;+CREG=2;+CREG?;+CPIN?" | tr -d '\r')
+else
+	O1=$(sms_tool -D -d $DEVICE at "AT+CSQ")
+	O2=$(sms_tool -D -d $DEVICE at "AT+COPS=3,0")
+	O3=$(sms_tool -D -d $DEVICE at "AT+COPS?")
+	O4=$(sms_tool -D -d $DEVICE at "AT+COPS=3,2")
+	O5=$(sms_tool -D -d $DEVICE at "AT+COPS?")
+	O6=$(sms_tool -D -d $DEVICE at "AT+CREG=2")
+	O7=$(sms_tool -D -d $DEVICE at "AT+CREG?")
+	O8=$(sms_tool -D -d $DEVICE at "AT+CPIN?")
+
+	O=$(echo "$O1\n$O2\n$O3\n$O4\n$O5\n$O6\n$O7\n$O8" | tr -d '\r')
+fi
 
 # CSQ
 CSQ=$(echo "$O" | awk -F[,\ ] '/^\+(csq|CSQ)/ {print $2}')
@@ -264,8 +283,6 @@ fi
 
 REGOK=0
 [ "x$REG" = "x1" ] || [ "x$REG" = "x5" ] || [ "x$REG" = "x6" ] || [ "x$REG" = "x7" ] && REGOK=1
-. $RES/libs/getdevicevendorproduct
-VIDPID=$(getdevicevendorproduct $DEVICE)
 if [ -e "$RES/addon/$VIDPID" ]; then
 	ADDON=""
 	case $(cat /tmp/sysinfo/board_name) in

@@ -1,0 +1,19 @@
+# Fibocom L850-GL
+
+T=$(sms_tool -d $DEVICE at "AT+CGMI" | grep -i -v "^at" | awk -F' ' '{print $1}' | xargs)
+[ -n "$T" ] && VENDOR="$T"
+
+T=$(sms_tool -d $DEVICE at "AT+CGMM" | grep -i -v "^at" | xargs)
+[ -n "$T" ] && PRODUCT="$T"
+
+T=$(sms_tool -d $DEVICE at "AT+CGMR" | grep -i -v "^at" | xargs)
+[ -n "$T" ] && REVISION="$T"
+
+T=$(sms_tool -d $DEVICE at "AT+CGSN" | grep -i -v "^at" | xargs)
+[ -n "$T" ] && IMEI="$T"
+
+T=$(sms_tool -d $DEVICE at "AT+CCID" | awk '/^\+CCID:/{print $2}' | xargs)
+[ -n "$T" ] && ICCID="$T"
+
+T=$(sms_tool -d $DEVICE at "AT+CIMI" | grep -i -v "^at" | xargs)
+[ -n "$T" ] && IMSI="$T"

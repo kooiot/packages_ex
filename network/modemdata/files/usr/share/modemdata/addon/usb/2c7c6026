@@ -1,4 +1,4 @@
-# Quectel EC200T-EU
+# Quectel EC200T
 
 O=$(sms_tool -d $DEVICE at "at+qtemp")
 
