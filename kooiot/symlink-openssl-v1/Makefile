@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=symlink
+PKG_NAME:=symlink-openssl-v1
 PKG_VERSION:=20251222
 PKG_RELEASE:=3
 
@@ -16,7 +16,7 @@ PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
 include $(INCLUDE_DIR)/package.mk
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_ARCH)-$(PKG_VERSION).zip
+PKG_SOURCE:=symlink-$(PKG_ARCH)-$(PKG_VERSION).zip
 VERSION_NUMBER:=19.07
 
 ifeq ($(PKG_ARCH),arm_cortex-a9_neon)
