@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=phone-usb-tether
 PKG_VERSION:=0.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICNESE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
@@ -17,6 +17,7 @@ define Package/phone-usb-tether
   CATEGORY:=KooIoT
   SUBMENU:=Network Utilities
   TITLE:=USB Network shares auto script
+  PKGARCH:=all
   DEPENDS:=+kmod-usb-net-rndis +kmod-usb-storage \
 		   +kmod-usb-net-ipheth +usbmuxd +libimobiledevice +usbutils
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>

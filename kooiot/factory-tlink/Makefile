@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=factory-tlink
 PKG_VERSION:=2025.08.25
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -18,6 +18,7 @@ define Package/factory-tlink
   CATEGORY:=KooIoT
   TITLE:=Factory TLink Devices
   URL:=http://freeioe.org
+  PKGARCH:=all
   DEPENDS:=+robot-client
 endef
 

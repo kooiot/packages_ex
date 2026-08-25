@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=br-lan-dhcp
 PKG_VERSION:=2021.10.13
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICNESE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
@@ -17,6 +17,7 @@ define Package/br-lan-dhcp
   CATEGORY:=Network
   TITLE:=Lan Bridge DHCP Eanble Configurations
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
+  PKGARCH:=all
 endef
 
 define Package/br-lan-dhcp/description

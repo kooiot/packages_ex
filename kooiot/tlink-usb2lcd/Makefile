@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tlink-usb2lcd
 PKG_VERSION:=1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICNESE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
@@ -16,6 +16,7 @@ define Package/tlink-usb2lcd
   SECTION:=kooiot
   CATEGORY:=KooIoT
   TITLE:=ThingsLink USB2LCD necessery kernel options selection
+  PKGARCH:=all
   DEPENDS:=+lcd4linux-custom +@LCD4LINUX_CUSTOM_DRIVER_FW8888 \
 		   +@LCD4LINUX_CUSTOM_DRIVER_GLCD2USB \
 		   +@LCD4LINUX_CUSTOM_DRIVER_LCD2USB \

@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinc-freeioe-tunnel
 PKG_VERSION:=2021.06.10
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICNESE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
@@ -17,6 +17,7 @@ define Package/tinc-freeioe-tunnel
   CATEGORY:=KooIoT
   SUBMENU:=Network Utilities
   TITLE:=FreeIOE network tunnel over tinc
+  PKGARCH:=all
   DEPENDS:=+tinc
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef

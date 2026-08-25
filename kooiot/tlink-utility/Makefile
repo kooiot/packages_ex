@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tlink-utility
 PKG_VERSION:=2023.11.21
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -18,6 +18,7 @@ define Package/tlink-utility
   CATEGORY:=KooIoT
   TITLE:=Factory TLink Devices
   URL:=http://kooiot.com
+  PKGARCH:=all
 endef
 
 define Package/tlink-utility/description

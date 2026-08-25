@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe-hosts
 PKG_VERSION:=2023.06.15
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 PKG_LICENSE:=MIT
@@ -27,6 +27,7 @@ define Package/freeioe-hosts/template
     CATEGORY:=KooIoT
     SUBMENU:=FreeIOE Cloud Hosts
     TITLE:=$(1) Cloud for FreeIOE
+    PKGARCH:=all
     DEPENDS:=@freeioe
   endef
 

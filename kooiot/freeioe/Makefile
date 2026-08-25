@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeioe
 PKG_VERSION:=1638
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -34,6 +34,7 @@ define Package/freeioe
   CATEGORY:=KooIoT
   TITLE:=FreeIOE
   URL:=https://github.com/freeioe/freeioe
+  PKGARCH:=all
   DEPENDS:=+skynet +process-monitor +tlink-utility
 endef
 

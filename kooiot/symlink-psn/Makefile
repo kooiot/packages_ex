@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=symlink-psn
 PKG_VERSION:=2026.07.01
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICNESE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
@@ -17,6 +17,7 @@ define Package/symlink-psn
   CATEGORY:=KooIoT
   TITLE:=SymLink PSN formatter
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
+  PKGARCH:=all
 endef
 
 define Package/symlink-psn/description

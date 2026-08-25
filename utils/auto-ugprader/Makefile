@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=auto-upgrader
 PKG_VERSION:=0.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICNESE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
@@ -19,6 +19,7 @@ define Package/auto-upgrader
   TITLE:=Auto upgrade system detected by condition
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
   URL:=http://kooiot.com
+  PKGARCH:=all
 endef
 
 define Package/auto-upgrader/description

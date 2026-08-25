@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strip-ioe
 PKG_VERSION:=20200723
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICENSE:=MIT
 
 PKG_ARCH=$(ARCH_PACKAGES)
@@ -20,6 +20,7 @@ define Package/strip-ioe
   SECTION:=kooiot
   CATEGORY:=KooIoT
   TITLE:=Strip IOE
+  PKGARCH:=all
   DEPENDS:=+skynet +freeioe
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 endef
