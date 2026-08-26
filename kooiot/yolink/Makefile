@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=yolink
 PKG_VERSION:=20260817
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -18,6 +18,7 @@ include $(INCLUDE_DIR)/package.mk
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_ARCH)-$(PKG_VERSION).zip
 VERSION_NUMBER:=19.07
+PRODUCT_FILE:=xsproduct_h30.xml
 
 ifeq ($(PKG_ARCH),arm_cortex-a9_neon)
 SYMLINK_MD5SUM:=
@@ -30,6 +31,7 @@ endif
 ifeq ($(PKG_ARCH),aarch64_generic)
 SYMLINK_MD5SUM=b85243be8f7e3215ccb23d955e4083f6
 VERSION_NUMBER=22.03
+PRODUCT_FILE:=xsproduct_rk3.xml
 endif
 
 RSTRIP:=:
@@ -74,6 +76,7 @@ endef
 
 define Package/yolink/install
 	$(INSTALL_DIR) $(1)/mnt/yolink_pkg
+	$(CP) ./files/$(PRODUCT_FILE) $(1)/mnt/yolink_pkg
 	$(CP) -rf $(PKG_BUILD_DIR)/src/sympad/* $(1)/mnt/yolink_pkg
 	chmod a+x $(1)/mnt/yolink_pkg/yodog.ex
 	chmod a+x $(1)/mnt/yolink_pkg/yodaemon.exa

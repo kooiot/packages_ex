@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="GB2312"?> 
+<!-- model_id 软件厂家分配,不可以修改.
+100=armhf,101=arm64(aarch64),102=amd64 (linux x64),103=win32 ,104=arm32(armhf要早一点)
+105=h30(YG-C系列)
+-->
+<root model_id="106" name_id="yolink" name_display="YoLink" desc="YoLink" drv_ex="rk3" dog_port="2000">
+<!-- 路径如果不配置,产品中的相关缓存功能将关闭 
+path_audit:审计日志保存路径
+path_prj_backup:工程备份绝对目录,
+path_data_cache:数据缓存绝对目录
+
+以下几个参数是配置预置使用内存的最大尺寸,单位为KB，具体参数视目标系统内存情况确定
+mem_sz_db:采集最大缓存,最小为1024，也就是1MB.
+mem_sz_api:客户端分发最大缓存,最小为:256KB,
+-->
+
+<app mem_sz_db="2048" mem_sz_api="1024" path_audit="" path_prj_backup="" path_data_cache="">
+</app>
+
+<daemon port_udp="2005" port_bus="9199" port_is="9190" port_mt="9200">
+	<exapps>
+		<!--module file="yumat.exa" winfile="YuMat.exe" path=""/-->
+	</exapps>
+</daemon>
+
+<kernal port_udp="2008" port_bus="9198" port_rm="9230" port_brg="8240" >
+</kernal>
+
+<custom mini_ver="3.0.0.0" serialport0="0">
+	<!--硬件资源配置表
+	serialport0  第一个COM口默认从1开始, 如果从0开始,需设置serialport0=1
+	serialport0="0"
+	mini_ver="3.0.0.0" 最小固件版本要求
+	-->
+
+	<!--网口资源配置-->
+	<eths>
+		<!--eth index="0" device="eth0" desc="网口1"/>
+		<eth index="1" device="enp0s20f7" desc="网口2"/-->
+	</eths>
+	
+	<!--串口口资源配置>
+	<serials>
+		<serial index="1" device="ttyS0" />
+		<serial index="2" device="ttyS1" />
+	</serials-->
+
+</custom>
+</root>
+
