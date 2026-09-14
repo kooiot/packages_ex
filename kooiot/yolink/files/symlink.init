@@ -30,6 +30,7 @@ init_folders () {
 			ln -s /mnt/data/_symbackup /mnt/symbackup
 		fi
 	else
+		mount -a # Make sure all fs mounted
 		if [ ! -e /dev/mmcblk1 -a -e /dev/mtdblock1 ]; then
 			# Check folder link
 			if [ ! -L /mnt/yolink -a ! -e /mnt/yolink ]; then
@@ -42,6 +43,9 @@ init_folders () {
 				fi
 				if [ -e /mnt/storage/_yolink_pre ]; then
 					cp -rf /mnt/storage/_yolink_pre/* /mnt/yolink/
+				fi
+				if [ ! -e /mnt/yolink/project ]; then
+					ln -s /mnt/backup /mnt/yolink/project
 				fi
 			fi
 		fi

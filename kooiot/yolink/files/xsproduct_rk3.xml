@@ -6,7 +6,7 @@
 <root model_id="106" name_id="yolink" name_display="YoLink" desc="YoLink" drv_ex="rk3" dog_port="2000">
 <!-- 路径如果不配置,产品中的相关缓存功能将关闭 
 path_audit:审计日志保存路径
-path_prj_backup:工程备份绝对目录,
+path_lis:授权文件路径,
 path_data_cache:数据缓存绝对目录
 
 以下几个参数是配置预置使用内存的最大尺寸,单位为KB，具体参数视目标系统内存情况确定
@@ -14,16 +14,16 @@ mem_sz_db:采集最大缓存,最小为1024，也就是1MB.
 mem_sz_api:客户端分发最大缓存,最小为:256KB,
 -->
 
-<app mem_sz_db="2048" mem_sz_api="1024" path_audit="" path_prj_backup="" path_data_cache="">
+<app mem_sz_db="2048" mem_sz_api="1024" path_audit="" path_lis="" path_data_cache="">
 </app>
 
-<daemon port_udp="2005" port_bus="9199" port_is="9190" port_mt="9200">
+<daemon port_udp="2005" port_is="9199" port_mt="9200">
 	<exapps>
 		<!--module file="yumat.exa" winfile="YuMat.exe" path=""/-->
 	</exapps>
 </daemon>
 
-<kernal port_udp="2008" port_bus="9198" port_rm="9230" port_brg="8240" >
+<kernal port_udp="2008" port_rm="9230" port_brg="8240" >
 </kernal>
 
 <custom mini_ver="3.0.0.0" serialport0="0">
