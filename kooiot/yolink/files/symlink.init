@@ -24,10 +24,10 @@ init_folders () {
 				fi
 			fi
 		fi
-		if [ ! -e /mnt/symbackup ]; then
-			echo "MKDIR /mnt/symbackup" > /dev/kmsg
+		if [ ! -e /mnt/backup ]; then
+			echo "MKDIR /mnt/backup" > /dev/kmsg
 			mkdir -p /mnt/data/_symbackup
-			ln -s /mnt/data/_symbackup /mnt/symbackup
+			ln -s /mnt/data/_symbackup /mnt/backup
 		fi
 	else
 		mount -a # Make sure all fs mounted
@@ -50,8 +50,8 @@ init_folders () {
 			fi
 		fi
 
-		if [ ! -e /mnt/symbackup -a -e /mnt/backup ]; then
-			ln -s /mnt/backup /mnt/symbackup
+		if [ ! -e /mnt/backup ]; then
+			ln -s /mnt/sdcard /mnt/backup
 		fi
 	fi
 }

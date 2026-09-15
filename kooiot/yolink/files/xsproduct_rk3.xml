@@ -14,7 +14,7 @@ mem_sz_db:采集最大缓存,最小为1024，也就是1MB.
 mem_sz_api:客户端分发最大缓存,最小为:256KB,
 -->
 
-<app mem_sz_db="2048" mem_sz_api="1024" path_audit="" path_lis="" path_data_cache="">
+<app mem_sz_db="2048" mem_sz_api="1024" path_audit="" path_lis="/mnt/backup/device.lis" path_data_cache="/mnt/sdcard">
 </app>
 
 <daemon port_udp="2005" port_is="9199" port_mt="9200">
