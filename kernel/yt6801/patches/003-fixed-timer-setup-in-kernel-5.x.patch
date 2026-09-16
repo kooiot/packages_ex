@@ -1,0 +1,55 @@
+diff --git a/src/fuxi-gmac-net.c b/src/fuxi-gmac-net.c
+index 56dabb4..728d701 100755
+--- a/src/fuxi-gmac-net.c
++++ b/src/fuxi-gmac-net.c
+@@ -687,7 +687,11 @@ static void fxgmac_tx_hang_timer_handler(unsigned long data)
+ #endif
+ {
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,18,0))
++    struct fxgmac_channel *channel = container_of(t, struct fxgmac_channel, expansion.tx_hang_timer);
++#else
+     struct fxgmac_channel *channel = from_timer(channel, t, expansion.tx_hang_timer);
++#endif
+ #else
+     struct fxgmac_channel *channel = (struct fxgmac_channel *)data;
+ #endif
+diff --git a/src/fuxi-gmac-phy.c b/src/fuxi-gmac-phy.c
+index 040d059..4167e2b 100755
+--- a/src/fuxi-gmac-phy.c
++++ b/src/fuxi-gmac-phy.c
+@@ -430,7 +430,11 @@ static void fxgmac_phy_link_poll(unsigned long data)
+ #endif
+ {
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,15,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0))
++	struct fxgmac_pdata *pdata = container_of(t, struct fxgmac_pdata, expansion.phy_poll_tm);
++#else
+     struct fxgmac_pdata *pdata = from_timer(pdata, t, expansion.phy_poll_tm);
++#endif
+ #else
+     struct fxgmac_pdata *pdata = (struct fxgmac_pdata*)data;
+ #endif
+@@ -473,7 +477,11 @@ void fxgmac_phy_timer_resume(struct fxgmac_pdata *pdata)
+ int fxgmac_phy_timer_init(struct fxgmac_pdata *pdata)
+ {
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,15,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0))
++	timer_setup(&pdata->expansion.phy_poll_tm, fxgmac_phy_link_poll, 0);
++#else
+     init_timer_key(&pdata->expansion.phy_poll_tm, NULL, 0, "fuxi_phy_link_update_timer", NULL);
++#endif
+ #else
+     init_timer_key(&pdata->expansion.phy_poll_tm, 0, "fuxi_phy_link_update_timer", NULL);
+ #endif
+@@ -490,6 +498,10 @@ int fxgmac_phy_timer_init(struct fxgmac_pdata *pdata)
+ 
+ void fxgmac_phy_timer_destroy(struct fxgmac_pdata *pdata)
+ {
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,15,0))
++    timer_delete_sync(&pdata->expansion.phy_poll_tm);
++#else
+     del_timer_sync(&pdata->expansion.phy_poll_tm);
++#endif
+     DPRINTK("fxgmac_phy_timer removed\n");
+ }
