@@ -314,7 +314,7 @@ local function watch_cloud_status(iface_name)
 		local ping_host = string.match(chk_str or '', '^(%S+)')
 		if ping_host then
 			-- lua5.1
-			local r, err = os.execute('ping -c 1 '..ping_host)
+			local r, err = os.execute('ping -4 -c 1 '..ping_host)
 			echo_debug('PING '..ping_host..' return '..r)
 			if r == 0 then
 				cloud_last = now

@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wwan-watch
-PKG_VERSION:=4.0
+PKG_VERSION:=4.1
 PKG_RELEASE:=3
 PKG_LICENSE:=MIT
 
