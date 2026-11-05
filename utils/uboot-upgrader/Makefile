@@ -6,7 +6,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uboot-upgrader
 PKG_VERSION:=2026.11.05
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICENSE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
@@ -18,12 +18,13 @@ define Build/Compile
 endef
 
 define UBootUpgrader
+# PKG_BUILD_DEPENDS:=u-boot-$(3)
 define Package/uboot-upgrader-$(1)
   SECTION:=kooiot
   CATEGORY:=KooIoT
   SUBMENU:=Utilities
   TITLE:=Auto upgrade uboot for $(1)
-  DEPENDS:=@TARGET_$(2)_DEVICE_$(1) +u-boot-$(3)
+  DEPENDS:=@TARGET_$(2)_DEVICE_$(1)
   MAINTAINER:=Dirk Chang <dirk@kooiot.com>
   URL:=http://kooiot.com
 endef
