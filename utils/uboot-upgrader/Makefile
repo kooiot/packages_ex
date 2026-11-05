@@ -5,8 +5,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uboot-upgrader
-PKG_VERSION:=0.1
-PKG_RELEASE:=2
+PKG_VERSION:=2026.11.05
+PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 
 include $(INCLUDE_DIR)/package.mk
