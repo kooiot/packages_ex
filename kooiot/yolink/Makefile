@@ -9,11 +9,12 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=yolink
 PKG_VERSION:=20260914
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
+include $(INCLUDE_DIR)/kernel.mk
 include $(INCLUDE_DIR)/package.mk
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_ARCH)-$(PKG_VERSION).zip
@@ -53,10 +54,14 @@ define Package/yolink
   TITLE:=SymLink
   URL:=http://www.symid.com
   PROVIDES:=symlink-app
-  DEPENDS:=+libstdcpp +luci +libopenssl-v1 \
+  DEPENDS:=+libstdcpp +luci \
+		+libopenssl-v1 \
 		+libcurl +zip +unzip +zlib +symlink-psn \
 		+tlink-utility
 endef
+
+#+(LINUX_6_1||LINUX_6_6):libopenssl
+#+(LINUX_6_12||LINUX_6_18):libopenssl-v1
 
 define Package/yolink/description
 	SymLink application is an IOT gateway solution
