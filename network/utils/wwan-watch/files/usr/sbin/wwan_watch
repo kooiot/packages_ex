@@ -370,13 +370,16 @@ end
 local function watch_wwan_status()
 	local iface = wwan.get_wwan_iface()
 	if not iface then
-		wwan_not_exits = true
-		return
+		-- wwan_not_exits = true
+		-- return
+		-- force to use wwan as the interface for checking the auto
+		echo_debug("WWAN Netowrk interface missing! Using WWAN for default checking...")
+		iface = 'wwan'
 	end
 
 	local wan_iface = util.ubus('network.interface', 'status', {interface=iface})
 	if wan_iface then
-		if (not wan_iface.autostart and not wan_iface.errors) then
+		if not wan_iface.autostart and not wan_iface.errors then
 			-- if wwan interface disabled
 			echo_debug("Netowrk interface "..iface.." disabled!!!")
 			wwan_not_exits = true
