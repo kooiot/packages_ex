@@ -47,7 +47,9 @@ define Package/skynet
   CATEGORY:=KooIoT
   TITLE:=Skynet
   URL:=https://github.com/srdgame/skynet
-  DEPENDS:=+lua +zip +unzip +luci +libopenssl +@OPENSSL_WITH_SM234 +@OPENSSL_ENGINE_BUILTIN +libcurl +zlib +libstdcpp
+  DEPENDS:=+lua +zip +unzip +luci \
+		   +libopenssl +@OPENSSL_WITH_SM234 +@OPENSSL_ENGINE_BUILTIN \
+		   +libcurl +zlib +libstdcpp
 endef
 
 define Package/skynet/description

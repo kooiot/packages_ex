@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=symlink
-PKG_VERSION:=20251222
-PKG_RELEASE:=3
+PKG_VERSION:=20261110
+PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
@@ -24,11 +24,11 @@ SYMLINK_MD5SUM:=
 VERSION_NUMBER=17.01
 endif
 ifeq ($(PKG_ARCH),arm_cortex-a7_neon-vfpv4)
-SYMLINK_MD5SUM=9a4f691bdc1d1ce201c125cb017b1e24
+SYMLINK_MD5SUM=d9e0c4cf283723796fd95c4107d82af9
 VERSION_NUMBER=19.07
 endif
 ifeq ($(PKG_ARCH),aarch64_generic)
-SYMLINK_MD5SUM=b85243be8f7e3215ccb23d955e4083f6
+SYMLINK_MD5SUM=5a89b0c376f01e7a2a5bb47efabc8d87
 VERSION_NUMBER=22.03
 endif
 
@@ -51,11 +51,14 @@ define Package/symlink
   TITLE:=SymLink
   URL:=http://www.symid.com
   PROVIDES:=symlink-app
-  DEPENDS:=+libstdcpp +luci +libopenssl \
-		+@OPENSSL_WITH_NPN \
-		+@OPENSSL_WITH_SM234 +@OPENSSL_ENGINE_BUILTIN \
+  DEPENDS:=+libstdcpp +luci \
 		+libcurl +zip +unzip +zlib +symlink-psn \
-		+tlink-utility
+		+tlink-utility \
+		+(LINUX_5_4||LINUX_5_15||LINUX_6_1):libopenssl \
+		+@(LINUX_5_4||LINUX_5_15||LINUX_6_1):OPENSSL_WITH_NPN \
+		+@(LINUX_5_4||LINUX_5_15||LINUX_6_1):OPENSSL_WITH_SM234 \
+		+@(LINUX_5_4||LINUX_5_15||LINUX_6_1):OPENSSL_ENGINE_BUILTIN \
+		+!(LINUX_5_4||LINUX_5_15||LINUX_6_1):libopenssl-v1
 endef
 
 define Package/symlink/description

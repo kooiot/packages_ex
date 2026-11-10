@@ -8,13 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=yolink
-PKG_VERSION:=20260914
-PKG_RELEASE:=3
+PKG_VERSION:=20261106
+PKG_RELEASE:=1
 
 PKG_ARCH=$(ARCH_PACKAGES)
 PKG_MAINTAINER:=Dirk Chang <dirk@kooiot.com>
 
-include $(INCLUDE_DIR)/kernel.mk
 include $(INCLUDE_DIR)/package.mk
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_ARCH)-$(PKG_VERSION).zip
@@ -26,7 +25,7 @@ SYMLINK_MD5SUM:=
 VERSION_NUMBER=17.01
 endif
 ifeq ($(PKG_ARCH),arm_cortex-a7_neon-vfpv4)
-SYMLINK_MD5SUM=48d2ab9148e537126394abd157316677
+SYMLINK_MD5SUM=90dfc1e427abd17ace317037642d3bd2
 VERSION_NUMBER=19.07
 endif
 ifeq ($(PKG_ARCH),aarch64_generic)
@@ -54,14 +53,16 @@ define Package/yolink
   TITLE:=SymLink
   URL:=http://www.symid.com
   PROVIDES:=symlink-app
+  CONFLICTS:=symlink
   DEPENDS:=+libstdcpp +luci \
-		+libopenssl-v1 \
 		+libcurl +zip +unzip +zlib +symlink-psn \
-		+tlink-utility
+		+tlink-utility \
+		+(LINUX_5_4||LINUX_5_15||LINUX_6_1):libopenssl \
+		+@(LINUX_5_4||LINUX_5_15||LINUX_6_1):OPENSSL_WITH_NPN \
+		+@(LINUX_5_4||LINUX_5_15||LINUX_6_1):OPENSSL_WITH_SM234 \
+		+@(LINUX_5_4||LINUX_5_15||LINUX_6_1):OPENSSL_ENGINE_BUILTIN \
+		+!(LINUX_5_4||LINUX_5_15||LINUX_6_1):libopenssl-v1
 endef
-
-#+(LINUX_6_1||LINUX_6_6):libopenssl
-#+(LINUX_6_12||LINUX_6_18):libopenssl-v1
 
 define Package/yolink/description
 	SymLink application is an IOT gateway solution
@@ -77,7 +78,6 @@ endef
 
 define Build/Compile
 endef
-
 
 define Package/yolink/install
 	$(INSTALL_DIR) $(1)/mnt/yolink_pkg
